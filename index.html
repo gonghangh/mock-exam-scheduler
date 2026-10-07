@@ -329,10 +329,12 @@
                 <td class="py-3 px-3 font-mono text-xs">13:40 ~ 14:30 (50분)</td>
                 <td class="py-3 px-3 font-bold text-purple-700">
                   13:40 ~ 14:30 (50분)<br>
-                  <span class="text-xs font-normal text-slate-500">5교시 수업 교사</span>
+                  <span class="text-xs font-normal text-slate-500">5교시 수업 교사</span><br>
+                  <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">※ 수: 부담임 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-600">
                   <strong class="text-slate-900">13:35 입실, 영어 문제지 배부.</strong> 13:40 본령 및 영어 듣기평가 방송 진행. 14:30에 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다.
+                  <div class="mt-1 text-[11px] text-indigo-700 font-medium">※ 수요일은 3학년 자율활동 연동으로 <strong>해당 반 부담임 교사</strong>가 임장 감독합니다.</div>
                 </td>
               </tr>
 
@@ -358,7 +360,8 @@
                 </td>
                 <td class="py-3 px-3 font-bold text-rose-700">
                   14:40 ~ 15:30 (50분)<br>
-                  <span class="text-xs font-normal text-slate-600">6교시 수업 교사</span>
+                  <span class="text-xs font-normal text-slate-600">6교시 수업 교사</span><br>
+                  <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">※ 수: 담임 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-rose-900">
                   <div class="space-y-1">
@@ -366,7 +369,7 @@
                     <div><strong>② 14:50 ~ 15:00:</strong> 쉬는 시간 동안 한국사 시험지 배부 & 대기 지도</div>
                     <div><strong>③ 15:00 ~ 15:30:</strong> <strong>한국사 30분 감독</strong> 및 15:30 회수</div>
                     <div class="p-1.5 bg-rose-100 rounded text-rose-950 font-bold space-y-1">
-                      <div>🔔 <strong>월·수·금:</strong> 15:30에 한국사 답안지 회수 완료 후 즉시 전 시험 종료 및 학급 종례!!</div>
+                      <div>🔔 <strong>월·수·금:</strong> 15:30에 한국사 답안지 회수 완료 후 즉시 전 시험 종료 및 학급 종례!! <span class="text-indigo-800">(※ 수요일은 담임교사가 직접 본인 반 종례)</span></div>
                       <div>🔔 <strong>화·목:</strong> 6교시 감독 교사가 <strong>시간을 조금 더 할애하여 탐구 2과목(제1/2선택) 시험지까지 학생들에게 배부</strong>해 주고 퇴실!</div>
                     </div>
                   </div>
@@ -699,61 +702,73 @@
       }
     };
 
-    // Raw timetable for 3rd grade classes 1-8 (from PDF 1)
+    // 3학년 담임 및 부담임 지도교사 명단 (자율활동 임장 / 수요일 5교시: 부담임, 6교시: 담임)
+    const HOMEROOM_TEACHERS = {
+      1: { homeroom: '고명호', assistant: '박현우', hSubject: '수학', aSubject: '정보' },
+      2: { homeroom: '강재욱', assistant: '이서윤', hSubject: '물리', aSubject: '지리' },
+      3: { homeroom: '황인욱', assistant: '황인욱', hSubject: '역사', aSubject: '역사' },
+      4: { homeroom: '김경남', assistant: '한효숙', hSubject: '영어', aSubject: '중국어' },
+      5: { homeroom: '정주윤', assistant: '배혜선', hSubject: '수학', aSubject: '일반사회' },
+      6: { homeroom: '오의진', assistant: '이예진', hSubject: '국어', aSubject: '화학' },
+      7: { homeroom: '신수완', assistant: '양기훈', hSubject: '기술', aSubject: '지구과학' },
+      8: { homeroom: '권유진', assistant: '이현승', hSubject: '수학', aSubject: '일반사회' }
+    };
+
+    // Raw timetable for 3rd grade classes 1-8 (from PDF 1 & 자율활동 임장지도 연동)
     const RAW_CLASS_TIMETABLES = {
       1: {
         '월': [['E',''], ['언매','방수영'], ['C',''], ['B',''], ['D',''], ['영독','김경남'], ['','']],
         '화': [['확통','고명호'], ['언매','방수영'], ['D',''], ['스생','우성훈'], ['미감A/음악','박소연'], ['영독','김경남'], ['A','']],
-        '수': [['C',''], ['영독','김경남'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['영독','김경남'], ['B',''], ['E',''], ['자율(부담임)','박현우'], ['자율(담임)','고명호'], ['','']],
         '목': [['미감A/음악','박소연'], ['A',''], ['확통','고명호'], ['B',''], ['E',''], ['C',''], ['진로','박현우']],
         '금': [['스생','우성훈'], ['언매','방수영'], ['D',''], ['확통','고명호'], ['A',''], ['미감A/음악','박소연'], ['','']]
       },
       2: {
         '월': [['E',''], ['확통','고명호'], ['C',''], ['B',''], ['D',''], ['화작','방수영'], ['','']],
         '화': [['스생','우성훈'], ['미감A','박소연'], ['D',''], ['영독','김경남'], ['확통','고명호'], ['화작','방수영'], ['A','']],
-        '수': [['C',''], ['미감A','박소연'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['미감A','박소연'], ['B',''], ['E',''], ['자율(부담임)','이서윤'], ['자율(담임)','강재욱'], ['','']],
         '목': [['영독','김경남'], ['A',''], ['화작','방수영'], ['B',''], ['E',''], ['C',''], ['확통','고명호']],
         '금': [['진로','송지현'], ['미감A','박소연'], ['D',''], ['스생','우성훈'], ['A',''], ['영독','김경남'], ['','']]
       },
       3: {
         '월': [['E',''], ['미감A','박소연'], ['C',''], ['B',''], ['D',''], ['확통','고명호'], ['','']],
         '화': [['미감A','박소연'], ['영독','김경남'], ['D',''], ['진로','황지윤'], ['화작','방수영'], ['확통','고명호'], ['A','']],
-        '수': [['C',''], ['스생','우성훈'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['스생','우성훈'], ['B',''], ['E',''], ['자율(부담임)','황인욱'], ['자율(담임)','황인욱'], ['','']],
         '목': [['화작','방수영'], ['A',''], ['스생','우성훈'], ['B',''], ['E',''], ['C',''], ['영독','김경남']],
         '금': [['영독','김경남'], ['확통','고명호'], ['D',''], ['미감A','박소연'], ['A',''], ['화작','방수영'], ['','']]
       },
       4: {
         '월': [['E',''], ['영독','김경남'], ['C',''], ['B',''], ['D',''], ['미감A','박소연'], ['','']],
         '화': [['화작','방수영'], ['확통','고명호'], ['D',''], ['스생','최창근'], ['영독','김경남'], ['미감A','박소연'], ['A','']],
-        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['자율(부담임)','한효숙'], ['자율(담임)','김경남'], ['','']],
         '목': [['확통','고명호'], ['A',''], ['미감A','박소연'], ['B',''], ['E',''], ['C',''], ['화작','방수영']],
         '금': [['스생','최창근'], ['영독','김경남'], ['D',''], ['화작','방수영'], ['A',''], ['확통','고명호'], ['','']]
       },
       5: {
         '월': [['E',''], ['확통','최정'], ['C',''], ['B',''], ['D',''], ['영독','정주윤'], ['','']],
         '화': [['영독','정주윤'], ['확통','최정'], ['D',''], ['미감A','박소연'], ['화작','오의진'], ['스생','최창근'], ['A','']],
-        '수': [['C',''], ['화작','오의진'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['화작','오의진'], ['B',''], ['E',''], ['자율(부담임)','배혜선'], ['자율(담임)','정주윤'], ['','']],
         '목': [['영독','정주윤'], ['A',''], ['스생','최창근'], ['B',''], ['E',''], ['C',''], ['미감A','박소연']],
         '금': [['미감A','박소연'], ['진로','황지윤'], ['D',''], ['화작','오의진'], ['A',''], ['확통','최정'], ['','']]
       },
       6: {
         '월': [['E',''], ['화작','오의진'], ['C',''], ['B',''], ['D',''], ['음연','송지호'], ['','']],
         '화': [['화작','오의진'], ['확통','진혜리'], ['D',''], ['영독','정주윤'], ['진로','윤정윤'], ['음연','송지호'], ['A','']],
-        '수': [['C',''], ['스생','박현선'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['스생','박현선'], ['B',''], ['E',''], ['자율(부담임)','이예진'], ['자율(담임)','오의진'], ['','']],
         '목': [['확통','진혜리'], ['A',''], ['화작','오의진'], ['B',''], ['E',''], ['C',''], ['영독','정주윤']],
         '금': [['영독','정주윤'], ['스생','박현선'], ['D',''], ['음연','송지호'], ['A',''], ['확통','진혜리'], ['','']]
       },
       7: {
         '월': [['E',''], ['진로','신수완'], ['C',''], ['B',''], ['D',''], ['확통','이지연'], ['','']],
         '화': [['스생','박현선'], ['영독','정주윤'], ['D',''], ['음연','송지호'], ['확통','이지연'], ['화작','오의진'], ['A','']],
-        '수': [['C',''], ['영독','정주윤'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['영독','정주윤'], ['B',''], ['E',''], ['자율(부담임)','양기훈'], ['자율(담임)','신수완'], ['','']],
         '목': [['화작','오의진'], ['A',''], ['스생','박현선'], ['B',''], ['E',''], ['C',''], ['음연','송지호']],
         '금': [['화작','오의진'], ['음연','송지호'], ['D',''], ['영독','정주윤'], ['A',''], ['확통','이지연'], ['','']]
       },
       8: {
         '월': [['E',''], ['음연','송지호'], ['C',''], ['B',''], ['D',''], ['화작','오의진'], ['','']],
         '화': [['진로','윤정윤'], ['확통','이지연'], ['D',''], ['화작','오의진'], ['영독','정주윤'], ['스생','박현선'], ['A','']],
-        '수': [['C',''], ['음연','송지호'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['음연','송지호'], ['B',''], ['E',''], ['자율(부담임)','이현승'], ['자율(담임)','권유진'], ['','']],
         '목': [['확통','이지연'], ['A',''], ['영독','정주윤'], ['B',''], ['E',''], ['C',''], ['화작','오의진']],
         '금': [['음연','송지호'], ['영독','정주윤'], ['D',''], ['확통','이지연'], ['A',''], ['스생','박현선'], ['','']]
       }
@@ -808,7 +823,7 @@
         examTime: '13:40 ~ 14:30',
         durationText: '50분',
         proctorTime: '13:40 ~ 14:30 (50분)',
-        dutyNote: '13:35 입실, 문제지 배부 및 듣기평가 포함 50분 감독. 14:30에 답안지 회수 없이 퇴실.',
+        dutyNote: '13:35 입실, 문제지 배부 및 듣기평가 포함 50분 감독. 14:30에 답안지 회수 없이 퇴실. (※ 수요일: 해당 학급 부담임 교사 감독)',
         isDismissal: false
       },
       6: {
@@ -818,7 +833,7 @@
         examTime: '14:40 ~ 15:30',
         durationText: '50분',
         proctorTime: '14:40 ~ 15:30 (연속 50분)',
-        dutyNote: '14:40 입실 → 14:50 영어 회수 → 한국사 배부 → 15:00~15:30 한국사 30분 감독 및 회수! (월·수·금: 즉시 종례 / 화·목: 시간 조금 더 할애하여 탐구 1·2선택 시험지 배부 후 퇴실)',
+        dutyNote: '14:40 입실 → 14:50 영어 회수 → 한국사 배부 → 15:00~15:30 한국사 30분 감독 및 회수! (※ 수요일: 담임교사가 들어가 한국사 감독 및 15:30 종례 / 화·목: 시간 조금 더 할애하여 탐구 1·2선택 시험지 배부 후 퇴실)',
         isDismissal: false
       },
       7: {
@@ -880,7 +895,7 @@
         schedule: {
           '월': [null, '306화작', null, '208화법', null, '308화작', null],
           '화': ['306화작', null, null, '308화작', '305화작', '307화작', null],
-          '수': [null, '305화작', '208화법', null, null, null, null],
+          '수': [null, '305화작', '208화법', null, null, '306자율(담임)', null],
           '목': ['307화작', null, '306화작', null, null, '208화법', '308화작'],
           '금': ['307화작', null, null, '305화작', null, null, null]
         }
@@ -950,7 +965,7 @@
         schedule: {
           '월': [null, '302확통', null, null, null, '303확통', null],
           '화': ['301확통', '304확통', null, '201 E_경수', '302확통', '303확통', null],
-          '수': [null, '201 E_경수', null, null, null, null, null],
+          '수': [null, '201 E_경수', null, null, null, '301자율(담임)', null],
           '목': ['304확통', null, '301확통', null, null, null, '302확통'],
           '금': ['201 E_경수', '303확통', null, '301확통', null, '304확통', null]
         }
@@ -960,7 +975,7 @@
         schedule: {
           '월': [null, null, null, '302 B_미적', null, '203 B_기하', null],
           '화': [null, '203 B_기하', null, '205 E_기하', '202 A_기하', null, '301 A_미적'],
-          '수': [null, '205 E_기하', '302 B_미적', null, null, null, null],
+          '수': [null, '205 E_기하', '302 B_미적', null, null, '308자율(담임)', null],
           '목': ['202 A_기하', '301 A_미적', null, '302 B_미적', null, null, '203 B_기하'],
           '금': ['205 E_기하', '202 A_기하', null, null, '301 A_미적', null, null]
         }
@@ -1010,7 +1025,7 @@
         schedule: {
           '월': [null, '304영독', null, null, null, '301영독', null],
           '화': ['201 C_영발', '303영독', null, '302영독', '304영독', '301영독', null],
-          '수': [null, '301영독', '201 C_영발', null, null, null, null],
+          '수': [null, '301영독', '201 C_영발', null, null, '304자율(담임)', null],
           '목': ['302영독', null, null, '201 C_영발', null, null, '303영독'],
           '금': ['303영독', '304영독', null, '201 C_영발', null, '302영독', null]
         }
@@ -1020,7 +1035,7 @@
         schedule: {
           '월': [null, '202 D_영발', null, null, null, '305영독', null],
           '화': ['305영독', '307영독', null, '306영독', '308영독', '202 D_영발', '306영독'],
-          '수': [null, '307영독', '308영독', null, null, null, null],
+          '수': [null, '307영독', '308영독', null, null, '305자율(담임)', null],
           '목': ['305영독', '308영독', null, '307영독', null, null, '306영독'],
           '금': ['306영독', '308영독', null, '307영독', null, '202 D_영발', null]
         }
@@ -1030,7 +1045,7 @@
         schedule: {
           '월': ['306 E_사탐', '102통사A', '305 D_사탐', '103통사A', '305 D_사탐', null, null],
           '화': ['101통사A', null, '104통사A', '105통사A', null, null, null],
-          '수': [null, '103통사A', null, '306 E_사탐', null, null, null],
+          '수': [null, '103통사A', null, '306 E_사탐', '305자율(부담임)', null, null],
           '목': [null, '105통사A', '305 D_사탐', null, '306 E_사탐', null, null],
           '금': ['101통사A', null, '305 D_사탐', '102통사A', '104통사A', null, null]
         }
@@ -1040,7 +1055,7 @@
         schedule: {
           '월': ['307 E_중회', null, '301 C_생창', null, '302 D_생창', null, null],
           '화': [null, '307 A_생창', '302 D_생창', null, '208 A_중국', null, '307 A_생창'],
-          '수': ['301 C_생창', null, null, '307 E_중회', null, '301 C_생창', null],
+          '수': ['301 C_생창', null, null, '307 E_중회', '304자율(부담임)', null, null],
           '목': ['208 A_중국', '307 A_생창', '302 D_생창', null, '307 E_중회', '301 C_생창', null],
           '금': [null, '208 A_중국', '302 D_생창', null, '307 A_생창', null, null]
         }
@@ -1050,7 +1065,7 @@
         schedule: {
           '월': ['301 E_사문', null, '303 C_사문', '304 B_사문', null, null, null],
           '화': [null, '302 A_사문', '106통사A', null, '107통사A', null, '302 A_사문'],
-          '수': ['303 C_사문', null, '106통사A', '301 E_사문', '301 E_사문', '303 C_사문', null],
+          '수': ['303 C_사문', null, '106통사A', '301 E_사문', '308자율(부담임)', null, null],
           '목': [null, '302 A_사문', '304 B_사문', '304 B_사문', null, '303 C_사문', null],
           '금': ['107통사A', null, '106통사A', '304 B_사문', '302 A_사문', null, null]
         }
@@ -1080,7 +1095,7 @@
         schedule: {
           '월': ['302 E_한지', null, '301 D_한지', '303 B_한지', '301 D_한지', '104통사B', null],
           '화': ['103통사B', null, null, '102통사B', null, '101통사B', null],
-          '수': [null, null, '303 B_한지', '302 E_한지', null, null, null],
+          '수': [null, null, '303 B_한지', '302 E_한지', '302자율(부담임)', null, null],
           '목': ['102통사B', null, '301 D_한지', '303 B_한지', '302 E_한지', '103통사B', null],
           '금': [null, '104통사B', '301 D_한지', '303 B_한지', '101통사B', null, null]
         }
@@ -1120,7 +1135,7 @@
         schedule: {
           '월': [null, '107한국', '302 C_동사', null, '303 D_동사', null, null],
           '화': ['108한국', null, '303 D_동사', '106한국', null, null, null],
-          '수': ['302 C_동사', null, '106한국', '107한국', null, null, null],
+          '수': ['302 C_동사', null, '106한국', '107한국', '303자율(부담임)', '303자율(담임)', null],
           '목': [null, null, null, '107한국', null, '302 C_동사', '108한국'],
           '금': [null, '106한국', '303 D_동사', null, '108한국', null, null]
         }
@@ -1140,7 +1155,7 @@
         schedule: {
           '월': [null, null, '305 C_화학2', '309 B_생과', null, null, null],
           '화': ['104통과A', null, '101통과A', null, '103통과A', null, '304 A_화학2'],
-          '수': ['305 C_화학2', null, '309 B_생과', '101통과A', null, null, null],
+          '수': ['305 C_화학2', null, '309 B_생과', '101통과A', '306자율(부담임)', null, null],
           '목': [null, '304 A_화학2', null, '309 B_생과', '102통과A', '305 C_화학2', null],
           '금': ['104통과A', null, '103통과A', null, '304 A_화학2', '102통과A', null]
         }
@@ -1150,7 +1165,7 @@
         schedule: {
           '월': ['304 E_생과', '105통과B', '307 D_지구2', '106통과B', '307 D_지구2', null, null],
           '화': ['203 C_지구', null, null, null, '105통과B', null, null],
-          '수': ['106통과B', null, '107통과B', '304 E_생과', null, null, null],
+          '수': ['106통과B', null, '107통과B', '304 E_생과', '307자율(부담임)', null, null],
           '목': [null, null, '203 C_지구', '203 C_지구', '304 E_생과', null, null],
           '금': ['108통과B', '108통과B', '307 D_지구2', null, null, '107통과B', null]
         }
@@ -1200,7 +1215,7 @@
         schedule: {
           '월': [null, '206 D_역학', '306 D_물리2', '308 B_물리2', '306 D_물리2', null, null],
           '화': [null, '306 A_생과', null, null, '207 A_역학', null, '306 A_생과'],
-          '수': [null, null, '308 B_물리2', null, null, null, null],
+          '수': [null, null, '308 B_물리2', null, null, '302자율(담임)', null],
           '목': ['207 A_역학', '306 A_생과', '306 D_물리2', '308 B_물리2', null, null, null],
           '금': [null, '207 A_역학', null, null, '306 A_생과', '206 D_역학', null]
         }
@@ -1210,7 +1225,7 @@
         schedule: {
           '월': ['308 E_공학', '307진로', '309 D_공학', '301 B_공학', '309 D_공학', '204 B_지식', null],
           '화': [null, '204 B_지식', null, null, '203 A_지식', null, null],
-          '수': [null, null, '301 B_공학', '308 E_공학', null, null, null],
+          '수': [null, null, '301 B_공학', '308 E_공학', null, '307자율(담임)', null],
           '목': ['203 A_지식', null, '309 D_공학', '301 B_공학', '308 E_공학', null, '204 B_지식'],
           '금': [null, '203 A_지식', null, null, null, null, null]
         }
@@ -1230,7 +1245,7 @@
         schedule: {
           '월': [null, '205 D_데이', '308 C_인공', null, '310 D_인공', null, null],
           '화': ['204 C_데이', null, '310 D_인공', '206 E_데이', null, '205 D_데이', null],
-          '수': ['308 C_인공', null, null, null, null, null, null],
+          '수': ['308 C_인공', null, null, null, '301자율(부담임)', null, null],
           '목': [null, null, '204 C_데이', '208진로', null, '308 C_인공', '301진로'],
           '금': ['206 E_데이', '206 E_데이', '310 D_인공', '204 C_데이', null, '205 D_데이', null]
         }
@@ -1351,7 +1366,21 @@
           let electiveGroup = null;
           let displaySubj = subj;
 
-          if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
+          if (day === '수' && pIdx === 4) {
+            // 수요일 5교시: 해당 학급의 부담임 교사
+            const hr = HOMEROOM_TEACHERS[c];
+            teacher = hr.assistant;
+            displaySubj = `자율활동 (부담임: ${teacher})`;
+            isElective = false;
+            electiveGroup = null;
+          } else if (day === '수' && pIdx === 5) {
+            // 수요일 6교시: 해당 학급의 담임 교사
+            const hr = HOMEROOM_TEACHERS[c];
+            teacher = hr.homeroom;
+            displaySubj = `자율활동 (담임: ${teacher})`;
+            isElective = false;
+            electiveGroup = null;
+          } else if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
             isElective = true;
             electiveGroup = subj;
             const elect = ELECTIVE_HOMEROOM_MAP[subj][c];
@@ -1715,7 +1744,10 @@
           const note = (day === '화' || day === '목') ? '(16:30 탐구까지)' : '(15:30 한국사 후 종례)';
           text += `■ ${day}요일 ${note}\n`;
           byDay[day].forEach(d => {
-            text += `  - ${d.period}교시: ${d.room} (${d.config.area}) | ${d.config.proctorTime}\n`;
+            let roleExtra = '';
+            if (d.day === '수' && d.period === 5) roleExtra = ' [부담임 감독]';
+            if (d.day === '수' && d.period === 6) roleExtra = ' [담임 감독 & 15:30종례]';
+            text += `  - ${d.period}교시: ${d.room} (${d.config.area})${roleExtra} | ${d.config.proctorTime}\n`;
           });
         }
       });
@@ -1748,7 +1780,19 @@
       // Update Banner
       const isMonWedFri = (day === '월' || day === '수' || day === '금');
       const bannerEl = document.getElementById('matrixDayBanner');
-      if (isMonWedFri) {
+      if (day === '수') {
+        bannerEl.className = 'p-4 rounded-xl border border-indigo-200 bg-indigo-50/80 flex flex-col sm:flex-row items-center justify-between text-indigo-950 text-xs sm:text-sm';
+        bannerEl.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
+            <span class="font-bold">수요일 특이사항 (자율활동 임장 지도 연동):</span>
+            <span><strong>5교시: 부담임 교사</strong>(영어 1차 감독), <strong>6교시: 담임 교사</strong>(한국사 감독 및 15:30 종례)!</span>
+          </div>
+          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-indigo-200 text-indigo-900 text-xs shrink-0">
+            5교시 부담임 / 6교시 담임
+          </span>
+        `;
+      } else if (isMonWedFri) {
         bannerEl.className = 'p-4 rounded-xl border border-blue-200 bg-blue-50/70 flex flex-col sm:flex-row items-center justify-between text-blue-900 text-xs sm:text-sm';
         bannerEl.innerHTML = `
           <div class="flex items-center space-x-2">
@@ -1822,10 +1866,17 @@
           const teacher = item.teacher;
           const subj = item.subject;
 
+          let roleBadge = '';
+          if (day === '수' && p === 5) {
+            roleBadge = `<span class="inline-block ml-1 text-[10px] px-1.5 py-0.2 bg-purple-100 text-purple-700 font-bold rounded">부담임</span>`;
+          } else if (day === '수' && p === 6) {
+            roleBadge = `<span class="inline-block ml-1 text-[10px] px-1.5 py-0.2 bg-amber-100 text-amber-800 font-bold rounded">담임</span>`;
+          }
+
           html += `
             <td class="py-2.5 px-2 border-l border-slate-100">
-              <div class="font-bold text-slate-900 hover:text-blue-600 cursor-pointer" onclick="selectTeacherFromTable('${teacher}')">
-                ${teacher || '-'}
+              <div class="font-bold text-slate-900 hover:text-blue-600 cursor-pointer flex items-center justify-center" onclick="selectTeacherFromTable('${teacher}')">
+                <span>${teacher || '-'}</span>${roleBadge}
               </div>
               <div class="text-[11px] text-slate-500 truncate max-w-[110px] mx-auto" title="${subj}">
                 ${subj || '-'}
@@ -1879,9 +1930,14 @@
       let html = `
         <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
           <div>
-            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold">학급 게시용</span>
-            <h3 class="text-2xl font-black text-slate-900 mt-1">3학년 ${classNum}반 모의고사 시간표</h3>
-            <p class="text-xs text-slate-500 mt-1">월·수·금은 15:30 종료 / 화·목은 16:30 종료</p>
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold">학급 게시용</span>
+              <span class="px-2.5 py-1 bg-indigo-50 border border-indigo-200 text-indigo-800 rounded text-xs font-semibold">
+                담임: <strong>${HOMEROOM_TEACHERS[classNum].homeroom}</strong> (${HOMEROOM_TEACHERS[classNum].hSubject}) | 부담임: <strong>${HOMEROOM_TEACHERS[classNum].assistant}</strong> (${HOMEROOM_TEACHERS[classNum].aSubject})
+              </span>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900 mt-1.5">3학년 ${classNum}반 모의고사 시간표</h3>
+            <p class="text-xs text-slate-500 mt-1">월·수·금은 15:30 종료 (수: 5교시 부담임, 6교시 담임 임장) | 화·목은 16:30 종료</p>
           </div>
           <button onclick="window.print()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg flex items-center space-x-1 transition no-print">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>

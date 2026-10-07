@@ -67,10 +67,10 @@
     <!-- Rule Ticker / Announcement Bar -->
     <div class="bg-blue-600 text-white px-4 py-1.5 text-[11px] flex items-center justify-between font-medium">
       <div class="truncate mr-2">
-        <span>💡 <strong>기존 시간표 수업 교사</strong>가 해당 학급 감독 투입!</span>
+        <span>💡 기존 시간표 연동 (※ 수: 5교시 부담임 / 6교시 담임 임장)</span>
       </div>
       <span class="shrink-0 text-[10px] bg-white/20 px-1.5 py-0.5 rounded font-bold">
-        월수금 15:30 / 화목 16:30 종례
+        월수금 15:30 / 화목 16:30
       </span>
     </div>
   </header>
@@ -271,13 +271,23 @@
           </p>
         </div>
 
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs">
+        <div class="bg-white rounded-2xl p-4 border border-emerald-200/80 shadow-xs">
           <div class="flex items-center space-x-2 text-slate-900 font-bold text-sm mb-1">
             <span class="w-5 h-5 rounded-md bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">4</span>
             <span>이동수업(A~E군) 자기 학급 응시</span>
           </div>
           <p class="text-xs text-slate-600 pl-7 leading-relaxed">
             학생 이동 없이 1~8반 자기 교실에서 응시하며, 각 반 교실(301~308)에 배정된 선택과목 교사가 해당 반 감독을 맡습니다.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-indigo-200 shadow-xs bg-indigo-50/40">
+          <div class="flex items-center space-x-2 text-indigo-950 font-bold text-sm mb-1">
+            <span class="w-5 h-5 rounded-md bg-indigo-600 text-white flex items-center justify-center text-xs">⭐</span>
+            <span>수요일: 5교시 부담임 / 6교시 담임 임장</span>
+          </div>
+          <p class="text-xs text-indigo-900 pl-7 leading-relaxed">
+            수요일은 창체 자율활동 연동으로 <strong>5교시는 각 학급 부담임 교사</strong>가 영어 1차를 감독하고, <strong>6교시는 담임 교사</strong>가 입실하여 한국사 시험 감독 및 <strong>15:30 학급 종례</strong>를 직접 진행합니다.
           </p>
         </div>
       </div>
@@ -375,60 +385,72 @@
       }
     };
 
+    // 3학년 담임 및 부담임 지도교사 명단 (자율활동 임장 / 수요일 5교시: 부담임, 6교시: 담임)
+    const HOMEROOM_TEACHERS = {
+      1: { homeroom: '고명호', assistant: '박현우', hSubject: '수학', aSubject: '정보' },
+      2: { homeroom: '강재욱', assistant: '이서윤', hSubject: '물리', aSubject: '지리' },
+      3: { homeroom: '황인욱', assistant: '황인욱', hSubject: '역사', aSubject: '역사' },
+      4: { homeroom: '김경남', assistant: '한효숙', hSubject: '영어', aSubject: '중국어' },
+      5: { homeroom: '정주윤', assistant: '배혜선', hSubject: '수학', aSubject: '일반사회' },
+      6: { homeroom: '오의진', assistant: '이예진', hSubject: '국어', aSubject: '화학' },
+      7: { homeroom: '신수완', assistant: '양기훈', hSubject: '기술', aSubject: '지구과학' },
+      8: { homeroom: '권유진', assistant: '이현승', hSubject: '수학', aSubject: '일반사회' }
+    };
+
     const RAW_CLASS_TIMETABLES = {
       1: {
         '월': [['E',''], ['언매','방수영'], ['C',''], ['B',''], ['D',''], ['영독','김경남'], ['','']],
         '화': [['확통','고명호'], ['언매','방수영'], ['D',''], ['스생','우성훈'], ['미감A/음악','박소연'], ['영독','김경남'], ['A','']],
-        '수': [['C',''], ['영독','김경남'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['영독','김경남'], ['B',''], ['E',''], ['자율(부담임)','박현우'], ['자율(담임)','고명호'], ['','']],
         '목': [['미감A/음악','박소연'], ['A',''], ['확통','고명호'], ['B',''], ['E',''], ['C',''], ['진로','박현우']],
         '금': [['스생','우성훈'], ['언매','방수영'], ['D',''], ['확통','고명호'], ['A',''], ['미감A/음악','박소연'], ['','']]
       },
       2: {
         '월': [['E',''], ['확통','고명호'], ['C',''], ['B',''], ['D',''], ['화작','방수영'], ['','']],
         '화': [['스생','우성훈'], ['미감A','박소연'], ['D',''], ['영독','김경남'], ['확통','고명호'], ['화작','방수영'], ['A','']],
-        '수': [['C',''], ['미감A','박소연'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['미감A','박소연'], ['B',''], ['E',''], ['자율(부담임)','이서윤'], ['자율(담임)','강재욱'], ['','']],
         '목': [['영독','김경남'], ['A',''], ['화작','방수영'], ['B',''], ['E',''], ['C',''], ['확통','고명호']],
         '금': [['진로','송지현'], ['미감A','박소연'], ['D',''], ['스생','우성훈'], ['A',''], ['영독','김경남'], ['','']]
       },
       3: {
         '월': [['E',''], ['미감A','박소연'], ['C',''], ['B',''], ['D',''], ['확통','고명호'], ['','']],
         '화': [['미감A','박소연'], ['영독','김경남'], ['D',''], ['진로','황지윤'], ['화작','방수영'], ['확통','고명호'], ['A','']],
-        '수': [['C',''], ['스생','우성훈'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['스생','우성훈'], ['B',''], ['E',''], ['자율(부담임)','황인욱'], ['자율(담임)','황인욱'], ['','']],
         '목': [['화작','방수영'], ['A',''], ['스생','우성훈'], ['B',''], ['E',''], ['C',''], ['영독','김경남']],
         '금': [['영독','김경남'], ['확통','고명호'], ['D',''], ['미감A','박소연'], ['A',''], ['화작','방수영'], ['','']]
       },
       4: {
         '월': [['E',''], ['영독','김경남'], ['C',''], ['B',''], ['D',''], ['미감A','박소연'], ['','']],
         '화': [['화작','방수영'], ['확통','고명호'], ['D',''], ['스생','최창근'], ['영독','김경남'], ['미감A','박소연'], ['A','']],
-        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['자율(부담임)','한효숙'], ['자율(담임)','김경남'], ['','']],
         '목': [['확통','고명호'], ['A',''], ['미감A','박소연'], ['B',''], ['E',''], ['C',''], ['화작','방수영']],
         '금': [['스생','최창근'], ['영독','김경남'], ['D',''], ['화작','방수영'], ['A',''], ['확통','고명호'], ['','']]
       },
       5: {
         '월': [['E',''], ['확통','최정'], ['C',''], ['B',''], ['D',''], ['영독','정주윤'], ['','']],
         '화': [['영독','정주윤'], ['확통','최정'], ['D',''], ['미감A','박소연'], ['화작','오의진'], ['스생','최창근'], ['A','']],
-        '수': [['C',''], ['화작','오의진'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['화작','오의진'], ['B',''], ['E',''], ['자율(부담임)','배혜선'], ['자율(담임)','정주윤'], ['','']],
         '목': [['영독','정주윤'], ['A',''], ['스생','최창근'], ['B',''], ['E',''], ['C',''], ['미감A','박소연']],
         '금': [['미감A','박소연'], ['진로','황지윤'], ['D',''], ['화작','오의진'], ['A',''], ['확통','최정'], ['','']]
       },
       6: {
         '월': [['E',''], ['화작','오의진'], ['C',''], ['B',''], ['D',''], ['음연','송지호'], ['','']],
         '화': [['화작','오의진'], ['확통','진혜리'], ['D',''], ['영독','정주윤'], ['진로','윤정윤'], ['음연','송지호'], ['A','']],
-        '수': [['C',''], ['스생','박현선'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['스생','박현선'], ['B',''], ['E',''], ['자율(부담임)','이예진'], ['자율(담임)','오의진'], ['','']],
         '목': [['확통','진혜리'], ['A',''], ['화작','오의진'], ['B',''], ['E',''], ['C',''], ['영독','정주윤']],
         '금': [['영독','정주윤'], ['스생','박현선'], ['D',''], ['음연','송지호'], ['A',''], ['확통','진혜리'], ['','']]
       },
       7: {
         '월': [['E',''], ['진로','신수완'], ['C',''], ['B',''], ['D',''], ['확통','이지연'], ['','']],
         '화': [['스생','박현선'], ['영독','정주윤'], ['D',''], ['음연','송지호'], ['확통','이지연'], ['화작','오의진'], ['A','']],
-        '수': [['C',''], ['영독','정주윤'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['영독','정주윤'], ['B',''], ['E',''], ['자율(부담임)','양기훈'], ['자율(담임)','신수완'], ['','']],
         '목': [['화작','오의진'], ['A',''], ['스생','박현선'], ['B',''], ['E',''], ['C',''], ['음연','송지호']],
         '금': [['화작','오의진'], ['음연','송지호'], ['D',''], ['영독','정주윤'], ['A',''], ['확통','이지연'], ['','']]
       },
       8: {
         '월': [['E',''], ['음연','송지호'], ['C',''], ['B',''], ['D',''], ['화작','오의진'], ['','']],
         '화': [['진로','윤정윤'], ['확통','이지연'], ['D',''], ['화작','오의진'], ['영독','정주윤'], ['스생','박현선'], ['A','']],
-        '수': [['C',''], ['음연','송지호'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '수': [['C',''], ['음연','송지호'], ['B',''], ['E',''], ['자율(부담임)','이현승'], ['자율(담임)','권유진'], ['','']],
         '목': [['확통','이지연'], ['A',''], ['영독','정주윤'], ['B',''], ['E',''], ['C',''], ['화작','오의진']],
         '금': [['음연','송지호'], ['영독','정주윤'], ['D',''], ['확통','이지연'], ['A',''], ['스생','박현선'], ['','']]
       }
@@ -478,7 +500,7 @@
         examTime: '13:40 ~ 14:30',
         durationText: '50분',
         proctorTime: '13:40 ~ 14:30 (50분)',
-        dutyNote: '13:35 입실, 문제지 배부 및 듣기평가 포함 50분 감독. 14:30 회수 없이 퇴실.'
+        dutyNote: '13:35 입실, 문제지 배부 및 듣기평가 포함 50분 감독. 14:30 회수 없이 퇴실. (※ 수요일: 해당 학급 부담임 교사)'
       },
       6: {
         period: 6,
@@ -487,7 +509,7 @@
         examTime: '14:40 ~ 15:30',
         durationText: '50분',
         proctorTime: '14:40 ~ 15:30 (연속 50분)',
-        dutyNote: '14:40 입실 → 14:50 영어 회수 → 한국사 배부 → 15:00~15:30 한국사 감독 및 회수! (월수금 즉시 종례 / 화목 탐구 시험지 배부 후 퇴실)'
+        dutyNote: '14:40 입실 → 14:50 영어 회수 → 한국사 배부 → 15:00~15:30 한국사 감독 및 회수! (※ 수요일: 담임교사가 들어가 한국사 감독 및 15:30 종례 / 화목: 탐구 시험지 배부 후 퇴실)'
       },
       7: {
         period: 7,
@@ -505,42 +527,42 @@
       '윤선미': { subject: '국어', schedule: { '월': ['106국어', null, '201진로', null, '107국어', '105국어', null], '화': [null, '106국어', null, '108국어', '201 A_문학', null, '105국어'], '수': ['107국어', '108국어', null, null, null, null, '106국어'], '목': ['201 A_문학', null, '105국어', '107국어', null, '108국어', null], '금': [null, '201 A_문학', null, null, null, null, null] } },
       '강은진': { subject: '국어', schedule: { '월': ['203화법', null, '203화법', '205화법', null, '202 B_문학', null], '화': [null, '202 B_문학', null, null, null, null, '201화법'], '수': ['201화법', null, '205화법', '203화법', null, null, null], '목': [null, '203화법', null, '205화법', '201화법', null, '202 B_문학'], '금': [null, null, '205화법', null, '201화법', null, null] } },
       '정은숙': { subject: '국어', schedule: { '월': ['206화법', '203 D_문학', null, '204화법', '202화법', null, '202화법'], '화': [null, null, null, null, null, '203 D_문학', null], '수': ['204화법', null, '206화법', '206화법', null, null, null], '목': [null, null, null, null, '204화법', '206화법', null], '금': [null, '202화법', '202화법', null, '204화법', '203 D_문학', null] } },
-      '오의진': { subject: '국어 (화작)', schedule: { '월': [null, '306화작', null, '208화법', null, '308화작', null], '화': ['306화작', null, null, '308화작', '305화작', '307화작', null], '수': [null, '305화작', '208화법', null, null, null, null], '목': ['307화작', null, '306화작', null, null, '208화법', '308화작'], '금': ['307화작', null, null, '305화작', null, null, null] } },
+      '오의진': { subject: '국어 (화작)', schedule: { '월': [null, '306화작', null, '208화법', null, '308화작', null], '화': ['306화작', null, null, '308화작', '305화작', '307화작', null], '수': [null, '305화작', '208화법', null, null, '306자율(담임)', null], '목': ['307화작', null, '306화작', null, null, '208화법', '308화작'], '금': ['307화작', null, null, '305화작', null, null, null] } },
       '방수영': { subject: '국어 (언매/화작)', schedule: { '월': [null, '301언매', null, null, null, '302화작', null], '화': ['304화작', '301언매', null, null, null, '302화작', null], '수': [null, '204 E_문학', null, '204 E_문학', null, null, null], '목': ['303화작', null, '302화작', null, '303화작', null, '304화작'], '금': ['204 E_문학', '301언매', null, '304화작', null, '303화작', null] } },
       '노광현': { subject: '수학', schedule: { '월': [null, null, '104수학', null, '101수학', '103수학', null], '화': ['102수학', null, '104수학', null, '101수학', '103수학', null], '수': ['104수학', null, '102수학', null, null, null, null], '목': [null, null, '103수학', '102수학', null, '104수학', '101수학'], '금': [null, null, '102수학', '101수학', null, '103수학', null] } },
       '조수연': { subject: '수학', schedule: { '월': ['105수학', null, '107수학', null, '106수학', '108수학', null], '화': [null, null, '105수학', null, '108수학', '107수학', null], '수': [null, '106수학', null, '108수학', null, null, null], '목': ['107수학', null, '106수학', null, null, '105수학', null], '금': ['105수학', '107수학', null, '108수학', '106수학', null, null] } },
       '최정': { subject: '수학 (확통/미적)', schedule: { '월': ['202미적', '305확통', null, null, '203미적', null, null], '화': [null, '305확통', '201미적', null, null, null, '203미적'], '수': ['203미적', null, '201미적', '202미적', null, null, null], '목': [null, '201미적', null, '203미적', '202미적', null, null], '금': [null, null, '201미적', null, '202미적', '305확통', null] } },
       '진혜리': { subject: '수학 (미적/확통)', schedule: { '월': ['204미적', null, '205미적', '206미적', null, null, null], '화': [null, '306확통', null, null, null, null, '204미적'], '수': ['205미적', null, '206미적', '204미적', null, null, null], '목': ['306확통', '204미적', null, '206미적', null, '205미적', null], '금': [null, null, '206미적', null, '205미적', '306확통', null] } },
       '이지연': { subject: '수학 (미적/확통)', schedule: { '월': ['208미적', null, '206진로', null, '207미적', '307확통', null], '화': [null, '308확통', '208미적', null, '307확통', null, null], '수': ['208미적', null, null, '207미적', null, null, null], '목': ['308확통', null, null, '207미적', '208미적', '207진로', null], '금': [null, null, '207미적', '308확통', null, '307확통', null] } },
-      '고명호': { subject: '수학 (확통/경수)', schedule: { '월': [null, '302확통', null, null, null, '303확통', null], '화': ['301확통', '304확통', null, '201 E_경수', '302확통', '303확통', null], '수': [null, '201 E_경수', null, null, null, null, null], '목': ['304확통', null, '301확통', null, null, null, '302확통'], '금': ['201 E_경수', '303확통', null, '301확통', null, '304확통', null] } },
-      '권유진': { subject: '수학 (미적/기하)', schedule: { '월': [null, null, null, '302 B_미적', null, '203 B_기하', null], '화': [null, '203 B_기하', null, '205 E_기하', '202 A_기하', null, '301 A_미적'], '수': [null, '205 E_기하', '302 B_미적', null, null, null, null], '목': ['202 A_기하', '301 A_미적', null, '302 B_미적', null, null, '203 B_기하'], '금': ['205 E_기하', '202 A_기하', null, null, '301 A_미적', null, null] } },
+      '고명호': { subject: '수학 (확통/경수)', schedule: { '월': [null, '302확통', null, null, null, '303확통', null], '화': ['301확통', '304확통', null, '201 E_경수', '302확통', '303확통', null], '수': [null, '201 E_경수', null, null, null, '301자율(담임)', null], '목': ['304확통', null, '301확통', null, null, null, '302확통'], '금': ['201 E_경수', '303확통', null, '301확통', null, '304확통', null] } },
+      '권유진': { subject: '수학 (미적/기하)', schedule: { '월': [null, null, null, '302 B_미적', null, '203 B_기하', null], '화': [null, '203 B_기하', null, '205 E_기하', '202 A_기하', null, '301 A_미적'], '수': [null, '205 E_기하', '302 B_미적', null, null, '308자율(담임)', null], '목': ['202 A_기하', '301 A_미적', null, '302 B_미적', null, null, '203 B_기하'], '금': ['205 E_기하', '202 A_기하', null, null, '301 A_미적', null, null] } },
       '진현영': { subject: '영어', schedule: { '월': [null, null, '103영어', '201영어A', '104영어', '201영어A', null], '화': ['102영어', '103영어', '202영어A', null, '102영어', null, '101영어'], '수': [null, '101영어', null, null, null, null, null], '목': ['104영어', null, '101영어', '202영어A', null, '201영어A', null], '금': ['102영어', null, null, '104영어', '103영어', null, null] } },
       '김정현': { subject: '영어', schedule: { '월': [null, '108영어', '202영어B', null, '201영어B', '107영어', null], '화': ['107영어', '105영어', null, null, null, null, '106영어'], '수': [null, '105영어', '202영어B', null, null, null, null], '목': [null, '107영어', null, '201영어B', null, '108영어', null], '금': ['106영어', null, '108영어', '105영어', '106영어', null, null] } },
       '윤정윤': { subject: '영어 (영어A/진로)', schedule: { '월': ['207영어A', null, '203영어A', null, '206영어A', null, null], '화': ['308진로', null, '205영어A', null, '306진로', null, null], '수': ['207영어A', null, '203영어A', null, '205영어A', null, '208영어A'], '목': [null, '208영어A', '204영어A', '204영어A', null, null, null], '금': [null, null, '204영어A', null, '206영어A', null, null] } },
       '송지현': { subject: '영어 (영어B/진로)', schedule: { '월': ['205영어B', null, '208영어B', null, '204영어B', null, null], '화': [null, null, '207영어B', null, null, null, null], '수': ['206영어B', null, '207영어B', '205영어B', '203영어B', null, null], '목': [null, '206영어B', null, null, '203영어B', '204영어B', null], '금': ['302진로', null, '208영어B', null, null, null, null] } },
-      '김경남': { subject: '영어 (영독/영발)', schedule: { '월': [null, '304영독', null, null, null, '301영독', null], '화': ['201 C_영발', '303영독', null, '302영독', '304영독', '301영독', null], '수': [null, '301영독', '201 C_영발', null, null, null, null], '목': ['302영독', null, null, '201 C_영발', null, null, '303영독'], '금': ['303영독', '304영독', null, '201 C_영발', null, '302영독', null] } },
-      '정주윤': { subject: '영어 (영독/영발)', schedule: { '월': [null, '202 D_영발', null, null, null, '305영독', null], '화': ['305영독', '307영독', null, '306영독', '308영독', '202 D_영발', '306영독'], '수': [null, '307영독', '308영독', null, null, null, null], '목': ['305영독', '308영독', null, '307영독', null, null, '306영독'], '금': ['306영독', '308영독', null, '307영독', null, '202 D_영발', null] } },
-      '배혜선': { subject: '사회 (통사/사탐)', schedule: { '월': ['306 E_사탐', '102통사A', '305 D_사탐', '103통사A', '305 D_사탐', null, null], '화': ['101통사A', null, '104통사A', '105통사A', null, null, null], '수': [null, '103통사A', null, '306 E_사탐', null, null, null], '목': [null, '105통사A', '305 D_사탐', null, '306 E_사탐', null, null], '금': ['101통사A', null, '305 D_사탐', '102통사A', '104통사A', null, null] } },
-      '한효숙': { subject: '사회 (생창/중국어)', schedule: { '월': ['307 E_중회', null, '301 C_생창', null, '302 D_생창', null, null], '화': [null, '307 A_생창', '302 D_생창', null, '208 A_중국', null, '307 A_생창'], '수': ['301 C_생창', null, null, '307 E_중회', null, '301 C_생창', null], '목': ['208 A_중국', '307 A_생창', '302 D_생창', null, '307 E_중회', '301 C_생창', null], '금': [null, '208 A_중국', '302 D_생창', null, '307 A_생창', null, null] } },
-      '이현승': { subject: '사회 (사문/통사)', schedule: { '월': ['301 E_사문', null, '303 C_사문', '304 B_사문', null, null, null], '화': [null, '302 A_사문', '106통사A', null, '107통사A', null, '302 A_사문'], '수': ['303 C_사문', null, '106통사A', '301 E_사문', '301 E_사문', '303 C_사문', null], '목': [null, '302 A_사문', '304 B_사문', '304 B_사문', null, '303 C_사문', null], '금': ['107통사A', null, '106통사A', '304 B_사문', '302 A_사문', null, null] } },
+      '김경남': { subject: '영어 (영독/영발)', schedule: { '월': [null, '304영독', null, null, null, '301영독', null], '화': ['201 C_영발', '303영독', null, '302영독', '304영독', '301영독', null], '수': [null, '301영독', '201 C_영발', null, null, '304자율(담임)', null], '목': ['302영독', null, null, '201 C_영발', null, null, '303영독'], '금': ['303영독', '304영독', null, '201 C_영발', null, '302영독', null] } },
+      '정주윤': { subject: '영어 (영독/영발)', schedule: { '월': [null, '202 D_영발', null, null, null, '305영독', null], '화': ['305영독', '307영독', null, '306영독', '308영독', '202 D_영발', '306영독'], '수': [null, '307영독', '308영독', null, null, '305자율(담임)', null], '목': ['305영독', '308영독', null, '307영독', null, null, '306영독'], '금': ['306영독', '308영독', null, '307영독', null, '202 D_영발', null] } },
+      '배혜선': { subject: '사회 (통사/사탐)', schedule: { '월': ['306 E_사탐', '102통사A', '305 D_사탐', '103통사A', '305 D_사탐', null, null], '화': ['101통사A', null, '104통사A', '105통사A', null, null, null], '수': [null, '103통사A', null, '306 E_사탐', '305자율(부담임)', null, null], '목': [null, '105통사A', '305 D_사탐', null, '306 E_사탐', null, null], '금': ['101통사A', null, '305 D_사탐', '102통사A', '104통사A', null, null] } },
+      '한효숙': { subject: '사회 (생창/중국어)', schedule: { '월': ['307 E_중회', null, '301 C_생창', null, '302 D_생창', null, null], '화': [null, '307 A_생창', '302 D_생창', null, '208 A_중국', null, '307 A_생창'], '수': ['301 C_생창', null, null, '307 E_중회', '304자율(부담임)', null, null], '목': ['208 A_중국', '307 A_생창', '302 D_생창', null, '307 E_중회', '301 C_생창', null], '금': [null, '208 A_중국', '302 D_생창', null, '307 A_생창', null, null] } },
+      '이현승': { subject: '사회 (사문/통사)', schedule: { '월': ['301 E_사문', null, '303 C_사문', '304 B_사문', null, null, null], '화': [null, '302 A_사문', '106통사A', null, '107통사A', null, '302 A_사문'], '수': ['303 C_사문', null, '106통사A', '301 E_사문', '308자율(부담임)', null, null], '목': [null, '302 A_사문', '304 B_사문', '304 B_사문', null, '303 C_사문', null], '금': ['107통사A', null, '106통사A', '304 B_사문', '302 A_사문', null, null] } },
       '이승연': { subject: '일본어/학습', schedule: { '월': ['309 E_학생', null, null, null, '204 A_일본', '205 B_일본', null], '화': [null, '205 B_일본', null, null, null, null, '308 A_학생'], '수': ['206 C_일본', null, null, '309 E_학생', '309 E_학생', null, null], '목': ['204 A_일본', '308 A_학생', '206 C_일본', '206 C_일본', '309 E_학생', null, '205 B_일본'], '금': [null, '204 A_일본', null, null, '308 A_학생', null, null] } },
       '남성우': { subject: '한국사/통사', schedule: { '월': [null, '101한국', '101한국', '105한국', '102한국', '102한국', null], '화': [null, '108통사A', '102한국', '103한국', null, '102한국', '104한국'], '수': ['108통사A', null, '101한국', '105한국', null, null, null], '목': ['103한국', null, '102한국', null, '101한국', null, '104한국'], '금': [null, '103한국', '105한국', null, null, '104한국', null] } },
-      '이서윤': { subject: '지리 (한지/통사)', schedule: { '월': ['302 E_한지', null, '301 D_한지', '303 B_한지', '301 D_한지', '104통사B', null], '화': ['103통사B', null, null, '102통사B', null, '101통사B', null], '수': [null, null, '303 B_한지', '302 E_한지', null, null, null], '목': ['102통사B', null, '301 D_한지', '303 B_한지', '302 E_한지', '103통사B', null], '금': [null, '104통사B', '301 D_한지', '303 B_한지', '101통사B', null, null] } },
+      '이서윤': { subject: '지리 (한지/통사)', schedule: { '월': ['302 E_한지', null, '301 D_한지', '303 B_한지', '301 D_한지', '104통사B', null], '화': ['103통사B', null, null, '102통사B', null, '101통사B', null], '수': [null, null, '303 B_한지', '302 E_한지', '302자율(부담임)', null, null], '목': ['102통사B', null, '301 D_한지', '303 B_한지', '302 E_한지', '103통사B', null], '금': [null, '104통사B', '301 D_한지', '303 B_한지', '101통사B', null, null] } },
       '윤은정': { subject: '지리 (여지/한지)', schedule: { '월': ['305 E_여지', '201 D_한지', '304 D_여지', '306 B_여지', '304 D_여지', null, null], '화': [null, null, '304 D_여지', '306 B_여지', null, '201 D_한지', '303 A_여지'], '수': [null, '202 E_한지', '306 B_여지', '202 E_한지', null, null, null], '목': [null, '303 A_여지', '304 D_여지', '306 B_여지', '305 E_여지', null, null], '금': ['202 E_한지', '303 A_여지', '304 D_여지', null, '303 A_여지', '201 D_한지', null] } },
       '이혜빈': { subject: '역사 (동사/통사)', schedule: { '월': ['202 C_동사', '201 B_동사', '105통사B', '203 E_동사', '108통사B', '201 B_동사', null], '화': [null, null, null, '106통사B', '106통사B', null, '107통사B'], '수': [null, '203 E_동사', null, null, null, null, null], '목': ['108통사B', null, '202 C_동사', '202 C_동사', '107통사B', null, '201 B_동사'], '금': ['203 E_동사', null, null, null, null, '105통사B', null] } },
       '조덕인': { subject: '사회 (법사/사탐)', schedule: { '월': ['207 C_법사', '208 D_법사', '304 C_사탐', '307 B_사탐', null, '206 B_법사', null], '화': [null, '206 B_법사', null, null, '205 A_법사', '208 D_법사', null], '수': ['304 C_사탐', null, '307 B_사탐', null, null, null, null], '목': ['205 A_법사', null, '207 C_법사', '307 B_사탐', null, '304 C_사탐', '206 B_법사'], '금': [null, '205 A_법사', null, '207 C_법사', null, '208 D_법사', null] } },
-      '황인욱': { subject: '역사 (한국사/동사)', schedule: { '월': [null, '107한국', '302 C_동사', null, '303 D_동사', null, null], '화': ['108한국', null, '303 D_동사', '106한국', null, null, null], '수': ['302 C_동사', null, '106한국', '107한국', null, null, null], '목': [null, null, null, '107한국', null, '302 C_동사', '108한국'], '금': [null, '106한국', '303 D_동사', null, '108한국', null, null] } },
+      '황인욱': { subject: '역사 (한국사/동사)', schedule: { '월': [null, '107한국', '302 C_동사', null, '303 D_동사', null, null], '화': ['108한국', null, '303 D_동사', '106한국', null, null, null], '수': ['302 C_동사', null, '106한국', '107한국', '303자율(부담임)', '303자율(담임)', null], '목': [null, null, null, '107한국', null, '302 C_동사', '108한국'], '금': [null, '106한국', '303 D_동사', null, '108한국', null, null] } },
       '김동인': { subject: '윤리 (윤사)', schedule: { '월': ['303 E_윤사3', '204 D_윤사', null, '305 B_윤사3', null, '207 B_윤사', null], '화': [null, '207 B_윤사', null, '208 E_윤사', '206 A_윤사', '204 D_윤사', null], '수': [null, '208 E_윤사', '305 B_윤사3', '303 E_윤사3', '303 E_윤사3', null, null], '목': ['206 A_윤사', null, null, '305 B_윤사3', '303 E_윤사3', null, '207 B_윤사'], '금': ['208 E_윤사', '206 A_윤사', null, '305 B_윤사3', null, '204 D_윤사', null] } },
-      '이예진': { subject: '화학/통과', schedule: { '월': [null, null, '305 C_화학2', '309 B_생과', null, null, null], '화': ['104통과A', null, '101통과A', null, '103통과A', null, '304 A_화학2'], '수': ['305 C_화학2', null, '309 B_생과', '101통과A', null, null, null], '목': [null, '304 A_화학2', null, '309 B_생과', '102통과A', '305 C_화학2', null], '금': ['104통과A', null, '103통과A', null, '304 A_화학2', '102통과A', null] } },
-      '양기훈': { subject: '지구과학/통과', schedule: { '월': ['304 E_생과', '105통과B', '307 D_지구2', '106통과B', '307 D_지구2', null, null], '화': ['203 C_지구', null, null, null, '105통과B', null, null], '수': ['106통과B', null, '107통과B', '304 E_생과', null, null, null], '목': [null, null, '203 C_지구', '203 C_지구', '304 E_생과', null, null], '금': ['108통과B', '108통과B', '307 D_지구2', null, null, '107통과B', null] } },
+      '이예진': { subject: '화학/통과', schedule: { '월': [null, null, '305 C_화학2', '309 B_생과', null, null, null], '화': ['104통과A', null, '101통과A', null, '103통과A', null, '304 A_화학2'], '수': ['305 C_화학2', null, '309 B_생과', '101통과A', '306자율(부담임)', null, null], '목': [null, '304 A_화학2', null, '309 B_생과', '102통과A', '305 C_화학2', null], '금': ['104통과A', null, '103통과A', null, '304 A_화학2', '102통과A', null] } },
+      '양기훈': { subject: '지구과학/통과', schedule: { '월': ['304 E_생과', '105통과B', '307 D_지구2', '106통과B', '307 D_지구2', null, null], '화': ['203 C_지구', null, null, null, '105통과B', null, null], '수': ['106통과B', null, '107통과B', '304 E_생과', '307자율(부담임)', null, null], '목': [null, null, '203 C_지구', '203 C_지구', '304 E_생과', null, null], '금': ['108통과B', '108통과B', '307 D_지구2', null, null, '107통과B', null] } },
       '이승언': { subject: '생명과학/통과', schedule: { '월': ['108통과A', null, '306 C_생명2', null, '308 D_생과', '106통과A', null], '화': ['105통과A', null, '308 D_생과', null, null, '108통과A', '305 A_생명2'], '수': ['306 C_생명2', '107통과A', null, null, null, null, null], '목': [null, '305 A_생명2', null, '107통과A', '305 A_생명2', '306 C_생명2', null], '금': [null, null, '308 D_생과', '106통과A', '305 A_생명2', null, '105통과A'] } },
       '김계전': { subject: '과학탐구실험', schedule: { '월': [null, null, null, null, null, null, null], '화': [null, null, null, null, null, null, null], '수': [null, null, null, null, null, null, null], '목': ['105과탐', '106과탐', '107과탐', '108과탐', null, null, null], '금': [null, null, null, null, null, null, null] } },
       '김숙': { subject: '과학 (통과/세포)', schedule: { '월': ['101통과B', '103통과B', null, null, null, '209 B_세포', null], '화': ['208 C_세포', '209 B_세포', null, '207 E_세포', null, null, '102통과B'], '수': [null, '207 E_세포', null, '104통과B', null, null, null], '목': [null, '104통과B', '208 C_세포', null, '103통과B', null, '209 B_세포'], '금': ['207 E_세포', '102통과B', null, '208 C_세포', null, '101통과B', null] } },
       '이정은': { subject: '과학 (물리/물질)', schedule: { '월': [null, '207 D_물질', '307 C_생과', null, null, null, null], '화': ['205 C_물질', '208 B_물질', null, null, null, '208 B_물질', '208 B_물질'], '수': ['307 C_생과', '102과탐', null, null, null, '207 D_물질', null], '목': [null, null, '205 C_물질', '104과탐', null, '307 C_생과', null], '금': ['103과탐', '101과탐', null, '205 C_물질', null, '207 D_물질', null] } },
-      '강재욱': { subject: '물리 (물리2/역학)', schedule: { '월': [null, '206 D_역학', '306 D_물리2', '308 B_물리2', '306 D_물리2', null, null], '화': [null, '306 A_생과', null, null, '207 A_역학', null, '306 A_생과'], '수': [null, null, '308 B_물리2', null, null, null, null], '목': ['207 A_역학', '306 A_생과', '306 D_물리2', '308 B_물리2', null, null, null], '금': [null, '207 A_역학', null, null, '306 A_생과', '206 D_역학', null] } },
-      '신수완': { subject: '기술가정/공학', schedule: { '월': ['308 E_공학', '307진로', '309 D_공학', '301 B_공학', '309 D_공학', '204 B_지식', null], '화': [null, '204 B_지식', null, null, '203 A_지식', null, null], '수': [null, null, '301 B_공학', '308 E_공학', null, null, null], '목': ['203 A_지식', null, '309 D_공학', '301 B_공학', '308 E_공학', null, '204 B_지식'], '금': [null, '203 A_지식', null, null, null, null, null] } },
+      '강재욱': { subject: '물리 (물리2/역학)', schedule: { '월': [null, '206 D_역학', '306 D_물리2', '308 B_물리2', '306 D_물리2', null, null], '화': [null, '306 A_생과', null, null, '207 A_역학', null, '306 A_생과'], '수': [null, null, '308 B_물리2', null, null, '302자율(담임)', null], '목': ['207 A_역학', '306 A_생과', '306 D_물리2', '308 B_물리2', null, null, null], '금': [null, '207 A_역학', null, null, '306 A_생과', '206 D_역학', null] } },
+      '신수완': { subject: '기술가정/공학', schedule: { '월': ['308 E_공학', '307진로', '309 D_공학', '301 B_공학', '309 D_공학', '204 B_지식', null], '화': [null, '204 B_지식', null, null, '203 A_지식', null, null], '수': [null, null, '301 B_공학', '308 E_공학', null, '307자율(담임)', null], '목': ['203 A_지식', null, '309 D_공학', '301 B_공학', '308 E_공학', null, '204 B_지식'], '금': [null, '203 A_지식', null, null, null, null, null] } },
       '유대근': { subject: '기술/로봇', schedule: { '월': ['107로봇', null, '108로봇', '202진로', '105로봇', '106로봇', null], '화': [null, '107로봇', '204진로', null, null, null, '205진로'], '수': ['105로봇', null, null, null, null, '203진로', null], '목': ['106로봇', '108로봇', '107로봇', null, '105로봇', '106로봇', null], '금': [null, null, null, null, null, null, null] } },
-      '박현우': { subject: '정보/인공지능', schedule: { '월': [null, '205 D_데이', '308 C_인공', null, '310 D_인공', null, null], '화': ['204 C_데이', null, '310 D_인공', '206 E_데이', null, '205 D_데이', null], '수': ['308 C_인공', null, null, null, null, null, null], '목': [null, null, '204 C_데이', '208진로', null, '308 C_인공', '301진로'], '금': ['206 E_데이', '206 E_데이', '310 D_인공', '204 C_데이', null, '205 D_데이', null] } },
+      '박현우': { subject: '정보/인공지능', schedule: { '월': [null, '205 D_데이', '308 C_인공', null, '310 D_인공', null, null], '화': ['204 C_데이', null, '310 D_인공', '206 E_데이', null, '205 D_데이', null], '수': ['308 C_인공', null, null, null, '301자율(부담임)', null, null], '목': [null, null, '204 C_데이', '208진로', null, '308 C_인공', '301진로'], '금': ['206 E_데이', '206 E_데이', '310 D_인공', '204 C_데이', null, '205 D_데이', null] } },
       '황지윤': { subject: '정보/진로', schedule: { '월': ['104정보', null, '102정보', '101정보', '103정보', null, null], '화': [null, '304진로', '102정보', '303진로', '104정보', null, null], '수': [null, '304진로', '103정보', null, null, null, null], '목': [null, '103정보', null, null, '104정보', '101정보', null], '금': [null, '305진로', '101정보', null, '102정보', null, null] } },
       '우성훈': { subject: '체육 (스생/체육)', schedule: { '월': [null, '104체육A', '103체육A', '102체육A', null, '101체육A', null], '화': ['302스생', null, null, '301스생', null, null, null], '수': [null, '303스생', '104체육A', null, null, null, null], '목': ['101체육A', null, '303스생', '103체육A', null, '102체육A', null], '금': ['301스생', '105체육A', null, '302스생', null, null, null] } },
       '최창근': { subject: '체육 (스생)', schedule: { '월': ['201스생', null, '204스생', '203스생', '205스생', null, null], '화': [null, null, '204스생', '304스생', null, '305스생', '206스생'], '수': ['202스생', null, null, '201스생', null, null, null], '목': [null, '205스생', '305스생', '304스생', null, '202스생', null], '금': ['304스생', null, '203스생', null, '206스생', null, null] } },
@@ -572,7 +594,19 @@
           let isElective = false;
           let displaySubj = subj;
 
-          if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
+          if (day === '수' && pIdx === 4) {
+            // 수요일 5교시: 해당 학급의 부담임 교사
+            const hr = HOMEROOM_TEACHERS[c];
+            teacher = hr.assistant;
+            displaySubj = `자율활동 (부담임: ${teacher})`;
+            isElective = false;
+          } else if (day === '수' && pIdx === 5) {
+            // 수요일 6교시: 해당 학급의 담임 교사
+            const hr = HOMEROOM_TEACHERS[c];
+            teacher = hr.homeroom;
+            displaySubj = `자율활동 (담임: ${teacher})`;
+            isElective = false;
+          } else if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
             isElective = true;
             const elect = ELECTIVE_HOMEROOM_MAP[subj][c];
             teacher = elect.teacher;
@@ -958,7 +992,10 @@
           const note = (day === '화' || day === '목') ? '(16:30 탐구까지)' : '(15:30 한국사 종례)';
           text += `■ ${day}요일 ${note}\n`;
           byDay[day].forEach(d => {
-            text += `  • ${d.period}교시: ${d.room} (${d.config.shortArea}) | ${d.config.examTime}\n`;
+            let roleExtra = '';
+            if (d.day === '수' && d.period === 5) roleExtra = ' [부담임]';
+            if (d.day === '수' && d.period === 6) roleExtra = ' [담임 & 종례]';
+            text += `  • ${d.period}교시: ${d.room} (${d.config.shortArea})${roleExtra} | ${d.config.examTime}\n`;
           });
         }
       });
@@ -1029,12 +1066,19 @@
       let gHtml = '';
       for (let c = 1; c <= 8; c++) {
         const item = RESOLVED_CLASSES[c][day][currentSelectedPeriod - 1];
+        let roleBadge = '';
+        if (day === '수' && currentSelectedPeriod === 5) {
+          roleBadge = `<span class="text-[10px] bg-purple-100 text-purple-700 font-bold px-1.5 py-0.2 rounded">부담임</span>`;
+        } else if (day === '수' && currentSelectedPeriod === 6) {
+          roleBadge = `<span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.2 rounded">담임</span>`;
+        }
+
         gHtml += `
           <div onclick="onTeacherSelected('${item.teacher}'); switchMobileTab('my');" 
                class="bg-slate-50 border border-slate-200/80 active:bg-blue-50 rounded-xl p-3 cursor-pointer transition">
             <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-1">
               <span>${c}반</span>
-              <span class="text-[10px] text-slate-400 font-normal truncate max-w-[65px]">${item.subject}</span>
+              ${roleBadge || `<span class="text-[10px] text-slate-400 font-normal truncate max-w-[65px]">${item.subject}</span>`}
             </div>
             <div class="text-base font-black text-slate-900 mt-0.5">${item.teacher} <span class="text-xs font-normal text-slate-500">선생님</span></div>
           </div>
@@ -1061,7 +1105,20 @@
 
     function renderMobileClassSchedule(classNum) {
       const container = document.getElementById('mClassScheduleContent');
-      let html = '';
+      const hr = HOMEROOM_TEACHERS[classNum];
+      let html = `
+        <div class="bg-indigo-50/80 border border-indigo-200 rounded-2xl p-3.5 mb-2 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-indigo-950">3학년 ${classNum}반 지도교사</span>
+            <span class="text-[10px] bg-indigo-200 text-indigo-900 font-bold px-1.5 py-0.5 rounded">수: 부담임5T / 담임6T</span>
+          </div>
+          <div class="text-indigo-800 mt-1 flex items-center space-x-2">
+            <span>담임: <strong>${hr.homeroom}</strong> (${hr.hSubject})</span>
+            <span>|</span>
+            <span>부담임: <strong>${hr.assistant}</strong> (${hr.aSubject})</span>
+          </div>
+        </div>
+      `;
 
       DAYS.forEach(day => {
         const isMWF = (day === '월' || day === '수' || day === '금');
