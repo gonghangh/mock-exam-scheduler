@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3학년 시간모의고사 일정 및 감독 통합 운영 포털</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    * { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    
+    @media print {
+      body { background: white !important; color: black !important; }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      .print-card { box-shadow: none !important; border: 1px solid #cbd5e1 !important; page-break-inside: avoid; }
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Top Header Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-blue-200">
+            3
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">3학년 시간모의고사 운영 포털</h1>
+              <span class="px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">2026학년도</span>
+            </div>
+            <p class="text-xs text-slate-500 hidden sm:block">기존 시간표 기반 감독 배정 | 월·수·금 15:30 종례 | 화·목 16:30 종례</p>
+          </div>
+        </div>
+
+        <!-- Quick Status & Realtime Clock -->
+        <div class="flex items-center space-x-3">
+          <div class="hidden md:flex flex-col text-right">
+            <span id="headerClock" class="text-sm font-bold text-slate-800 font-mono tracking-tight">--:--:--</span>
+            <span id="currentStatusBadge" class="text-xs text-emerald-600 font-medium">실시간 대기 중</span>
+          </div>
+          <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg flex items-center space-x-1.5 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            <span>인쇄하기</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <div class="flex space-x-1 sm:space-x-4 border-t border-slate-100 overflow-x-auto py-2">
+        <button onclick="switchTab('guide')" id="tab-guide" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-blue-600 bg-blue-50 transition whitespace-nowrap">
+          📖 운영 가이드 (처음 보는 교사용)
+        </button>
+        <button onclick="switchTab('teacher')" id="tab-teacher" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
+          👨‍🏫 선생님별 맞춤 조회 (내 일정 찾기)
+        </button>
+        <button onclick="switchTab('matrix')" id="tab-matrix" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
+          📅 요일별 전체 현황판 (1~8반)
+        </button>
+        <button onclick="switchTab('class')" id="tab-class" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
+          🏫 학급별 시간표 (1~8반 인쇄용)
+        </button>
+        <button onclick="switchTab('simulator')" id="tab-simulator" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
+          ⏱️ 시험 진행 시뮬레이터
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Banner (Day of week alert) -->
+  <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white px-4 py-3 shadow-inner no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm gap-2">
+      <div class="flex items-center space-x-2">
+        <span class="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold bg-amber-400 text-slate-950">
+          핵심 원칙
+        </span>
+        <span class="font-medium">
+          <strong>기존 수업 교사가 해당 학급 감독 투입!</strong> 80분/100분 시험은 [앞교시 교사(50분)] + [쉬는시간 무감독(10분)] + [뒷교시 교사]로 자동 분할 분담됩니다.
+        </span>
+      </div>
+      <div class="flex items-center space-x-2 shrink-0">
+        <span class="bg-white/20 px-2.5 py-1 rounded-full text-xs font-semibold">
+          월·수·금: 15:30 종료(한국사 직후 종례)
+        </span>
+        <span class="bg-amber-400/90 text-slate-950 px-2.5 py-1 rounded-full text-xs font-bold">
+          화·목: 16:30 종료(7교시 탐구까지)
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: 운영 가이드 (처음 보는 선생님을 위한 친절한 설명서) -->
+    <!-- ========================================================================= -->
+    <div id="content-guide" class="space-y-6">
+      
+      <!-- Welcome Alert Card -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-md text-xs font-bold uppercase tracking-wider">안내 가이드</span>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">시간모의고사 감독 교사 운영 방식</h2>
+            <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+              시간모의고사는 정규 수업 시수 결손 및 특정 교사 감독 과중을 방지하기 위해 <strong>[기존 정규 시간표의 수업 교사]</strong>가 해당 시간에 그대로 학급에 들어가 감독하는 방식으로 운영됩니다. 아래 4가지 핵심 규칙만 숙지하시면 됩니다!
+            </p>
+          </div>
+        </div>
+
+        <!-- 4 Key Core Rules Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-blue-400 transition">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm mb-3">1</div>
+            <h3 class="font-bold text-slate-900 text-base">기존 시간표 1:1 연동</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              별도의 인위적 감독 배정 없이, 해당 요일 3학년 학급의 <strong>원래 수업 담당 교사</strong>가 그대로 해당 반 감독으로 들어갑니다.
+            </p>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-indigo-400 transition">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm mb-3">2</div>
+            <h3 class="font-bold text-slate-900 text-base">교시 분할 & 무감독 원칙</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              모의고사 시간(80분/100분)과 정규 수업(50분)의 차이는 <strong>앞 교시(50분) + 쉬는시간 무감독(10분) + 뒷 교시(나머지 분)</strong>로 공평하게 나눕니다.
+            </p>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-purple-400 transition">
+            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold text-sm mb-3">3</div>
+            <h3 class="font-bold text-slate-900 text-base">요일별 종료 시각 차이</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              <strong>월·수·금:</strong> 15:30 한국사 종료 즉시 종례!<br>
+              <strong>화·목:</strong> 7교시 탐구까지 치르고 16:30에 종례합니다. (정규 6/7교시 편제 기준)
+            </p>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-emerald-400 transition">
+            <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-sm mb-3">4</div>
+            <h3 class="font-bold text-slate-900 text-base">이동수업(A~E군) 자기반 응시</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              학생들은 이동하지 않고 <strong>자기 학급 교실(1~8반)</strong>에서 응시하며, 해당 교실(301~308호)에 배정된 선택과목 교사가 해당 반 감독을 맡습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Timetable & Proctor Duties Matrix -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm overflow-hidden">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+          <span>📋 교시별 세부 일정 및 감독 교사 행동 요령 (총정리표)</span>
+        </h3>
+        <p class="text-xs text-slate-500 mt-1">내가 들어가는 교시에 정확히 몇 시부터 몇 시까지 감독해야 하고, 언제 퇴실해야 하는지 확인하세요.</p>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs sm:text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100/80 text-slate-700 font-semibold border-y border-slate-200">
+                <th class="py-3 px-3 text-center w-16">교시</th>
+                <th class="py-3 px-3 w-28">시험 영역</th>
+                <th class="py-3 px-3 w-44">시험 시간 (총분수)</th>
+                <th class="py-3 px-3 w-48 text-blue-700 font-bold">실제 감독 시간 (배정 교사)</th>
+                <th class="py-3 px-4">감독 교사 행동 요령 & 중요 체크포인트</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <!-- 아침 조회 -->
+              <tr class="bg-amber-50/40">
+                <td class="py-3 px-3 text-center font-bold text-amber-800">조회</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">입실 및 시험준비</td>
+                <td class="py-3 px-3 font-mono text-xs">08:40 ~ 08:50 (10분)</td>
+                <td class="py-3 px-3 font-bold text-amber-800">담임 교사 임장</td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  담임교사 임장 지도. 학생 본인 확인, 휴대폰 수거, 고사 준비 안내.
+                </td>
+              </tr>
+
+              <!-- 1교시 국어 전반 -->
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-3 text-center font-bold bg-blue-50/50 text-blue-800">1교시</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  국어 (전반부)
+                  <span class="block text-[11px] text-slate-400">총 80분 중 앞 50분</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">08:50 ~ 09:40 (50분)</td>
+                <td class="py-3 px-3 font-bold text-blue-700">
+                  08:50 ~ 09:40 (50분)<br>
+                  <span class="text-xs font-normal text-slate-500">1교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  <strong class="text-slate-900">시험지 배부 및 본령.</strong> 50분간 감독 후 09:40에 1교시 종료령과 함께 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다. (학생은 계속 이어서 시험 응시)
+                </td>
+              </tr>
+
+              <!-- 무감독 1 -->
+              <tr class="bg-slate-50/80 text-slate-500 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 font-semibold text-slate-600">무감독 (쉬는시간)</td>
+                <td class="py-2 px-3 font-mono">09:40 ~ 09:50 (10분)</td>
+                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
+                <td class="py-2 px-4 text-slate-500">
+                  기존 1-2교시 쉬는 시간 활용. 학생들은 교실에서 조용히 계속 시험에 응시합니다.
+                </td>
+              </tr>
+
+              <!-- 2교시 국어 후반 -->
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-3 text-center font-bold bg-blue-50/50 text-blue-800">2교시</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  국어 (후반부 & 회수)
+                  <span class="block text-[11px] text-slate-400">총 80분 중 뒤 20분</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">09:50 ~ 10:10 (20분)</td>
+                <td class="py-3 px-3 font-bold text-blue-700">
+                  09:50 ~ 10:10 (20분)<br>
+                  <span class="text-xs font-normal text-slate-500">2교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  <strong class="text-slate-900">09:50 입실</strong>하여 20분간 감독. <strong>10:10 국어 종료령</strong>에 맞춰 답안지/문제지 회수 및 매수 확인 후 고사실 본부 제출. <span class="text-emerald-600 font-semibold">※ 10:10에 바로 퇴실 완료!</span>
+                </td>
+              </tr>
+
+              <!-- 자습 및 휴식 -->
+              <tr class="bg-emerald-50/40 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 font-bold text-emerald-900">자습 및 휴식 (40분)</td>
+                <td class="py-2 px-3 font-mono text-emerald-700">10:10 ~ 10:50 (40분)</td>
+                <td class="py-2 px-3 text-emerald-700 font-medium">자습 및 휴식 (무감독)</td>
+                <td class="py-2 px-4 text-emerald-800">
+                  2교시 잔여 시간(30분) 및 기존 2-3교시 쉬는시간(10분) 활용 학생 자율 자습 및 휴식. (2교시 교사는 10:10에 답안지 회수 후 퇴실 완료!)
+                </td>
+              </tr>
+
+              <!-- 3교시 수학 전반 -->
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-3 text-center font-bold bg-indigo-50/50 text-indigo-800">3교시</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  수학 (전반부)
+                  <span class="block text-[11px] text-slate-400">총 100분 중 앞 50분</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">10:50 ~ 11:40 (50분)</td>
+                <td class="py-3 px-3 font-bold text-indigo-700">
+                  10:50 ~ 11:40 (50분)<br>
+                  <span class="text-xs font-normal text-slate-500">3교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  <strong class="text-slate-900">10:45경 입실, 수학 문제지 배부 및 본령.</strong> 50분간 감독 후 11:40에 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다.
+                </td>
+              </tr>
+
+              <!-- 무감독 2 -->
+              <tr class="bg-slate-50/80 text-slate-500 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 font-semibold text-slate-600">무감독 (쉬는시간)</td>
+                <td class="py-2 px-3 font-mono">11:40 ~ 11:50 (10분)</td>
+                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
+                <td class="py-2 px-4 text-slate-500">기존 3-4교시 쉬는 시간 활용. 학생들은 정숙을 유지하며 시험을 계속 풉니다.</td>
+              </tr>
+
+              <!-- 4교시 수학 후반 -->
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-3 text-center font-bold bg-indigo-50/50 text-indigo-800">4교시</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  수학 (후반부 & 회수)
+                  <span class="block text-[11px] text-slate-400">총 100분 중 뒤 40분</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">11:50 ~ 12:30 (40분)</td>
+                <td class="py-3 px-3 font-bold text-indigo-700">
+                  11:50 ~ 12:30 (40분)<br>
+                  <span class="text-xs font-normal text-slate-500">4교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  <strong class="text-slate-900">11:50 입실</strong>하여 40분간 감독. <strong>12:30 수학 종료령</strong>에 맞춰 답안지/문제지 회수 및 본부 제출 후 퇴실.
+                </td>
+              </tr>
+
+              <!-- 점심 준비 및 점심시간 -->
+              <tr class="bg-amber-50/40 text-xs">
+                <td class="py-2 px-3 text-center font-mono">점심</td>
+                <td class="py-2 px-3 font-semibold text-amber-900">점심 준비 & 급식</td>
+                <td class="py-2 px-3 font-mono text-amber-800">12:30 ~ 13:40 (70분)</td>
+                <td class="py-2 px-3 text-amber-800 font-medium">급식 지도</td>
+                <td class="py-2 px-4 text-amber-900">
+                  12:30~12:40 (휴식 및 준비) + 12:40~13:40 (점심시간 60분). 1·2학년 정규 급식 일정과 동일 운영!
+                </td>
+              </tr>
+
+              <!-- 5교시 영어 전반 -->
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-3 text-center font-bold bg-purple-50/50 text-purple-800">5교시</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  영어 (듣기평가 & 전반)
+                  <span class="block text-[11px] text-slate-400">총 70분 중 앞 50분</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">13:40 ~ 14:30 (50분)</td>
+                <td class="py-3 px-3 font-bold text-purple-700">
+                  13:40 ~ 14:30 (50분)<br>
+                  <span class="text-xs font-normal text-slate-500">5교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  <strong class="text-slate-900">13:35 입실, 영어 문제지 배부.</strong> 13:40 본령 및 영어 듣기평가 방송 진행. 14:30에 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다.
+                </td>
+              </tr>
+
+              <!-- 무감독 3 -->
+              <tr class="bg-slate-50/80 text-slate-500 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 font-semibold text-slate-600">무감독 (쉬는시간)</td>
+                <td class="py-2 px-3 font-mono">14:30 ~ 14:40 (10분)</td>
+                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
+                <td class="py-2 px-4 text-slate-500">기존 5-6교시 쉬는 시간 활용. 학생들은 정숙을 유지하며 독해 문제를 계속 풉니다.</td>
+              </tr>
+
+              <!-- 6교시 영어 후반 + 배부 + 한국사 (연속 50분!) -->
+              <tr class="bg-rose-50/40 hover:bg-rose-50/70 border-l-4 border-l-rose-500">
+                <td class="py-3 px-3 text-center font-bold bg-rose-100/60 text-rose-800">6교시</td>
+                <td class="py-3 px-3 font-semibold text-rose-950">
+                  영어 회수 + 한국사
+                  <span class="block text-[11px] text-rose-700 font-bold">★ 50분 연속 임장!</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">
+                  14:40 ~ 15:30 (50분)<br>
+                  <span class="text-[11px] text-slate-500">영어10m + 준비10m + 한국사30m</span>
+                </td>
+                <td class="py-3 px-3 font-bold text-rose-700">
+                  14:40 ~ 15:30 (50분)<br>
+                  <span class="text-xs font-normal text-slate-600">6교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-rose-900">
+                  <div class="space-y-1">
+                    <div><strong>① 14:40 입실:</strong> 영어 후반 10분 감독 후 <strong>14:50 영어 종료 및 답안지 회수</strong></div>
+                    <div><strong>② 14:50 ~ 15:00:</strong> 쉬는 시간 동안 한국사 시험지 배부 & 대기 지도</div>
+                    <div><strong>③ 15:00 ~ 15:30:</strong> <strong>한국사 30분 감독</strong> 및 15:30 회수</div>
+                    <div class="p-1.5 bg-rose-100 rounded text-rose-950 font-bold space-y-1">
+                      <div>🔔 <strong>월·수·금:</strong> 15:30에 한국사 답안지 회수 완료 후 즉시 전 시험 종료 및 학급 종례!!</div>
+                      <div>🔔 <strong>화·목:</strong> 6교시 감독 교사가 <strong>시간을 조금 더 할애하여 탐구 2과목(제1/2선택) 시험지까지 학생들에게 배부</strong>해 주고 퇴실!</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 화·목 탐구 제1선택 무감독 (10분) -->
+              <tr class="bg-slate-50/80 text-slate-500 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 font-semibold text-slate-600">
+                  탐구 제1선택 시작<br>
+                  <span class="text-[10px] text-slate-400 font-normal">(화·목만 해당)</span>
+                </td>
+                <td class="py-2 px-3 font-mono">15:30 ~ 15:40 (10분)</td>
+                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
+                <td class="py-2 px-4 text-slate-500">
+                  기존 6-7교시 쉬는 시간(10분) 활용 <strong>무감독 진행</strong>. 학생들은 6교시 교사가 나눠준 시험지로 <strong>15:30부터 탐구 제1선택(30분) 자율 시험 시작!</strong>
+                </td>
+              </tr>
+
+              <!-- 7교시 탐구 2과목 (화, 목만 진행!) -->
+              <tr class="bg-amber-50/50 hover:bg-amber-100/40 border-l-4 border-l-amber-500">
+                <td class="py-3 px-3 text-center font-bold bg-amber-100 text-amber-900">7교시<br><span class="text-[10px] font-normal">(화·목만)</span></td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  탐구 2과목 감독<br>
+                  <span class="text-[11px] text-amber-700 font-bold">1선택(30분) / 2선택(30분)</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">
+                  15:30 ~ 16:30 (총 60분)<br>
+                  <span class="text-[10px] text-slate-500 font-normal">1선택: 15:30~16:00 (30분)<br>2선택: 16:00~16:30 (30분)</span>
+                </td>
+                <td class="py-3 px-3 font-bold text-amber-800">
+                  15:40 ~ 16:30 (총 50분)<br>
+                  <span class="text-xs font-normal text-slate-500">7교시 수업 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-700">
+                  <div class="space-y-1">
+                    <div><strong>① 15:40 입실:</strong> 탐구 제1선택 후반부 20분간 감독 후 <strong>16:00 제1선택 종료 및 답안지 회수</strong></div>
+                    <div><strong>② 16:00 ~ 16:30 (30분):</strong> 이어서 <strong>탐구 제2선택 30분간 감독</strong></div>
+                    <div><strong>③ 16:30:</strong> 최종 시험 종료령 후 제2선택 답안지 전량 회수, 본부 제출 및 <strong>최종 학급 종례!</strong></div>
+                    <div class="text-[11px] text-amber-900 font-medium">※ 7교시 교사는 15:40~16:30 총 50분 감독으로 원래 수업 시수(50분)와 정확히 일치합니다.</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: 선생님별 맞춤 조회 (내 일정 & 원래 시간표) -->
+    <!-- ========================================================================= -->
+    <div id="content-teacher" class="hidden space-y-6">
+
+      <!-- Teacher Search & Selector Bar -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm no-print">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-900">선생님별 맞춤 감독 일정 & 원래 시간표</h2>
+            <p class="text-xs text-slate-500 mt-1">성함을 선택하거나 검색하시면 내 모의고사 감독 시간과 원래 수업 시간표를 비교해 드립니다.</p>
+          </div>
+
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <div class="relative w-full sm:w-64">
+              <input type="text" id="teacherSearchInput" oninput="filterTeacherDropdown(this.value)" placeholder="선생님 성함 검색 (예: 고명호, 방수영)" 
+                     class="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <select id="teacherSelect" onchange="renderTeacherView(this.value)" class="py-2 px-3 border border-slate-300 rounded-xl text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Quick 3rd Grade Teachers Buttons -->
+        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
+          <span class="text-xs font-semibold text-slate-500 mr-1">주요 3학년 교사 바로가기:</span>
+          <div id="quickTeacherButtons" class="flex flex-wrap gap-1.5">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Teacher Profile Header -->
+      <div id="teacherProfileCard" class="bg-gradient-to-br from-slate-900 to-blue-950 text-white rounded-2xl p-6 shadow-md">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- 2-Column Layout: My Proctor Duties vs My Original Schedule -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left: My Mock Exam Proctor Duties (5 Cols) -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                <h3 class="font-bold text-slate-900 text-base">나의 모의고사 감독 배정표</h3>
+              </div>
+              <div class="flex items-center space-x-2">
+                <button onclick="copyTeacherScheduleText()" class="text-xs px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg flex items-center space-x-1 transition no-print">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                  <span>일정 텍스트 복사</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Proctor Duties List by Day -->
+            <div id="teacherProctorList" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: My Original Full Timetable (7 Cols) -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                <h3 class="font-bold text-slate-900 text-base">원래 주간 수업 시간표 (월~금)</h3>
+              </div>
+              <span class="text-xs text-slate-500">※ 파란색 강조: 모의고사 감독으로 전환된 수업</span>
+            </div>
+
+            <!-- Original Timetable Table -->
+            <div id="teacherOriginalTableContainer" class="overflow-x-auto">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: 요일별 종합 현황판 (전체 반 x 교시 매트릭스) -->
+    <!-- ========================================================================= -->
+    <div id="content-matrix" class="hidden space-y-6">
+
+      <!-- Day Selector & Action Bar -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900">요일별 전체 감독 현황판 (3학년 1~8반)</h2>
+          <p class="text-xs text-slate-500 mt-1">원하시는 요일을 선택하시면 1반부터 8반까지 교시별 시험 영역 및 감독 교사를 한눈에 확인하실 수 있습니다.</p>
+        </div>
+
+        <!-- Day Tabs -->
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl">
+          <button onclick="renderMatrixDay('월')" id="matrix-day-월" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 shadow-sm transition">월요일</button>
+          <button onclick="renderMatrixDay('화')" id="matrix-day-화" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">화요일</button>
+          <button onclick="renderMatrixDay('수')" id="matrix-day-수" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">수요일</button>
+          <button onclick="renderMatrixDay('목')" id="matrix-day-목" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">목요일</button>
+          <button onclick="renderMatrixDay('금')" id="matrix-day-금" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">금요일</button>
+        </div>
+      </div>
+
+      <!-- Current Selected Day Notice Banner -->
+      <div id="matrixDayBanner" class="p-4 rounded-xl border flex items-center justify-between">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Matrix Table Card -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <div id="matrixTableContainer">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: 학급별 시간표 (1~8반 인쇄 & 교실 게시용) -->
+    <!-- ========================================================================= -->
+    <div id="content-class" class="hidden space-y-6">
+
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900">학급별 모의고사 시간표 (1~8반)</h2>
+          <p class="text-xs text-slate-500 mt-1">학급별로 요일별 모의고사 시험 일정과 감독 선생님을 확인하고, 교실 칠판 부착용으로 인쇄할 수 있습니다.</p>
+        </div>
+
+        <!-- Class Selector -->
+        <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <button onclick="selectClass(1)" id="class-btn-1" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 transition">1반</button>
+          <button onclick="selectClass(2)" id="class-btn-2" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">2반</button>
+          <button onclick="selectClass(3)" id="class-btn-3" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">3반</button>
+          <button onclick="selectClass(4)" id="class-btn-4" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">4반</button>
+          <button onclick="selectClass(5)" id="class-btn-5" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">5반</button>
+          <button onclick="selectClass(6)" id="class-btn-6" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">6반</button>
+          <button onclick="selectClass(7)" id="class-btn-7" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">7반</button>
+          <button onclick="selectClass(8)" id="class-btn-8" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">8반</button>
+        </div>
+      </div>
+
+      <!-- Class Full Schedule Container -->
+      <div id="classScheduleContainer" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: 실시간 시험 시뮬레이터 & 타임라인 -->
+    <!-- ========================================================================= -->
+    <div id="content-simulator" class="hidden space-y-6">
+
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <h2 class="text-lg sm:text-xl font-bold text-slate-900">실시간 시험 진행 시뮬레이터</h2>
+        <p class="text-xs text-slate-500 mt-1">원하는 요일과 시각을 가상으로 설정하여, 그 시각에 어떤 시험이 진행 중이고 어느 교실에 어떤 선생님이 감독 중인지 테스트할 수 있습니다.</p>
+
+        <!-- Simulator Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 pt-4 border-t border-slate-100">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">가상 요일 선택</label>
+            <select id="simDaySelect" class="w-full p-2 border border-slate-300 rounded-lg text-sm font-semibold bg-white" onchange="runSimulation()">
+              <option value="월">월요일 (15:30 종료 - 한국사 직후 종례)</option>
+              <option value="화">화요일 (16:30 종료 - 7교시 탐구까지)</option>
+              <option value="수">수요일 (15:30 종료 - 한국사 직후 종례)</option>
+              <option value="목">목요일 (16:30 종료 - 7교시 탐구까지)</option>
+              <option value="금">금요일 (15:30 종료 - 한국사 직후 종례)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">가상 시각 설정</label>
+            <div class="flex items-center space-x-2">
+              <input type="time" id="simTimeInput" value="09:10" class="w-full p-2 border border-slate-300 rounded-lg text-sm font-mono font-bold" onchange="runSimulation()">
+              <button onclick="setSimToNow()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-xs font-semibold rounded-lg shrink-0 transition">현재시각</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">빠른 테스트 프리셋</label>
+            <div class="flex flex-wrap gap-1">
+              <button onclick="setSimTime('09:10')" class="px-2 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs rounded font-medium">09:10 (1교시 감독)</button>
+              <button onclick="setSimTime('10:00')" class="px-2 py-1 bg-sky-50 text-sky-700 hover:bg-sky-100 text-xs rounded font-medium">10:00 (2교시 감독)</button>
+              <button onclick="setSimTime('10:25')" class="px-2 py-1 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs rounded font-medium">10:25 (자습 및 휴식)</button>
+              <button onclick="setSimTime('14:45')" class="px-2 py-1 bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs rounded font-medium">14:45 (영어 회수)</button>
+              <button onclick="setSimTime('15:15')" class="px-2 py-1 bg-rose-50 text-rose-700 hover:bg-rose-100 text-xs rounded font-medium">15:15 (한국사)</button>
+              <button onclick="setSimTime('15:35')" class="px-2 py-1 bg-amber-50 text-amber-700 hover:bg-amber-100 text-xs rounded font-medium">15:35 (탐구1 무감독)</button>
+              <button onclick="setSimTime('15:50')" class="px-2 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs rounded font-medium">15:50 (탐구1 7교시 감독)</button>
+              <button onclick="setSimTime('16:15')" class="px-2 py-1 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs rounded font-medium">16:15 (탐구2 7교시 감독)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulator Output Card -->
+      <div id="simResultCard" class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <!-- Rendered by JS -->
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 no-print mt-10">
+    <div class="max-w-7xl mx-auto px-4">
+      <p class="font-medium text-slate-600">고등학교 3학년 시간모의고사 일정 및 감독 교사 운영 시스템</p>
+      <p class="mt-1">기존 수업 시간표 연동형 | 문의: 교무기획부 / 3학년부</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: DATA & LOGIC -->
+  <!-- ========================================================================= -->
+  <script>
+    // -------------------------------------------------------------
+    // 1. DATA DEFINITIONS
+    // -------------------------------------------------------------
+
+    // Elective blocks mapped to homeroom classrooms (301=1반, 302=2반, ... 308=8반)
+    const ELECTIVE_HOMEROOM_MAP = {
+      'A': {
+        1: { subject: 'A_미적분', teacher: '권유진' },
+        2: { subject: 'A_사회문화', teacher: '이현승' },
+        3: { subject: 'A_여행지리', teacher: '윤은정' },
+        4: { subject: 'A_화학Ⅱ', teacher: '이예진' },
+        5: { subject: 'A_생명과학Ⅱ', teacher: '이승언' },
+        6: { subject: 'A_생활과과학', teacher: '강재욱' },
+        7: { subject: 'A_생활과창의성', teacher: '한효숙' },
+        8: { subject: 'A_학습과생활', teacher: '이승연' }
+      },
+      'B': {
+        1: { subject: 'B_공학일반', teacher: '신수완' },
+        2: { subject: 'B_미적분', teacher: '권유진' },
+        3: { subject: 'B_한국지리', teacher: '이서윤' },
+        4: { subject: 'B_사회문화', teacher: '이현승' },
+        5: { subject: 'B_윤리와사상', teacher: '김동인' },
+        6: { subject: 'B_여행지리', teacher: '윤은정' },
+        7: { subject: 'B_사회탐구', teacher: '조덕인' },
+        8: { subject: 'B_물리학Ⅱ', teacher: '강재욱' }
+      },
+      'C': {
+        1: { subject: 'C_생활과창의성', teacher: '한효숙' },
+        2: { subject: 'C_동아시아사', teacher: '황인욱' },
+        3: { subject: 'C_사회문화', teacher: '이현승' },
+        4: { subject: 'C_사회탐구', teacher: '조덕인' },
+        5: { subject: 'C_화학Ⅱ', teacher: '이예진' },
+        6: { subject: 'C_생명과학Ⅱ', teacher: '이승언' },
+        7: { subject: 'C_생활과과학', teacher: '이정은' },
+        8: { subject: 'C_인공지능', teacher: '박현우' }
+      },
+      'D': {
+        1: { subject: 'D_한국지리', teacher: '이서윤' },
+        2: { subject: 'D_생활과창의성', teacher: '한효숙' },
+        3: { subject: 'D_동아시아사', teacher: '황인욱' },
+        4: { subject: 'D_여행지리', teacher: '윤은정' },
+        5: { subject: 'D_사회탐구', teacher: '배혜선' },
+        6: { subject: 'D_물리학Ⅱ', teacher: '강재욱' },
+        7: { subject: 'D_지구과학Ⅱ', teacher: '양기훈' },
+        8: { subject: 'D_생활과과학', teacher: '이승언' }
+      },
+      'E': {
+        1: { subject: 'E_사회문화', teacher: '이현승' },
+        2: { subject: 'E_한국지리', teacher: '이서윤' },
+        3: { subject: 'E_윤리와사상', teacher: '김동인' },
+        4: { subject: 'E_생활과과학', teacher: '양기훈' },
+        5: { subject: 'E_여행지리', teacher: '윤은정' },
+        6: { subject: 'E_사회탐구', teacher: '배혜선' },
+        7: { subject: 'E_중국어회화', teacher: '한효숙' },
+        8: { subject: 'E_공학일반', teacher: '신수완' }
+      }
+    };
+
+    // Raw timetable for 3rd grade classes 1-8 (from PDF 1)
+    const RAW_CLASS_TIMETABLES = {
+      1: {
+        '월': [['E',''], ['언매','방수영'], ['C',''], ['B',''], ['D',''], ['영독','김경남'], ['','']],
+        '화': [['확통','고명호'], ['언매','방수영'], ['D',''], ['스생','우성훈'], ['미감A/음악','박소연'], ['영독','김경남'], ['A','']],
+        '수': [['C',''], ['영독','김경남'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['미감A/음악','박소연'], ['A',''], ['확통','고명호'], ['B',''], ['E',''], ['C',''], ['진로','박현우']],
+        '금': [['스생','우성훈'], ['언매','방수영'], ['D',''], ['확통','고명호'], ['A',''], ['미감A/음악','박소연'], ['','']]
+      },
+      2: {
+        '월': [['E',''], ['확통','고명호'], ['C',''], ['B',''], ['D',''], ['화작','방수영'], ['','']],
+        '화': [['스생','우성훈'], ['미감A','박소연'], ['D',''], ['영독','김경남'], ['확통','고명호'], ['화작','방수영'], ['A','']],
+        '수': [['C',''], ['미감A','박소연'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['영독','김경남'], ['A',''], ['화작','방수영'], ['B',''], ['E',''], ['C',''], ['확통','고명호']],
+        '금': [['진로','송지현'], ['미감A','박소연'], ['D',''], ['스생','우성훈'], ['A',''], ['영독','김경남'], ['','']]
+      },
+      3: {
+        '월': [['E',''], ['미감A','박소연'], ['C',''], ['B',''], ['D',''], ['확통','고명호'], ['','']],
+        '화': [['미감A','박소연'], ['영독','김경남'], ['D',''], ['진로','황지윤'], ['화작','방수영'], ['확통','고명호'], ['A','']],
+        '수': [['C',''], ['스생','우성훈'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['화작','방수영'], ['A',''], ['스생','우성훈'], ['B',''], ['E',''], ['C',''], ['영독','김경남']],
+        '금': [['영독','김경남'], ['확통','고명호'], ['D',''], ['미감A','박소연'], ['A',''], ['화작','방수영'], ['','']]
+      },
+      4: {
+        '월': [['E',''], ['영독','김경남'], ['C',''], ['B',''], ['D',''], ['미감A','박소연'], ['','']],
+        '화': [['화작','방수영'], ['확통','고명호'], ['D',''], ['스생','최창근'], ['영독','김경남'], ['미감A','박소연'], ['A','']],
+        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['확통','고명호'], ['A',''], ['미감A','박소연'], ['B',''], ['E',''], ['C',''], ['화작','방수영']],
+        '금': [['스생','최창근'], ['영독','김경남'], ['D',''], ['화작','방수영'], ['A',''], ['확통','고명호'], ['','']]
+      },
+      5: {
+        '월': [['E',''], ['확통','최정'], ['C',''], ['B',''], ['D',''], ['영독','정주윤'], ['','']],
+        '화': [['영독','정주윤'], ['확통','최정'], ['D',''], ['미감A','박소연'], ['화작','오의진'], ['스생','최창근'], ['A','']],
+        '수': [['C',''], ['화작','오의진'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['영독','정주윤'], ['A',''], ['스생','최창근'], ['B',''], ['E',''], ['C',''], ['미감A','박소연']],
+        '금': [['미감A','박소연'], ['진로','황지윤'], ['D',''], ['화작','오의진'], ['A',''], ['확통','최정'], ['','']]
+      },
+      6: {
+        '월': [['E',''], ['화작','오의진'], ['C',''], ['B',''], ['D',''], ['음연','송지호'], ['','']],
+        '화': [['화작','오의진'], ['확통','진혜리'], ['D',''], ['영독','정주윤'], ['진로','윤정윤'], ['음연','송지호'], ['A','']],
+        '수': [['C',''], ['스생','박현선'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['확통','진혜리'], ['A',''], ['화작','오의진'], ['B',''], ['E',''], ['C',''], ['영독','정주윤']],
+        '금': [['영독','정주윤'], ['스생','박현선'], ['D',''], ['음연','송지호'], ['A',''], ['확통','진혜리'], ['','']]
+      },
+      7: {
+        '월': [['E',''], ['진로','신수완'], ['C',''], ['B',''], ['D',''], ['확통','이지연'], ['','']],
+        '화': [['스생','박현선'], ['영독','정주윤'], ['D',''], ['음연','송지호'], ['확통','이지연'], ['화작','오의진'], ['A','']],
+        '수': [['C',''], ['영독','정주윤'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['화작','오의진'], ['A',''], ['스생','박현선'], ['B',''], ['E',''], ['C',''], ['음연','송지호']],
+        '금': [['화작','오의진'], ['음연','송지호'], ['D',''], ['영독','정주윤'], ['A',''], ['확통','이지연'], ['','']]
+      },
+      8: {
+        '월': [['E',''], ['음연','송지호'], ['C',''], ['B',''], ['D',''], ['화작','오의진'], ['','']],
+        '화': [['진로','윤정윤'], ['확통','이지연'], ['D',''], ['화작','오의진'], ['영독','정주윤'], ['스생','박현선'], ['A','']],
+        '수': [['C',''], ['음연','송지호'], ['B',''], ['E',''], ['E',''], ['C',''], ['','']],
+        '목': [['확통','이지연'], ['A',''], ['영독','정주윤'], ['B',''], ['E',''], ['C',''], ['화작','오의진']],
+        '금': [['음연','송지호'], ['영독','정주윤'], ['D',''], ['확통','이지연'], ['A',''], ['스생','박현선'], ['','']]
+      }
+    };
+
+    // Period timing & exam duties definition
+    const PERIOD_CONFIG = {
+      1: {
+        period: 1,
+        area: '국어 1차 (전반부)',
+        subjectCategory: '국어',
+        examTime: '08:50 ~ 09:40',
+        durationText: '50분',
+        proctorTime: '08:50 ~ 09:40 (50분)',
+        dutyNote: '시험지/답안지 배부 및 50분간 감독. 09:40 종료령 후 답안지 회수 없이 퇴실.',
+        isDismissal: false
+      },
+      2: {
+        period: 2,
+        area: '국어 2차 (후반부 & 회수)',
+        subjectCategory: '국어',
+        examTime: '09:50 ~ 10:10',
+        durationText: '20분',
+        proctorTime: '09:50 ~ 10:10 (20분)',
+        dutyNote: '09:50 입실, 20분 감독 후 10:10 종료령 시 답안지/문제지 전량 회수 후 퇴실. (이후 10:50까지 40분 자습 및 휴식)',
+        isDismissal: false
+      },
+      3: {
+        period: 3,
+        area: '수학 1차 (전반부)',
+        subjectCategory: '수학',
+        examTime: '10:50 ~ 11:40',
+        durationText: '50분',
+        proctorTime: '10:50 ~ 11:40 (50분)',
+        dutyNote: '10:45 입실, 수학 시험지 배부 및 50분 감독. 11:40 종료 시 답안지 회수 없이 퇴실.',
+        isDismissal: false
+      },
+      4: {
+        period: 4,
+        area: '수학 2차 (후반부 & 회수)',
+        subjectCategory: '수학',
+        examTime: '11:50 ~ 12:30',
+        durationText: '40분',
+        proctorTime: '11:50 ~ 12:30 (40분)',
+        dutyNote: '11:50 입실, 40분 감독 후 12:30 수학 종료 시 답안지/문제지 회수 및 본부 제출.',
+        isDismissal: false
+      },
+      5: {
+        period: 5,
+        area: '영어 1차 (듣기평가 & 전반)',
+        subjectCategory: '영어',
+        examTime: '13:40 ~ 14:30',
+        durationText: '50분',
+        proctorTime: '13:40 ~ 14:30 (50분)',
+        dutyNote: '13:35 입실, 문제지 배부 및 듣기평가 포함 50분 감독. 14:30에 답안지 회수 없이 퇴실.',
+        isDismissal: false
+      },
+      6: {
+        period: 6,
+        area: '영어 회수 + 한국사 (연속)',
+        subjectCategory: '한국사/영어',
+        examTime: '14:40 ~ 15:30',
+        durationText: '50분',
+        proctorTime: '14:40 ~ 15:30 (연속 50분)',
+        dutyNote: '14:40 입실 → 14:50 영어 회수 → 한국사 배부 → 15:00~15:30 한국사 30분 감독 및 회수! (월·수·금: 즉시 종례 / 화·목: 시간 조금 더 할애하여 탐구 1·2선택 시험지 배부 후 퇴실)',
+        isDismissal: false
+      },
+      7: {
+        period: 7,
+        area: '탐구 2과목 (화·목만 진행)',
+        subjectCategory: '탐구',
+        examTime: '15:30 ~ 16:30',
+        durationText: '60분 (각 30분)',
+        proctorTime: '15:40 ~ 16:30 (50분)',
+        dutyNote: '화·목요일만 진행! [15:30~15:40 무감독] → [15:40~16:00(20분) 탐구 1선택 감독 및 16:00 회수] → [16:00~16:30(30분) 탐구 2선택 감독 및 16:30 최종 회수 & 종례]',
+        isDismissal: true
+      }
+    };
+
+    // Full 49 Teachers' raw schedules (from PDF 2)
+    const TEACHERS_RAW = {
+      '권희정': {
+        subject: '국어',
+        schedule: {
+          '월': [null, null, '101국어', '207화법', null, null, null],
+          '화': [null, '102국어', null, '101국어', null, '102국어', '207화법'],
+          '수': ['103국어', '104국어', null, '101국어', null, '104국어', null],
+          '목': ['103국어', '207화법', null, null, '207화법', null, '102국어'],
+          '금': [null, null, '104국어', '103국어', null, null, null]
+        }
+      },
+      '윤선미': {
+        subject: '국어',
+        schedule: {
+          '월': ['106국어', null, '201진로', null, '107국어', '105국어', null],
+          '화': [null, '106국어', null, '108국어', '201 A_문학', null, '105국어'],
+          '수': ['107국어', '108국어', null, null, null, null, '106국어'],
+          '목': ['201 A_문학', null, '105국어', '107국어', null, '108국어', null],
+          '금': [null, '201 A_문학', null, null, null, null, null]
+        }
+      },
+      '강은진': {
+        subject: '국어',
+        schedule: {
+          '월': ['203화법', null, '203화법', '205화법', null, '202 B_문학', null],
+          '화': [null, '202 B_문학', null, null, null, null, '201화법'],
+          '수': ['201화법', null, '205화법', '203화법', null, null, null],
+          '목': [null, '203화법', null, '205화법', '201화법', null, '202 B_문학'],
+          '금': [null, null, '205화법', null, '201화법', null, null]
+        }
+      },
+      '정은숙': {
+        subject: '국어',
+        schedule: {
+          '월': ['206화법', '203 D_문학', null, '204화법', '202화법', null, '202화법'],
+          '화': [null, null, null, null, null, '203 D_문학', null],
+          '수': ['204화법', null, '206화법', '206화법', null, null, null],
+          '목': [null, null, null, null, '204화법', '206화법', null],
+          '금': [null, '202화법', '202화법', null, '204화법', '203 D_문학', null]
+        }
+      },
+      '오의진': {
+        subject: '국어 (화작)',
+        schedule: {
+          '월': [null, '306화작', null, '208화법', null, '308화작', null],
+          '화': ['306화작', null, null, '308화작', '305화작', '307화작', null],
+          '수': [null, '305화작', '208화법', null, null, null, null],
+          '목': ['307화작', null, '306화작', null, null, '208화법', '308화작'],
+          '금': ['307화작', null, null, '305화작', null, null, null]
+        }
+      },
+      '방수영': {
+        subject: '국어 (언매/화작)',
+        schedule: {
+          '월': [null, '301언매', null, null, null, '302화작', null],
+          '화': ['304화작', '301언매', null, null, null, '302화작', null],
+          '수': [null, '204 E_문학', null, '204 E_문학', null, null, null],
+          '목': ['303화작', null, '302화작', null, '303화작', null, '304화작'],
+          '금': ['204 E_문학', '301언매', null, '304화작', null, '303화작', null]
+        }
+      },
+      '노광현': {
+        subject: '수학',
+        schedule: {
+          '월': [null, null, '104수학', null, '101수학', '103수학', null],
+          '화': ['102수학', null, '104수학', null, '101수학', '103수학', null],
+          '수': ['104수학', null, '102수학', null, null, null, null],
+          '목': [null, null, '103수학', '102수학', null, '104수학', '101수학'],
+          '금': [null, null, '102수학', '101수학', null, '103수학', null]
+        }
+      },
+      '조수연': {
+        subject: '수학',
+        schedule: {
+          '월': ['105수학', null, '107수학', null, '106수학', '108수학', null],
+          '화': [null, null, '105수학', null, '108수학', '107수학', null],
+          '수': [null, '106수학', null, '108수학', null, null, null],
+          '목': ['107수학', null, '106수학', null, null, '105수학', null],
+          '금': ['105수학', '107수학', null, '108수학', '106수학', null, null]
+        }
+      },
+      '최정': {
+        subject: '수학 (확통/미적)',
+        schedule: {
+          '월': ['202미적', '305확통', null, null, '203미적', null, null],
+          '화': [null, '305확통', '201미적', null, null, null, '203미적'],
+          '수': ['203미적', null, '201미적', '202미적', null, null, null],
+          '목': [null, '201미적', null, '203미적', '202미적', null, null],
+          '금': [null, null, '201미적', null, '202미적', '305확통', null]
+        }
+      },
+      '진혜리': {
+        subject: '수학 (미적/확통)',
+        schedule: {
+          '월': ['204미적', null, '205미적', '206미적', null, null, null],
+          '화': [null, '306확통', null, null, null, null, '204미적'],
+          '수': ['205미적', null, '206미적', '204미적', null, null, null],
+          '목': ['306확통', '204미적', null, '206미적', null, '205미적', null],
+          '금': [null, null, '206미적', null, '205미적', '306확통', null]
+        }
+      },
+      '이지연': {
+        subject: '수학 (미적/확통)',
+        schedule: {
+          '월': ['208미적', null, '206진로', null, '207미적', '307확통', null],
+          '화': [null, '308확통', '208미적', null, '307확통', null, null],
+          '수': ['208미적', null, null, '207미적', null, null, null],
+          '목': ['308확통', null, null, '207미적', '208미적', '207진로', null],
+          '금': [null, null, '207미적', '308확통', null, '307확통', null]
+        }
+      },
+      '고명호': {
+        subject: '수학 (확통/경수)',
+        schedule: {
+          '월': [null, '302확통', null, null, null, '303확통', null],
+          '화': ['301확통', '304확통', null, '201 E_경수', '302확통', '303확통', null],
+          '수': [null, '201 E_경수', null, null, null, null, null],
+          '목': ['304확통', null, '301확통', null, null, null, '302확통'],
+          '금': ['201 E_경수', '303확통', null, '301확통', null, '304확통', null]
+        }
+      },
+      '권유진': {
+        subject: '수학 (미적/기하)',
+        schedule: {
+          '월': [null, null, null, '302 B_미적', null, '203 B_기하', null],
+          '화': [null, '203 B_기하', null, '205 E_기하', '202 A_기하', null, '301 A_미적'],
+          '수': [null, '205 E_기하', '302 B_미적', null, null, null, null],
+          '목': ['202 A_기하', '301 A_미적', null, '302 B_미적', null, null, '203 B_기하'],
+          '금': ['205 E_기하', '202 A_기하', null, null, '301 A_미적', null, null]
+        }
+      },
+      '진현영': {
+        subject: '영어',
+        schedule: {
+          '월': [null, null, '103영어', '201영어A', '104영어', '201영어A', null],
+          '화': ['102영어', '103영어', '202영어A', null, '102영어', null, '101영어'],
+          '수': [null, '101영어', null, null, null, null, null],
+          '목': ['104영어', null, '101영어', '202영어A', null, '201영어A', null],
+          '금': ['102영어', null, null, '104영어', '103영어', null, null]
+        }
+      },
+      '김정현': {
+        subject: '영어',
+        schedule: {
+          '월': [null, '108영어', '202영어B', null, '201영어B', '107영어', null],
+          '화': ['107영어', '105영어', null, null, null, null, '106영어'],
+          '수': [null, '105영어', '202영어B', null, null, null, null],
+          '목': [null, '107영어', null, '201영어B', null, '108영어', null],
+          '금': ['106영어', null, '108영어', '105영어', '106영어', null, null]
+        }
+      },
+      '윤정윤': {
+        subject: '영어 (영어A/진로)',
+        schedule: {
+          '월': ['207영어A', null, '203영어A', null, '206영어A', null, null],
+          '화': ['308진로', null, '205영어A', null, '306진로', null, null],
+          '수': ['207영어A', null, '203영어A', null, '205영어A', null, '208영어A'],
+          '목': [null, '208영어A', '204영어A', '204영어A', null, null, null],
+          '금': [null, null, '204영어A', null, '206영어A', null, null]
+        }
+      },
+      '송지현': {
+        subject: '영어 (영어B/진로)',
+        schedule: {
+          '월': ['205영어B', null, '208영어B', null, '204영어B', null, null],
+          '화': [null, null, '207영어B', null, null, null, null],
+          '수': ['206영어B', null, '207영어B', '205영어B', '203영어B', null, null],
+          '목': [null, '206영어B', null, null, '203영어B', '204영어B', null],
+          '금': ['302진로', null, '208영어B', null, null, null, null]
+        }
+      },
+      '김경남': {
+        subject: '영어 (영독/영발)',
+        schedule: {
+          '월': [null, '304영독', null, null, null, '301영독', null],
+          '화': ['201 C_영발', '303영독', null, '302영독', '304영독', '301영독', null],
+          '수': [null, '301영독', '201 C_영발', null, null, null, null],
+          '목': ['302영독', null, null, '201 C_영발', null, null, '303영독'],
+          '금': ['303영독', '304영독', null, '201 C_영발', null, '302영독', null]
+        }
+      },
+      '정주윤': {
+        subject: '영어 (영독/영발)',
+        schedule: {
+          '월': [null, '202 D_영발', null, null, null, '305영독', null],
+          '화': ['305영독', '307영독', null, '306영독', '308영독', '202 D_영발', '306영독'],
+          '수': [null, '307영독', '308영독', null, null, null, null],
+          '목': ['305영독', '308영독', null, '307영독', null, null, '306영독'],
+          '금': ['306영독', '308영독', null, '307영독', null, '202 D_영발', null]
+        }
+      },
+      '배혜선': {
+        subject: '사회 (통사/사탐)',
+        schedule: {
+          '월': ['306 E_사탐', '102통사A', '305 D_사탐', '103통사A', '305 D_사탐', null, null],
+          '화': ['101통사A', null, '104통사A', '105통사A', null, null, null],
+          '수': [null, '103통사A', null, '306 E_사탐', null, null, null],
+          '목': [null, '105통사A', '305 D_사탐', null, '306 E_사탐', null, null],
+          '금': ['101통사A', null, '305 D_사탐', '102통사A', '104통사A', null, null]
+        }
+      },
+      '한효숙': {
+        subject: '사회 (생창/중국어)',
+        schedule: {
+          '월': ['307 E_중회', null, '301 C_생창', null, '302 D_생창', null, null],
+          '화': [null, '307 A_생창', '302 D_생창', null, '208 A_중국', null, '307 A_생창'],
+          '수': ['301 C_생창', null, null, '307 E_중회', null, '301 C_생창', null],
+          '목': ['208 A_중국', '307 A_생창', '302 D_생창', null, '307 E_중회', '301 C_생창', null],
+          '금': [null, '208 A_중국', '302 D_생창', null, '307 A_생창', null, null]
+        }
+      },
+      '이현승': {
+        subject: '사회 (사문/통사)',
+        schedule: {
+          '월': ['301 E_사문', null, '303 C_사문', '304 B_사문', null, null, null],
+          '화': [null, '302 A_사문', '106통사A', null, '107통사A', null, '302 A_사문'],
+          '수': ['303 C_사문', null, '106통사A', '301 E_사문', '301 E_사문', '303 C_사문', null],
+          '목': [null, '302 A_사문', '304 B_사문', '304 B_사문', null, '303 C_사문', null],
+          '금': ['107통사A', null, '106통사A', '304 B_사문', '302 A_사문', null, null]
+        }
+      },
+      '이승연': {
+        subject: '일본어/학습',
+        schedule: {
+          '월': ['309 E_학생', null, null, null, '204 A_일본', '205 B_일본', null],
+          '화': [null, '205 B_일본', null, null, null, null, '308 A_학생'],
+          '수': ['206 C_일본', null, null, '309 E_학생', '309 E_학생', null, null],
+          '목': ['204 A_일본', '308 A_학생', '206 C_일본', '206 C_일본', '309 E_학생', null, '205 B_일본'],
+          '금': [null, '204 A_일본', null, null, '308 A_학생', null, null]
+        }
+      },
+      '남성우': {
+        subject: '한국사/통사',
+        schedule: {
+          '월': [null, '101한국', '101한국', '105한국', '102한국', '102한국', null],
+          '화': [null, '108통사A', '102한국', '103한국', null, '102한국', '104한국'],
+          '수': ['108통사A', null, '101한국', '105한국', null, null, null],
+          '목': ['103한국', null, '102한국', null, '101한국', null, '104한국'],
+          '금': [null, '103한국', '105한국', null, null, '104한국', null]
+        }
+      },
+      '이서윤': {
+        subject: '지리 (한지/통사)',
+        schedule: {
+          '월': ['302 E_한지', null, '301 D_한지', '303 B_한지', '301 D_한지', '104통사B', null],
+          '화': ['103통사B', null, null, '102통사B', null, '101통사B', null],
+          '수': [null, null, '303 B_한지', '302 E_한지', null, null, null],
+          '목': ['102통사B', null, '301 D_한지', '303 B_한지', '302 E_한지', '103통사B', null],
+          '금': [null, '104통사B', '301 D_한지', '303 B_한지', '101통사B', null, null]
+        }
+      },
+      '윤은정': {
+        subject: '지리 (여지/한지)',
+        schedule: {
+          '월': ['305 E_여지', '201 D_한지', '304 D_여지', '306 B_여지', '304 D_여지', null, null],
+          '화': [null, null, '304 D_여지', '306 B_여지', null, '201 D_한지', '303 A_여지'],
+          '수': [null, '202 E_한지', '306 B_여지', '202 E_한지', null, null, null],
+          '목': [null, '303 A_여지', '304 D_여지', '306 B_여지', '305 E_여지', null, null],
+          '금': ['202 E_한지', '303 A_여지', '304 D_여지', null, '303 A_여지', '201 D_한지', null]
+        }
+      },
+      '이혜빈': {
+        subject: '역사 (동사/통사)',
+        schedule: {
+          '월': ['202 C_동사', '201 B_동사', '105통사B', '203 E_동사', '108통사B', '201 B_동사', null],
+          '화': [null, null, null, '106통사B', '106통사B', null, '107통사B'],
+          '수': [null, '203 E_동사', null, null, null, null, null],
+          '목': ['108통사B', null, '202 C_동사', '202 C_동사', '107통사B', null, '201 B_동사'],
+          '금': ['203 E_동사', null, null, null, null, '105통사B', null]
+        }
+      },
+      '조덕인': {
+        subject: '사회 (법사/사탐)',
+        schedule: {
+          '월': ['207 C_법사', '208 D_법사', '304 C_사탐', '307 B_사탐', null, '206 B_법사', null],
+          '화': [null, '206 B_법사', null, null, '205 A_법사', '208 D_법사', null],
+          '수': ['304 C_사탐', null, '307 B_사탐', null, null, null, null],
+          '목': ['205 A_법사', null, '207 C_법사', '307 B_사탐', null, '304 C_사탐', '206 B_법사'],
+          '금': [null, '205 A_법사', null, '207 C_법사', null, '208 D_법사', null]
+        }
+      },
+      '황인욱': {
+        subject: '역사 (한국사/동사)',
+        schedule: {
+          '월': [null, '107한국', '302 C_동사', null, '303 D_동사', null, null],
+          '화': ['108한국', null, '303 D_동사', '106한국', null, null, null],
+          '수': ['302 C_동사', null, '106한국', '107한국', null, null, null],
+          '목': [null, null, null, '107한국', null, '302 C_동사', '108한국'],
+          '금': [null, '106한국', '303 D_동사', null, '108한국', null, null]
+        }
+      },
+      '김동인': {
+        subject: '윤리 (윤사)',
+        schedule: {
+          '월': ['303 E_윤사3', '204 D_윤사', null, '305 B_윤사3', null, '207 B_윤사', null],
+          '화': [null, '207 B_윤사', null, '208 E_윤사', '206 A_윤사', '204 D_윤사', null],
+          '수': [null, '208 E_윤사', '305 B_윤사3', '303 E_윤사3', '303 E_윤사3', null, null],
+          '목': ['206 A_윤사', null, null, '305 B_윤사3', '303 E_윤사3', null, '207 B_윤사'],
+          '금': ['208 E_윤사', '206 A_윤사', null, '305 B_윤사3', null, '204 D_윤사', null]
+        }
+      },
+      '이예진': {
+        subject: '화학/통과',
+        schedule: {
+          '월': [null, null, '305 C_화학2', '309 B_생과', null, null, null],
+          '화': ['104통과A', null, '101통과A', null, '103통과A', null, '304 A_화학2'],
+          '수': ['305 C_화학2', null, '309 B_생과', '101통과A', null, null, null],
+          '목': [null, '304 A_화학2', null, '309 B_생과', '102통과A', '305 C_화학2', null],
+          '금': ['104통과A', null, '103통과A', null, '304 A_화학2', '102통과A', null]
+        }
+      },
+      '양기훈': {
+        subject: '지구과학/통과',
+        schedule: {
+          '월': ['304 E_생과', '105통과B', '307 D_지구2', '106통과B', '307 D_지구2', null, null],
+          '화': ['203 C_지구', null, null, null, '105통과B', null, null],
+          '수': ['106통과B', null, '107통과B', '304 E_생과', null, null, null],
+          '목': [null, null, '203 C_지구', '203 C_지구', '304 E_생과', null, null],
+          '금': ['108통과B', '108통과B', '307 D_지구2', null, null, '107통과B', null]
+        }
+      },
+      '이승언': {
+        subject: '생명과학/통과',
+        schedule: {
+          '월': ['108통과A', null, '306 C_생명2', null, '308 D_생과', '106통과A', null],
+          '화': ['105통과A', null, '308 D_생과', null, null, '108통과A', '305 A_생명2'],
+          '수': ['306 C_생명2', '107통과A', null, null, null, null, null],
+          '목': [null, '305 A_생명2', null, '107통과A', '305 A_생명2', '306 C_생명2', null],
+          '금': [null, null, '308 D_생과', '106통과A', '305 A_생명2', null, '105통과A']
+        }
+      },
+      '김계전': {
+        subject: '과학탐구실험',
+        schedule: {
+          '월': [null, null, null, null, null, null, null],
+          '화': [null, null, null, null, null, null, null],
+          '수': [null, null, null, null, null, null, null],
+          '목': ['105과탐', '106과탐', '107과탐', '108과탐', null, null, null],
+          '금': [null, null, null, null, null, null, null]
+        }
+      },
+      '김숙': {
+        subject: '과학 (통과/세포)',
+        schedule: {
+          '월': ['101통과B', '103통과B', null, null, null, '209 B_세포', null],
+          '화': ['208 C_세포', '209 B_세포', null, '207 E_세포', null, null, '102통과B'],
+          '수': [null, '207 E_세포', null, '104통과B', null, null, null],
+          '목': [null, '104통과B', '208 C_세포', null, '103통과B', null, '209 B_세포'],
+          '금': ['207 E_세포', '102통과B', null, '208 C_세포', null, '101통과B', null]
+        }
+      },
+      '이정은': {
+        subject: '과학 (물리/물질)',
+        schedule: {
+          '월': [null, '207 D_물질', '307 C_생과', null, null, null, null],
+          '화': ['205 C_물질', '208 B_물질', null, null, null, '208 B_물질', '208 B_물질'],
+          '수': ['307 C_생과', '102과탐', null, null, null, '207 D_물질', null],
+          '목': [null, null, '205 C_물질', '104과탐', null, '307 C_생과', null],
+          '금': ['103과탐', '101과탐', null, '205 C_물질', null, '207 D_물질', null]
+        }
+      },
+      '강재욱': {
+        subject: '물리 (물리2/역학)',
+        schedule: {
+          '월': [null, '206 D_역학', '306 D_물리2', '308 B_물리2', '306 D_물리2', null, null],
+          '화': [null, '306 A_생과', null, null, '207 A_역학', null, '306 A_생과'],
+          '수': [null, null, '308 B_물리2', null, null, null, null],
+          '목': ['207 A_역학', '306 A_생과', '306 D_물리2', '308 B_물리2', null, null, null],
+          '금': [null, '207 A_역학', null, null, '306 A_생과', '206 D_역학', null]
+        }
+      },
+      '신수완': {
+        subject: '기술가정/공학',
+        schedule: {
+          '월': ['308 E_공학', '307진로', '309 D_공학', '301 B_공학', '309 D_공학', '204 B_지식', null],
+          '화': [null, '204 B_지식', null, null, '203 A_지식', null, null],
+          '수': [null, null, '301 B_공학', '308 E_공학', null, null, null],
+          '목': ['203 A_지식', null, '309 D_공학', '301 B_공학', '308 E_공학', null, '204 B_지식'],
+          '금': [null, '203 A_지식', null, null, null, null, null]
+        }
+      },
+      '유대근': {
+        subject: '기술/로봇',
+        schedule: {
+          '월': ['107로봇', null, '108로봇', '202진로', '105로봇', '106로봇', null],
+          '화': [null, '107로봇', '204진로', null, null, null, '205진로'],
+          '수': ['105로봇', null, null, null, null, '203진로', null],
+          '목': ['106로봇', '108로봇', '107로봇', null, '105로봇', '106로봇', null],
+          '금': [null, null, null, null, null, null, null]
+        }
+      },
+      '박현우': {
+        subject: '정보/인공지능',
+        schedule: {
+          '월': [null, '205 D_데이', '308 C_인공', null, '310 D_인공', null, null],
+          '화': ['204 C_데이', null, '310 D_인공', '206 E_데이', null, '205 D_데이', null],
+          '수': ['308 C_인공', null, null, null, null, null, null],
+          '목': [null, null, '204 C_데이', '208진로', null, '308 C_인공', '301진로'],
+          '금': ['206 E_데이', '206 E_데이', '310 D_인공', '204 C_데이', null, '205 D_데이', null]
+        }
+      },
+      '황지윤': {
+        subject: '정보/진로',
+        schedule: {
+          '월': ['104정보', null, '102정보', '101정보', '103정보', null, null],
+          '화': [null, '304진로', '102정보', '303진로', '104정보', null, null],
+          '수': [null, '304진로', '103정보', null, null, null, null],
+          '목': [null, '103정보', null, null, '104정보', '101정보', null],
+          '금': [null, '305진로', '101정보', null, '102정보', null, null]
+        }
+      },
+      '우성훈': {
+        subject: '체육 (스생/체육)',
+        schedule: {
+          '월': [null, '104체육A', '103체육A', '102체육A', null, '101체육A', null],
+          '화': ['302스생', null, null, '301스생', null, null, null],
+          '수': [null, '303스생', '104체육A', null, null, null, null],
+          '목': ['101체육A', null, '303스생', '103체육A', null, '102체육A', null],
+          '금': ['301스생', '105체육A', null, '302스생', null, null, null]
+        }
+      },
+      '최창근': {
+        subject: '체육 (스생)',
+        schedule: {
+          '월': ['201스생', null, '204스생', '203스생', '205스생', null, null],
+          '화': [null, null, '204스생', '304스생', null, '305스생', '206스생'],
+          '수': ['202스생', null, null, '201스생', null, null, null],
+          '목': [null, '205스생', '305스생', '304스생', null, '202스생', null],
+          '금': ['304스생', null, '203스생', null, '206스생', null, null]
+        }
+      },
+      '박현선': {
+        subject: '체육 (스생/체육)',
+        schedule: {
+          '월': [null, null, '207스생', null, '208스생', '308스생', null],
+          '화': ['307스생', null, '107체육A', null, null, null, '108체육A'],
+          '수': [null, '306스생', null, '208스생', null, null, null],
+          '목': [null, '306스생', '307스생', null, '207스생', '106체육A', null],
+          '금': [null, '306스생', null, null, null, '308스생', null]
+        }
+      },
+      '송지호': {
+        subject: '음악 (음연/음악)',
+        schedule: {
+          '월': ['102음악', '308음연', null, '104음악', null, '306음연', null],
+          '화': ['106음악', '104음악', null, '307음연', '309 F_음연', '306음연', null],
+          '수': [null, '308음연', '108음악', null, null, null, null],
+          '목': ['309 F_음연', '102음악', null, '106음악', '108음악', null, '307음연'],
+          '금': ['308음연', '307음연', null, '306음연', null, '309 F_음연', null]
+        }
+      },
+      '박혁': {
+        subject: '체육 (체육B)',
+        schedule: {
+          '월': [null, null, null, null, null, null, null],
+          '화': [null, '106체육B', '108체육B', '107체육B', null, null, null],
+          '수': [null, null, null, null, null, null, null],
+          '목': [null, null, null, null, null, null, null],
+          '금': [null, null, null, null, null, null, null]
+        }
+      },
+      '박소연': {
+        subject: '미술 (미감A/미술)',
+        schedule: {
+          '월': [null, '303미감A', null, null, null, '304미감A', null],
+          '화': ['303미감A', '302미감A', null, '305미감A', '301미감A', '304미감A', null],
+          '수': ['101미술', '302미감A', null, '103미술', null, null, '103미술'],
+          '목': ['301 F_미감A', '101미술', '304미감A', null, null, null, '305미감A'],
+          '금': ['305미감A', '302미감A', null, '303미감A', null, '301 F_미감A', null]
+        }
+      },
+      '오혜진': {
+        subject: '미술',
+        schedule: {
+          '월': [null, null, null, null, null, null, null],
+          '화': [null, null, null, null, null, null, null],
+          '수': [null, null, null, null, null, null, null],
+          '목': [null, null, null, '105미술', '105미술', '107미술', '107미술'],
+          '금': [null, null, null, null, null, null, null]
+        }
+      },
+      '한병욱': {
+        subject: '진로',
+        schedule: {
+          '월': [null, null, null, null, null, null, null],
+          '화': [null, '101진로', '106진로', '108진로', null, null, null],
+          '수': [null, null, '105진로', '104진로', null, null, '103진로'],
+          '목': [null, null, null, '102진로', null, null, null],
+          '금': [null, null, null, null, '107진로', null, null]
+        }
+      }
+    };
+
+    // -------------------------------------------------------------
+    // 2. TIMETABLE RESOLUTION (Class & Teacher Map Generation)
+    // -------------------------------------------------------------
+    const DAYS = ['월', '화', '수', '목', '금'];
+    const RESOLVED_CLASSES = {}; // classNum -> day -> array of 7 periods
+    const TEACHER_PROCTOR_DUTIES = {}; // teacherName -> array of duties
+
+    // Initialize data structures
+    for (const t in TEACHERS_RAW) {
+      TEACHER_PROCTOR_DUTIES[t] = [];
+    }
+
+    for (let c = 1; c <= 8; c++) {
+      RESOLVED_CLASSES[c] = {};
+      for (const day of DAYS) {
+        RESOLVED_CLASSES[c][day] = [];
+        for (let pIdx = 0; pIdx < 7; pIdx++) {
+          const rawCell = RAW_CLASS_TIMETABLES[c][day][pIdx];
+          const subj = rawCell[0];
+          let teacher = rawCell[1];
+          let isElective = false;
+          let electiveGroup = null;
+          let displaySubj = subj;
+
+          if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
+            isElective = true;
+            electiveGroup = subj;
+            const elect = ELECTIVE_HOMEROOM_MAP[subj][c];
+            teacher = elect.teacher;
+            displaySubj = `${subj}선택 (${elect.subject})`;
+          } else if (subj === '미감A/음악') {
+            teacher = '박소연'; // 1반 교실 감독
+            displaySubj = '미감A/음악 (박소연)';
+          }
+
+          const periodConfig = PERIOD_CONFIG[pIdx + 1];
+          const hasDuty = teacher && teacher.trim() !== '' && (pIdx < 6 || (day === '화' || day === '목'));
+
+          const periodItem = {
+            period: pIdx + 1,
+            subject: displaySubj,
+            teacher: teacher,
+            isElective: isElective,
+            electiveGroup: electiveGroup,
+            config: periodConfig,
+            hasDuty: hasDuty
+          };
+
+          RESOLVED_CLASSES[c][day].push(periodItem);
+
+          // Add to teacher's proctor duty list if teacher exists and period is active on this day
+          if (hasDuty && TEACHER_PROCTOR_DUTIES[teacher]) {
+            TEACHER_PROCTOR_DUTIES[teacher].push({
+              day: day,
+              period: pIdx + 1,
+              classNum: c,
+              room: `3학년 ${c}반`,
+              subject: displaySubj,
+              config: periodConfig
+            });
+          }
+        }
+      }
+    }
+
+    // Sort teacher duties by day and period
+    const dayOrder = { '월': 1, '화': 2, '수': 3, '목': 4, '금': 5 };
+    for (const t in TEACHER_PROCTOR_DUTIES) {
+      TEACHER_PROCTOR_DUTIES[t].sort((a, b) => {
+        if (dayOrder[a.day] !== dayOrder[b.day]) return dayOrder[a.day] - dayOrder[b.day];
+        return a.period - b.period;
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 3. UI STATE & INITIALIZATION
+    // -------------------------------------------------------------
+    let currentTab = 'guide';
+    let currentSelectedTeacher = '고명호';
+    let currentMatrixDay = '화';
+    let currentSelectedClass = 1;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initTeacherSelector();
+      initHeaderClock();
+      renderTeacherView(currentSelectedTeacher);
+      renderMatrixDay(currentMatrixDay);
+      selectClass(currentSelectedClass);
+      setSimToNow();
+    });
+
+    // Tab switching logic
+    function switchTab(tabName) {
+      currentTab = tabName;
+      ['guide', 'teacher', 'matrix', 'class', 'simulator'].forEach(t => {
+        const contentEl = document.getElementById(`content-${t}`);
+        const tabBtn = document.getElementById(`tab-${t}`);
+        if (t === tabName) {
+          contentEl.classList.remove('hidden');
+          tabBtn.className = 'tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-blue-600 bg-blue-50 transition whitespace-nowrap';
+        } else {
+          contentEl.classList.add('hidden');
+          tabBtn.className = 'tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap';
+        }
+      });
+    }
+
+    // Realtime Header Clock
+    function initHeaderClock() {
+      const clockEl = document.getElementById('headerClock');
+      const badgeEl = document.getElementById('currentStatusBadge');
+
+      function update() {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const secs = String(now.getSeconds()).padStart(2, '0');
+        clockEl.textContent = `${hrs}:${mins}:${secs}`;
+
+        const curMins = now.getHours() * 60 + now.getMinutes();
+        // 08:50 = 530, 16:30 = 990
+        if (curMins >= 530 && curMins <= 990) {
+          badgeEl.textContent = '모의고사 진행 시간대';
+          badgeEl.className = 'text-xs text-blue-600 font-bold';
+        } else {
+          badgeEl.textContent = '시험 시간 외';
+          badgeEl.className = 'text-xs text-slate-400 font-normal';
+        }
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    // -------------------------------------------------------------
+    // 4. TEACHER VIEW RENDERING
+    // -------------------------------------------------------------
+    function initTeacherSelector() {
+      const select = document.getElementById('teacherSelect');
+      const quickContainer = document.getElementById('quickTeacherButtons');
+      select.innerHTML = '';
+      quickContainer.innerHTML = '';
+
+      const teacherNames = Object.keys(TEACHERS_RAW).sort();
+      
+      teacherNames.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        const dutyCount = TEACHER_PROCTOR_DUTIES[t]?.length || 0;
+        opt.textContent = `${t} (${TEACHERS_RAW[t].subject}) [감독 ${dutyCount}회]`;
+        if (t === currentSelectedTeacher) opt.selected = true;
+        select.appendChild(opt);
+      });
+
+      // Quick teachers (3rd grade teachers who have duties)
+      const topTeachers = ['고명호', '방수영', '김경남', '오의진', '정주윤', '박소연', '최정', '진혜리', '이지연', '권유진', '이서윤', '윤은정', '한효숙'];
+      topTeachers.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'px-2 py-0.5 text-xs bg-slate-100 hover:bg-blue-100 text-slate-700 hover:text-blue-700 font-medium rounded transition';
+        btn.textContent = t;
+        btn.onclick = () => {
+          document.getElementById('teacherSelect').value = t;
+          renderTeacherView(t);
+        };
+        quickContainer.appendChild(btn);
+      });
+    }
+
+    function filterTeacherDropdown(keyword) {
+      const select = document.getElementById('teacherSelect');
+      const kw = keyword.trim().toLowerCase();
+      for (let i = 0; i < select.options.length; i++) {
+        const opt = select.options[i];
+        if (opt.textContent.toLowerCase().includes(kw)) {
+          select.selectedIndex = i;
+          renderTeacherView(opt.value);
+          break;
+        }
+      }
+    }
+
+    function renderTeacherView(teacherName) {
+      currentSelectedTeacher = teacherName;
+      const teacherInfo = TEACHERS_RAW[teacherName];
+      const duties = TEACHER_PROCTOR_DUTIES[teacherName] || [];
+
+      // Calculate stats
+      const totalDuties = duties.length;
+      let totalMinutes = 0;
+      duties.forEach(d => {
+        if (d.period === 1) totalMinutes += 50;
+        else if (d.period === 2) totalMinutes += 20;
+        else if (d.period === 3) totalMinutes += 50;
+        else if (d.period === 4) totalMinutes += 40;
+        else if (d.period === 5) totalMinutes += 50;
+        else if (d.period === 6) totalMinutes += 50;
+        else if (d.period === 7) totalMinutes += 50;
+      });
+
+      // Render Profile Card
+      const profileCard = document.getElementById('teacherProfileCard');
+      profileCard.innerHTML = `
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center space-x-4">
+            <div class="w-14 h-14 rounded-2xl bg-blue-500/30 border border-blue-400/40 flex items-center justify-center text-2xl font-black text-white">
+              ${teacherName.slice(0, 1)}
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h2 class="text-2xl font-bold tracking-tight">${teacherName} 선생님</h2>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/30 border border-blue-400/40 text-blue-200">
+                  ${teacherInfo.subject}
+                </span>
+              </div>
+              <p class="text-xs text-blue-200/80 mt-1">
+                ${totalDuties > 0 ? `모의고사 주간 총 ${totalDuties}회 감독 투입 (${totalMinutes}분)` : '3학년 모의고사 감독 배정 없음 (1·2학년 정규 수업 진행)'}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl px-4 py-2 text-center flex-1 sm:flex-none">
+              <span class="block text-xs text-blue-200">주간 감독 횟수</span>
+              <span class="text-lg font-black text-white">${totalDuties}회</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl px-4 py-2 text-center flex-1 sm:flex-none">
+              <span class="block text-xs text-blue-200">총 감독 시간</span>
+              <span class="text-lg font-black text-amber-300 font-mono">${totalMinutes}분</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Render Left: Proctor Duties List
+      const proctorListEl = document.getElementById('teacherProctorList');
+      if (duties.length === 0) {
+        proctorListEl.innerHTML = `
+          <div class="text-center py-10 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <p class="text-sm font-semibold text-slate-600">3학년 모의고사 감독 배정이 없습니다.</p>
+            <p class="text-xs text-slate-400 mt-1">1학년 또는 2학년 수업 일정에 따라 정규 수업/자습을 진행합니다.</p>
+          </div>
+        `;
+      } else {
+        let html = '';
+        // Group duties by day
+        const byDay = { '월': [], '화': [], '수': [], '목': [], '금': [] };
+        duties.forEach(d => byDay[d.day].push(d));
+
+        DAYS.forEach(day => {
+          const dayDuties = byDay[day];
+          if (dayDuties.length === 0) return;
+
+          const isMonWedFri = (day === '월' || day === '수' || day === '금');
+          const dayBadgeText = isMonWedFri ? '15:30 종료(한국사 직후 종례)' : '16:30 종료(탐구까지)';
+          const dayBadgeColor = isMonWedFri ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800';
+
+          html += `
+            <div class="border border-slate-200 rounded-xl overflow-hidden print-card">
+              <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-6 h-6 rounded-md bg-slate-800 text-white font-bold text-xs flex items-center justify-center">${day}</span>
+                  <span class="font-bold text-slate-900 text-sm">${day}요일 감독 일정</span>
+                </div>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded ${dayBadgeColor}">
+                  ${dayBadgeText}
+                </span>
+              </div>
+              <div class="p-3 divide-y divide-slate-100 space-y-3">
+          `;
+
+          dayDuties.forEach(d => {
+            const p = d.period;
+            let badgeBg = 'bg-blue-100 text-blue-700';
+            if (p === 2) badgeBg = 'bg-sky-100 text-sky-700';
+            else if (p === 3 || p === 4) badgeBg = 'bg-indigo-100 text-indigo-700';
+            else if (p === 5) badgeBg = 'bg-purple-100 text-purple-700';
+            else if (p === 6) badgeBg = 'bg-rose-100 text-rose-700 font-bold';
+            else if (p === 7) badgeBg = 'bg-amber-100 text-amber-800 font-bold';
+
+            html += `
+              <div class="pt-2 first:pt-0">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center space-x-2">
+                    <span class="px-2 py-0.5 rounded text-xs font-bold ${badgeBg}">${d.period}교시</span>
+                    <span class="font-bold text-slate-900 text-sm">${d.room}</span>
+                    <span class="text-xs text-slate-500 font-medium">(${d.config.area})</span>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-xs font-bold text-slate-900 font-mono">${d.config.proctorTime}</span>
+                  </div>
+                </div>
+                <div class="mt-1.5 bg-slate-50 p-2 rounded-lg text-xs text-slate-600 flex items-start space-x-1.5">
+                  <span class="text-blue-500 font-bold">▶</span>
+                  <div>
+                    <span class="font-semibold text-slate-800">원래 수업:</span> ${d.subject} &nbsp;|&nbsp;
+                    <span class="text-slate-600">${d.config.dutyNote}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          html += `
+              </div>
+            </div>
+          `;
+        });
+        proctorListEl.innerHTML = html;
+      }
+
+      // Render Right: Original Timetable Grid
+      const originalTableContainer = document.getElementById('teacherOriginalTableContainer');
+      let origHtml = `
+        <table class="w-full text-center text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+              <th class="py-2.5 px-2 w-12">교시</th>
+              <th class="py-2.5 px-2">월</th>
+              <th class="py-2.5 px-2">화</th>
+              <th class="py-2.5 px-2">수</th>
+              <th class="py-2.5 px-2">목</th>
+              <th class="py-2.5 px-2">금</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+      `;
+
+      for (let p = 1; p <= 7; p++) {
+        origHtml += `<tr class="hover:bg-slate-50/50">`;
+        origHtml += `<td class="py-2.5 px-2 font-bold text-slate-500 bg-slate-50/50">${p}교시</td>`;
+
+        DAYS.forEach(day => {
+          const origCell = teacherInfo.schedule[day][p - 1];
+          // Check if this teacher is assigned as proctor for 3rd grade in this period
+          const isProctor = duties.some(d => d.day === day && d.period === p);
+
+          if (isProctor) {
+            const duty = duties.find(d => d.day === day && d.period === p);
+            origHtml += `
+              <td class="py-2 px-1.5 bg-blue-50/80 border border-blue-200 rounded-lg">
+                <div class="font-bold text-blue-900">${duty.room}</div>
+                <div class="text-[11px] text-blue-700">${duty.config.area.split(' ')[0]}</div>
+                <div class="mt-0.5 inline-block text-[10px] font-semibold bg-blue-600 text-white px-1.5 py-0.2 rounded-full">
+                  감독(${duty.config.durationText})
+                </div>
+              </td>
+            `;
+          } else if (origCell) {
+            origHtml += `
+              <td class="py-2 px-1.5 text-slate-600">
+                <div class="font-semibold text-slate-800">${origCell}</div>
+                <div class="text-[10px] text-slate-400">정규 수업</div>
+              </td>
+            `;
+          } else {
+            origHtml += `<td class="py-2 px-1.5 text-slate-300">-</td>`;
+          }
+        });
+
+        origHtml += `</tr>`;
+      }
+
+      origHtml += `
+          </tbody>
+        </table>
+      `;
+      originalTableContainer.innerHTML = origHtml;
+    }
+
+    // Copy Teacher Schedule to Clipboard
+    function copyTeacherScheduleText() {
+      const teacherName = currentSelectedTeacher;
+      const duties = TEACHER_PROCTOR_DUTIES[teacherName] || [];
+      if (duties.length === 0) {
+        alert(`${teacherName} 선생님은 배정된 3학년 모의고사 감독이 없습니다.`);
+        return;
+      }
+
+      let text = `[3학년 시간모의고사] ${teacherName} 선생님 감독 일정표\n`;
+      text += `--------------------------------------------------\n`;
+      
+      const byDay = { '월': [], '화': [], '수': [], '목': [], '금': [] };
+      duties.forEach(d => byDay[d.day].push(d));
+
+      DAYS.forEach(day => {
+        if (byDay[day].length > 0) {
+          const note = (day === '화' || day === '목') ? '(16:30 탐구까지)' : '(15:30 한국사 후 종례)';
+          text += `■ ${day}요일 ${note}\n`;
+          byDay[day].forEach(d => {
+            text += `  - ${d.period}교시: ${d.room} (${d.config.area}) | ${d.config.proctorTime}\n`;
+          });
+        }
+      });
+      text += `--------------------------------------------------\n`;
+      text += `※ 월·수·금은 6교시 한국사(15:30) 종료 후 즉시 종례입니다.`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`${teacherName} 선생님의 감독 일정이 클립보드에 복사되었습니다! 메신저나 메모장에 붙여넣으세요.`);
+      }).catch(err => {
+        alert('복사에 실패했습니다.');
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 5. MATRIX VIEW RENDERING (All Classes by Day)
+    // -------------------------------------------------------------
+    function renderMatrixDay(day) {
+      currentMatrixDay = day;
+
+      // Update Tab Styles
+      DAYS.forEach(d => {
+        const btn = document.getElementById(`matrix-day-${d}`);
+        if (d === day) {
+          btn.className = 'day-btn px-4 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 shadow-sm transition';
+        } else {
+          btn.className = 'day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition';
+        }
+      });
+
+      // Update Banner
+      const isMonWedFri = (day === '월' || day === '수' || day === '금');
+      const bannerEl = document.getElementById('matrixDayBanner');
+      if (isMonWedFri) {
+        bannerEl.className = 'p-4 rounded-xl border border-blue-200 bg-blue-50/70 flex flex-col sm:flex-row items-center justify-between text-blue-900 text-xs sm:text-sm';
+        bannerEl.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+            <span class="font-bold">${day}요일 모의고사:</span>
+            <span>6교시 한국사(15:00~15:30) 종료 즉시 <strong>15:30 전원 종례 및 하교</strong>합니다. (7교시 탐구 없음)</span>
+          </div>
+          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-blue-200 text-blue-800 text-xs">
+            15:30 시험 종료 & 종례
+          </span>
+        `;
+      } else {
+        bannerEl.className = 'p-4 rounded-xl border border-purple-200 bg-purple-50/70 flex flex-col sm:flex-row items-center justify-between text-purple-900 text-xs sm:text-sm';
+        bannerEl.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+            <span class="font-bold">${day}요일 모의고사:</span>
+            <span>한국사 후 7교시 탐구 영역(15:40~16:30)까지 모두 치른 후 <strong>16:30에 최종 종례</strong>합니다.</span>
+          </div>
+          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-800 text-xs">
+            16:30 시험 종료 & 종례
+          </span>
+        `;
+      }
+
+      // Render Matrix Table
+      const container = document.getElementById('matrixTableContainer');
+      const maxPeriods = (day === '화' || day === '목') ? 7 : 6;
+
+      let html = `
+        <table class="w-full text-center text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-800 font-bold border-y border-slate-200">
+              <th class="py-3 px-3 w-20 bg-slate-200/80">학급</th>
+      `;
+
+      for (let p = 1; p <= maxPeriods; p++) {
+        const pConf = PERIOD_CONFIG[p];
+        html += `
+          <th class="py-3 px-2 border-l border-slate-200">
+            <div class="text-xs font-bold text-blue-700">${p}교시</div>
+            <div class="text-[11px] font-semibold text-slate-700">${pConf.area.split(' ')[0]}</div>
+            <div class="text-[10px] text-slate-400 font-mono">${pConf.examTime}</div>
+          </th>
+        `;
+      }
+
+      // If Mon, Wed, Fri, show 7교시 column as "종례 완료"
+      if (maxPeriods === 6) {
+        html += `
+          <th class="py-3 px-2 border-l border-slate-200 bg-slate-50 text-slate-400">
+            <div class="text-xs font-semibold">7교시</div>
+            <div class="text-[11px]">종례/하교</div>
+            <div class="text-[10px] font-mono">15:30 종료</div>
+          </th>
+        `;
+      }
+
+      html += `
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+      `;
+
+      for (let c = 1; c <= 8; c++) {
+        html += `<tr class="hover:bg-slate-50">`;
+        html += `<td class="py-3 px-3 font-black text-slate-900 bg-slate-100/60">${c}반</td>`;
+
+        for (let p = 1; p <= maxPeriods; p++) {
+          const item = RESOLVED_CLASSES[c][day][p - 1];
+          const teacher = item.teacher;
+          const subj = item.subject;
+
+          html += `
+            <td class="py-2.5 px-2 border-l border-slate-100">
+              <div class="font-bold text-slate-900 hover:text-blue-600 cursor-pointer" onclick="selectTeacherFromTable('${teacher}')">
+                ${teacher || '-'}
+              </div>
+              <div class="text-[11px] text-slate-500 truncate max-w-[110px] mx-auto" title="${subj}">
+                ${subj || '-'}
+              </div>
+            </td>
+          `;
+        }
+
+        if (maxPeriods === 6) {
+          html += `
+            <td class="py-2.5 px-2 border-l border-slate-100 bg-slate-50/50 text-slate-400 text-xs font-medium">
+              -
+            </td>
+          `;
+        }
+
+        html += `</tr>`;
+      }
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function selectTeacherFromTable(teacherName) {
+      if (!teacherName || teacherName === '-') return;
+      document.getElementById('teacherSelect').value = teacherName;
+      renderTeacherView(teacherName);
+      switchTab('teacher');
+    }
+
+    // -------------------------------------------------------------
+    // 6. CLASS VIEW RENDERING (Single Class 1~8)
+    // -------------------------------------------------------------
+    function selectClass(classNum) {
+      currentSelectedClass = classNum;
+
+      for (let c = 1; c <= 8; c++) {
+        const btn = document.getElementById(`class-btn-${c}`);
+        if (c === classNum) {
+          btn.className = 'class-btn px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 transition';
+        } else {
+          btn.className = 'class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition';
+        }
+      }
+
+      const container = document.getElementById('classScheduleContainer');
+      let html = `
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
+          <div>
+            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold">학급 게시용</span>
+            <h3 class="text-2xl font-black text-slate-900 mt-1">3학년 ${classNum}반 모의고사 시간표</h3>
+            <p class="text-xs text-slate-500 mt-1">월·수·금은 15:30 종료 / 화·목은 16:30 종료</p>
+          </div>
+          <button onclick="window.print()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg flex items-center space-x-1 transition no-print">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            <span>이 학급 시간표 인쇄</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      `;
+
+      DAYS.forEach(day => {
+        const isMonWedFri = (day === '월' || day === '수' || day === '금');
+        const maxP = isMonWedFri ? 6 : 7;
+        const badgeColor = isMonWedFri ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700';
+
+        html += `
+          <div class="border border-slate-200 rounded-xl overflow-hidden print-card">
+            <div class="bg-slate-100/80 p-3 border-b border-slate-200 text-center">
+              <span class="text-base font-black text-slate-900">${day}요일</span>
+              <span class="block text-[11px] font-bold ${badgeColor} rounded mt-1 py-0.5">
+                ${isMonWedFri ? '15:30 종례' : '16:30 종례'}
+              </span>
+            </div>
+            <div class="p-2 space-y-2 text-xs">
+        `;
+
+        for (let p = 1; p <= maxP; p++) {
+          const item = RESOLVED_CLASSES[classNum][day][p - 1];
+          const pConf = PERIOD_CONFIG[p];
+
+          html += `
+            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100">
+              <div class="flex items-center justify-between font-bold text-slate-800">
+                <span>${p}교시 <span class="font-medium text-slate-500">(${pConf.area.split(' ')[0]})</span></span>
+                <span class="text-blue-700">${item.teacher}</span>
+              </div>
+              <div class="text-[11px] text-slate-500 mt-0.5 flex items-center justify-between">
+                <span>${item.subject}</span>
+                <span class="font-mono text-[10px]">${pConf.durationText}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        if (isMonWedFri) {
+          html += `
+            <div class="p-2 bg-emerald-50 rounded-lg border border-emerald-100 text-center font-bold text-emerald-800">
+              15:30 시험 종료 & 종례
+            </div>
+          `;
+        }
+
+        html += `
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      container.innerHTML = html;
+    }
+
+    // -------------------------------------------------------------
+    // 7. SIMULATOR LOGIC
+    // -------------------------------------------------------------
+    function setSimTime(timeStr) {
+      document.getElementById('simTimeInput').value = timeStr;
+      runSimulation();
+    }
+
+    function setSimToNow() {
+      const now = new Date();
+      const hrs = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('simTimeInput').value = `${hrs}:${mins}`;
+      
+      const dayIndex = now.getDay(); // 0 is Sun, 1 is Mon
+      const dayMap = { 1: '월', 2: '화', 3: '수', 4: '목', 5: '금' };
+      if (dayMap[dayIndex]) {
+        document.getElementById('simDaySelect').value = dayMap[dayIndex];
+      }
+      runSimulation();
+    }
+
+    function runSimulation() {
+      const day = document.getElementById('simDaySelect').value;
+      const timeStr = document.getElementById('simTimeInput').value;
+      const [h, m] = timeStr.split(':').map(Number);
+      const totalMins = h * 60 + m;
+
+      const isMonWedFri = (day === '월' || day === '수' || day === '금');
+      const resultCard = document.getElementById('simResultCard');
+
+      // Schedule intervals
+      // 08:40~08:50 (520~530): 조회
+      // 08:50~09:40 (530~580): 1교시 국어 전반 (50분)
+      // 09:40~09:50 (580~590): 무감독 휴식 (10분)
+      // 09:50~10:10 (590~610): 2교시 국어 후반 (20분)
+      // 10:10~10:50 (610~650): 자습 및 휴식 (40분)
+      // 10:50~11:40 (650~700): 3교시 수학 전반 (50분)
+      // 11:40~11:50 (700~710): 무감독 휴식 (10분)
+      // 11:50~12:30 (710~750): 4교시 수학 후반 (40분)
+      // 12:30~12:40 (750~760): 휴식 및 점심준비 (10분)
+      // 12:40~13:40 (760~820): 점심시간 (60분)
+      // 13:40~14:30 (820~870): 5교시 영어 전반 (50분)
+      // 14:30~14:40 (870~880): 무감독 휴식 (10분)
+      // 14:40~14:50 (880~890): 6교시 영어 후반 및 회수 (10분)
+      // 14:50~15:00 (890~900): 6교시 한국사 준비/배부 (10분)
+      // 15:00~15:30 (900~930): 6교시 한국사 시험 (30분)
+      // 월, 수, 금: 15:30 (930) 한국사 종료 즉시 종례!
+      // 화, 목:
+      // 15:30: 6교시 감독이 탐구 1·2선택 시험지 배부 후 퇴실
+      // 15:30~15:40 (930~940): 탐구 1선택 무감독 (10분)
+      // 15:40~16:00 (940~960): 7교시 교사 탐구 1선택 감독 (20분, 16:00 회수)
+      // 16:00~16:30 (960~990): 7교시 교사 탐구 2선택 감독 (30분, 16:30 회수 & 종례)
+      // 16:30: 시험 종료!
+
+      let statusType = ''; // 'proctor', 'unsupervised', 'break', 'lunch', 'dismissed', 'before'
+      let periodNum = null;
+      let statusTitle = '';
+      let statusDesc = '';
+
+      if (totalMins < 520) {
+        statusType = 'before';
+        statusTitle = '시험 시작 전 (등교 시간)';
+        statusDesc = '08:40부터 담임 교사 임장 조회 및 고사 준비가 시작됩니다.';
+      } else if (totalMins < 530) {
+        statusType = 'morning';
+        statusTitle = '아침 조회 및 고사 준비 (08:40 ~ 08:50)';
+        statusDesc = '담임 선생님 임장 지도 하에 핸드폰 수거 및 시험 유의사항을 전달합니다.';
+      } else if (totalMins < 580) {
+        statusType = 'proctor';
+        periodNum = 1;
+        statusTitle = '1교시 국어 전반부 시험 진행 중 (08:50 ~ 09:40)';
+        statusDesc = '1교시 수업 교사가 50분간 감독합니다. 09:40 종료 시 답안지 회수 없이 퇴실합니다.';
+      } else if (totalMins < 590) {
+        statusType = 'unsupervised';
+        statusTitle = '국어 시험 중 무감독 휴식 시간 (09:40 ~ 09:50)';
+        statusDesc = '기존 1-2교시 쉬는 시간을 활용한 10분간의 무감독 시간입니다. 학생들은 조용히 문제를 계속 풉니다.';
+      } else if (totalMins < 610) {
+        statusType = 'proctor';
+        periodNum = 2;
+        statusTitle = '2교시 국어 후반부 & 회수 진행 중 (09:50 ~ 10:10)';
+        statusDesc = '2교시 수업 교사가 20분간 감독 후 10:10 국어 종료령과 함께 답안지를 회수하고 퇴실합니다.';
+      } else if (totalMins < 650) {
+        statusType = 'break';
+        statusTitle = '자습 및 휴식 시간 (10:10 ~ 10:50, 총 40분)';
+        statusDesc = '2교시 교사는 10:10에 답안지 회수 후 퇴실 완료! 학생들은 10:50 수학 시작 전까지 40분간 자습 및 휴식을 취합니다.';
+      } else if (totalMins < 700) {
+        statusType = 'proctor';
+        periodNum = 3;
+        statusTitle = '3교시 수학 전반부 시험 진행 중 (10:50 ~ 11:40)';
+        statusDesc = '3교시 수업 교사가 50분간 감독합니다. 11:40 종료 시 답안지 회수 없이 퇴실합니다.';
+      } else if (totalMins < 710) {
+        statusType = 'unsupervised';
+        statusTitle = '수학 시험 중 무감독 휴식 시간 (11:40 ~ 11:50)';
+        statusDesc = '10분간 무감독으로 진행되며, 학생들은 자율적으로 문제 풀이를 이어갑니다.';
+      } else if (totalMins < 750) {
+        statusType = 'proctor';
+        periodNum = 4;
+        statusTitle = '4교시 수학 후반부 & 회수 진행 중 (11:50 ~ 12:30)';
+        statusDesc = '4교시 수업 교사가 40분간 감독 후 12:30 수학 종료령과 함께 답안지를 회수하고 퇴실합니다.';
+      } else if (totalMins < 760) {
+        statusType = 'break';
+        statusTitle = '휴식 및 점심 준비 (12:30 ~ 12:40)';
+        statusDesc = '수학 시험 종료 후 급식 전 10분간의 휴식 및 준비 시간입니다.';
+      } else if (totalMins < 820) {
+        statusType = 'lunch';
+        statusTitle = '점심 시간 (12:40 ~ 13:40, 60분)';
+        statusDesc = '1, 2학년과 동일하게 급식실 점심식사가 진행됩니다.';
+      } else if (totalMins < 870) {
+        statusType = 'proctor';
+        periodNum = 5;
+        statusTitle = '5교시 영어 듣기평가 및 전반부 진행 중 (13:40 ~ 14:30)';
+        statusDesc = '5교시 수업 교사가 50분간 감독합니다. 14:30에 답안지 회수 없이 퇴실합니다.';
+      } else if (totalMins < 880) {
+        statusType = 'unsupervised';
+        statusTitle = '영어 시험 중 무감독 휴식 시간 (14:30 ~ 14:40)';
+        statusDesc = '10분간 무감독 시간입니다. 학생들은 자율적으로 독해 문제를 계속 풉니다.';
+      } else if (totalMins < 930) {
+        statusType = 'proctor';
+        periodNum = 6;
+        statusTitle = '6교시 영어 회수 + 한국사 진행 중 (14:40 ~ 15:30, 연속 50분!)';
+        statusDesc = '6교시 수업 교사가 임장하여 14:50 영어 회수 → 준비 → 15:00~15:30 한국사를 감독합니다. (화·목: 15:30에 시간 조금 더 할애하여 탐구 1·2선택 시험지 배부 후 퇴실)';
+      } else if (isMonWedFri) {
+        statusType = 'dismissed';
+        statusTitle = '월·수·금 시험 종료 및 종례 완료 (15:30 이후)';
+        statusDesc = '월, 수, 금요일은 6교시 한국사 종료 후 15:30에 이미 종례 및 하교를 마쳤습니다.';
+      } else if (totalMins < 940) {
+        statusType = 'unsupervised';
+        statusTitle = '탐구 제1선택 전반부 무감독 시간 (15:30 ~ 15:40, 10분)';
+        statusDesc = '6교시 교사가 배부한 시험지로 학생들은 15:30부터 탐구 제1선택(15:30~16:00, 30분) 자율 시험을 시작합니다. 15:40까지 10분간 무감독으로 진행됩니다.';
+      } else if (totalMins < 960) {
+        statusType = 'proctor';
+        periodNum = 7;
+        statusTitle = '7교시 탐구 제1선택 후반부 감독 진행 중 (15:40 ~ 16:00, 20분)';
+        statusDesc = '7교시 수업 교사가 15:40에 입실하여 탐구 제1선택 후반 20분을 감독하고, 16:00에 제1선택 답안지를 회수합니다.';
+      } else if (totalMins < 990) {
+        statusType = 'proctor';
+        periodNum = 7;
+        statusTitle = '7교시 탐구 제2선택 감독 진행 중 (16:00 ~ 16:30, 30분)';
+        statusDesc = '7교시 수업 교사가 이어서 탐구 제2선택(16:00~16:30, 30분)을 감독하고, 16:30에 최종 시험 종료령 및 전량 회수, 종례합니다.';
+      } else {
+        statusType = 'dismissed';
+        statusTitle = '화·목 시험 종료 및 종례 완료 (16:30 이후)';
+        statusDesc = '오늘의 모든 모의고사 시험이 완료되었습니다.';
+      }
+
+      // Generate HTML
+      let html = `
+        <div class="space-y-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 rounded-lg text-sm font-black bg-blue-600 text-white">
+              ${day}요일 ${timeStr} 시뮬레이션
+            </span>
+            <span class="text-base font-bold text-slate-900">${statusTitle}</span>
+          </div>
+          <p class="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            ${statusDesc}
+          </p>
+      `;
+
+      if (statusType === 'proctor' && periodNum) {
+        html += `
+          <div class="mt-4">
+            <h4 class="text-sm font-bold text-slate-800 mb-2">📌 지금 교실에 들어간 감독 선생님 현황 (1~8반)</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        `;
+
+        for (let c = 1; c <= 8; c++) {
+          const item = RESOLVED_CLASSES[c][day][periodNum - 1];
+          html += `
+            <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3 text-center">
+              <span class="block text-xs font-bold text-blue-900">${c}반 고사실</span>
+              <span class="block text-base font-black text-blue-700 mt-1">${item.teacher} 선생님</span>
+              <span class="block text-[11px] text-slate-500 mt-0.5 truncate">${item.subject}</span>
+            </div>
+          `;
+        }
+
+        html += `
+            </div>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      resultCard.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
