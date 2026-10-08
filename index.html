@@ -57,9 +57,9 @@
           <div>
             <div class="flex items-center space-x-2">
               <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">3학년 시간모의고사 운영 포털</h1>
-              <span class="px-2 py-0.5 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">2026학년도</span>
+              <span class="px-2 py-0.5 text-xs font-bold bg-indigo-100 text-indigo-700 rounded-full">10.19~ 수능 타종 일과</span>
             </div>
-            <p class="text-xs text-slate-500 hidden sm:block">기존 시간표 기반 감독 배정 | 월·수·금 15:30 종례 | 화·목 16:30 종례</p>
+            <p class="text-xs text-slate-500 hidden sm:block">1,2학년 시정표 분리 연동형 | 309·310 활용 & 1·2순위 배정 | 월·수·금 15:30 / 화·목 16:30</p>
           </div>
         </div>
 
@@ -67,7 +67,7 @@
         <div class="flex items-center space-x-3">
           <div class="hidden md:flex flex-col text-right">
             <span id="headerClock" class="text-sm font-bold text-slate-800 font-mono tracking-tight">--:--:--</span>
-            <span id="currentStatusBadge" class="text-xs text-emerald-600 font-medium">실시간 대기 중</span>
+            <span id="currentStatusBadge" class="text-xs text-emerald-600 font-medium">수능 타종 일과 가동</span>
           </div>
           <a href="./mobile/" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg flex items-center space-x-1 transition border border-blue-200 shadow-xs">
             <span>📱 모바일 버전</span>
@@ -82,10 +82,10 @@
       <!-- Main Navigation Tabs -->
       <div class="flex space-x-1 sm:space-x-4 border-t border-slate-100 overflow-x-auto py-2">
         <button onclick="switchTab('guide')" id="tab-guide" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-blue-600 bg-blue-50 transition whitespace-nowrap">
-          📖 운영 가이드 (처음 보는 교사용)
+          📖 운영 가이드 & 시정표 비교
         </button>
         <button onclick="switchTab('teacher')" id="tab-teacher" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
-          👨‍🏫 선생님별 맞춤 조회 (내 일정 찾기)
+          👨‍🏫 선생님별 맞춤 조회 (내 일정 & 대체)
         </button>
         <button onclick="switchTab('matrix')" id="tab-matrix" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
           📅 요일별 전체 현황판 (1~8반)
@@ -105,18 +105,21 @@
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs sm:text-sm gap-2">
       <div class="flex items-center space-x-2">
         <span class="inline-flex items-center justify-center px-2 py-0.5 rounded text-xs font-bold bg-amber-400 text-slate-950">
-          핵심 원칙
+          신규 수능 타종
         </span>
         <span class="font-medium">
-          <strong>기존 수업 교사가 해당 학급 감독 투입!</strong> 80분/100분 시험은 [앞교시 교사(50분)] + [쉬는시간 무감독(10분)] + [뒷교시 교사]로 자동 분할 분담됩니다.
+          <strong>10.19일부터 3학년 수능 타종 일과 가동!</strong> 1·2학년 정규 수업과 시간 겹침 시 <strong>[309·310 교사 우선 대체]</strong> & 뒤 교시(월·금 7T / 화·목 8T)에 <strong>[1순위 배정]</strong>됩니다.
         </span>
       </div>
       <div class="flex items-center space-x-2 shrink-0">
         <span class="bg-white/20 px-2.5 py-1 rounded-full text-xs font-semibold">
-          월·수·금: 15:30 종료(한국사 직후 종례)
+          월·금: 7교시(15:30 종료)
+        </span>
+        <span class="bg-indigo-300/30 px-2.5 py-1 rounded-full text-xs font-semibold">
+          수: 4교시까지(5,6T 비움)
         </span>
         <span class="bg-amber-400/90 text-slate-950 px-2.5 py-1 rounded-full text-xs font-bold">
-          화·목: 16:30 종료(7교시 탐구까지)
+          화·목: 8교시(16:30 종료)
         </span>
       </div>
     </div>
@@ -134,55 +137,186 @@
       <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
         <div class="flex items-start justify-between">
           <div>
-            <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-md text-xs font-bold uppercase tracking-wider">안내 가이드</span>
-            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">시간모의고사 감독 교사 운영 방식</h2>
-            <p class="text-sm text-slate-600 mt-1 leading-relaxed">
-              시간모의고사는 정규 수업 시수 결손 및 특정 교사 감독 과중을 방지하기 위해 <strong>[기존 정규 시간표의 수업 교사]</strong>가 해당 시간에 그대로 학급에 들어가 감독하는 방식으로 운영됩니다. 아래 4가지 핵심 규칙만 숙지하시면 됩니다!
+            <div class="flex items-center space-x-2">
+              <span class="px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-md text-xs font-bold uppercase tracking-wider">10.19~ 수능 타종 일과</span>
+              <span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-md text-xs font-bold">1·2학년 시정표 분리 운영</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">3학년 시간모의고사 운영 안내 및 시정표 비교</h2>
+            <p class="text-sm text-slate-600 mt-1.5 leading-relaxed">
+              10월 19일부터 3학년은 수능 실전 적응을 위해 <strong>수능 타종 일과</strong>로 전면 전환 운영됩니다. 1·2학년 정규 시정표와 시작/종료 시각이 다르므로 아래 시정표 비교표와 감독 교사 배정 원칙을 반드시 확인해 주시기 바랍니다.
             </p>
           </div>
         </div>
 
         <!-- 4 Key Core Rules Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-blue-400 transition">
-            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm mb-3">1</div>
-            <h3 class="font-bold text-slate-900 text-base">기존 시간표 1:1 연동</h3>
+          <div class="bg-indigo-50/60 border border-indigo-200/80 rounded-xl p-4 hover:border-indigo-400 transition">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm mb-3">1</div>
+            <h3 class="font-bold text-slate-900 text-base">수능 타종 일과 운영</h3>
             <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-              별도의 인위적 감독 배정 없이, 해당 요일 3학년 학급의 <strong>원래 수업 담당 교사</strong>가 그대로 해당 반 감독으로 들어갑니다.
+              <strong>8:40 학급 조회 후 8:50까지 착석 완료!</strong><br>
+              매시간 <strong>5분 전 입실</strong>하여 출석체크를 진행하며, 국어(80분), 수학(100분), 영어(70분), 탐구 영역을 시간표별로 분담하여 감독합니다.
             </p>
           </div>
 
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-indigo-400 transition">
-            <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm mb-3">2</div>
-            <h3 class="font-bold text-slate-900 text-base">교시 분할 & 무감독 원칙</h3>
+          <div class="bg-amber-50/60 border border-amber-200/80 rounded-xl p-4 hover:border-amber-400 transition">
+            <div class="w-8 h-8 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-sm mb-3">2</div>
+            <h3 class="font-bold text-slate-900 text-base">1·2학년 수업 충돌 방지</h3>
             <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-              모의고사 시간(80분/100분)과 정규 수업(50분)의 차이는 <strong>앞 교시(50분) + 쉬는시간 무감독(10분) + 뒷 교시(나머지 분)</strong>로 공평하게 나눕니다.
+              3학년 감독 시간과 1·2학년 정규 수업 시간이 겹치는 경우, <strong>1·2학년 수업을 우선 진행</strong>합니다.<br>
+              이때 발생하는 공백은 <strong>309·310호 배정 교사 우선 투입</strong> 및 시수 적은 교사로 안전하게 자동 대체됩니다.
             </p>
           </div>
 
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-purple-400 transition">
+          <div class="bg-purple-50/60 border border-purple-200/80 rounded-xl p-4 hover:border-purple-400 transition">
             <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold text-sm mb-3">3</div>
-            <h3 class="font-bold text-slate-900 text-base">요일별 종료 시각 차이</h3>
+            <h3 class="font-bold text-slate-900 text-base">7·8교시 1·2순위 배정 룰</h3>
             <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-              <strong>월·수·금:</strong> 15:30 한국사 종료 즉시 종례!<br>
-              <strong>화·목:</strong> 7교시 탐구까지 치르고 16:30에 종례합니다. (정규 6/7교시 편제 기준)
+              원래 시간표에 없는 뒤 교시(월·금 7T / 화·목 8T)는:<br>
+              • <strong>1순위:</strong> 앞에 1·2학년 수업 겹침으로 빠진 교사<br>
+              • <strong>2순위:</strong> 그날 수업 시수가 적은 교사 순으로 공평하게 배정됩니다.
             </p>
           </div>
 
-          <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-4 hover:border-emerald-400 transition">
+          <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-4 hover:border-emerald-400 transition">
             <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-sm mb-3">4</div>
-            <h3 class="font-bold text-slate-900 text-base">이동수업(A~E군) 자기반 응시</h3>
+            <h3 class="font-bold text-slate-900 text-base">수요일 및 요일별 하교</h3>
             <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-              학생들은 이동하지 않고 <strong>자기 학급 교실(1~8반)</strong>에서 응시하며, 해당 교실(301~308호)에 배정된 선택과목 교사가 해당 반 감독을 맡습니다.
+              • <strong>수요일:</strong> 4교시까지만 운영 (5·6교시 비움)<br>
+              • <strong>월·금:</strong> 7교시 한국사 후 <strong>15:30 종료 & 종례</strong><br>
+              • <strong>화·목:</strong> 8교시 탐구까지 치르고 <strong>16:30 최종 종례</strong>
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Detailed Timetable & Proctor Duties Matrix -->
+      <!-- NEW: Side-by-Side Bell Schedule Comparison Table -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm overflow-hidden">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+              <span>⏱️ 1·2학년 정규 시정표 vs 3학년 수능 타종 일과 종합 비교</span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">3학년 모의고사 시간과 1·2학년 수업 시간의 차이 및 충돌 구간을 확인하세요.</p>
+          </div>
+          <div class="flex items-center space-x-2 text-xs font-semibold">
+            <span class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-800 border border-blue-200">1·2학년: 정규 50분 체계</span>
+            <span class="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-900 border border-indigo-200">3학년: 수능 실전 타종 체계</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-slate-800 font-bold border-y border-slate-200">
+                <th class="py-2.5 px-3 w-16 text-center">교시</th>
+                <th class="py-2.5 px-3 w-40 bg-blue-50/70 text-blue-900 border-x border-slate-200">1·2학년 정규 시정표</th>
+                <th class="py-2.5 px-3 w-52 bg-indigo-50/70 text-indigo-950 font-black">3학년 바뀐 시정표 (입실/감독)</th>
+                <th class="py-2.5 px-3 w-40 text-slate-700">시험 영역 & 본령 시간</th>
+                <th class="py-2.5 px-4 text-slate-600">시간표 특징 및 감독 교사 확인 사항</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="py-2.5 px-3 text-center font-bold bg-slate-50">조회</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">08:40 ~ 08:50 (10분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-indigo-900 bg-indigo-50/30">08:40 ~ 08:50 (10분)</td>
+                <td class="py-2.5 px-3 font-semibold text-slate-800">입실 8:10 / 준비령 8:35</td>
+                <td class="py-2.5 px-4 text-xs text-slate-600">8:40 학급 조회 후 8:50까지 착석 완료 (담임 임장 지도)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-2.5 px-3 text-center font-bold bg-blue-50 text-blue-800">1교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">08:50 ~ 09:40 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-indigo-900 bg-indigo-50/30">08:50 ~ 09:25 (35분)</td>
+                <td class="py-2.5 px-3 font-semibold text-blue-900">국어 1차 (80분 중 앞부분)</td>
+                <td class="py-2.5 px-4 text-xs text-slate-600">국어 본령(08:40~10:00). 1교시 교사가 09:25까지 감독 후 회수 없이 2교시 교사에게 인계.</td>
+              </tr>
+              <tr class="hover:bg-amber-50/30">
+                <td class="py-2.5 px-3 text-center font-bold bg-blue-50 text-blue-800">2교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">09:50 ~ 10:40 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-amber-900 bg-amber-50/50">09:25 ~ 10:00 (35분) <span class="text-[10px] bg-amber-200 px-1 py-0.2 rounded font-bold ml-1">겹침주의</span></td>
+                <td class="py-2.5 px-3 font-semibold text-blue-900">국어 2차 & 회수 (10:00)</td>
+                <td class="py-2.5 px-4 text-xs text-amber-900">※ 1·2학년 1교시(08:50~09:40)와 15분 겹침! 1·2학년 수업 교사는 감독 제외 → 대체 교사 투입.</td>
+              </tr>
+              <tr class="bg-slate-50/80 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 border-x border-slate-200 font-mono text-slate-400">09:40~09:50 (10분 쉬는시간)</td>
+                <td class="py-2 px-3 font-mono font-bold text-slate-700 bg-slate-100">10:00 ~ 10:30 (30분 휴식)</td>
+                <td class="py-2 px-3 text-slate-500">자습 및 휴식</td>
+                <td class="py-2 px-4 text-slate-500">국어 종료 후 30분간 자습 및 화장실 휴식 (10:25 수학 준비령)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-2.5 px-3 text-center font-bold bg-indigo-50 text-indigo-800">3교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">10:50 ~ 11:40 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-amber-900 bg-amber-50/50">10:30 ~ 11:20 (50분) <span class="text-[10px] bg-amber-200 px-1 py-0.2 rounded font-bold ml-1">겹침주의</span></td>
+                <td class="py-2.5 px-3 font-semibold text-indigo-900">수학 1차 (100분 중 전반)</td>
+                <td class="py-2.5 px-4 text-xs text-slate-600">준비령 10:25, 본령 10:30~12:10. 1·2학년 2교시(09:50~10:40) 수업 교사는 충돌로 대체 교사 투입.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-2.5 px-3 text-center font-bold bg-indigo-50 text-indigo-800">4교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">11:50 ~ 12:40 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-amber-900 bg-amber-50/50">11:20 ~ 12:10 (50분) <span class="text-[10px] bg-amber-200 px-1 py-0.2 rounded font-bold ml-1">겹침주의</span></td>
+                <td class="py-2.5 px-3 font-semibold text-indigo-900">수학 2차 & 회수 (12:10)</td>
+                <td class="py-2.5 px-4 text-xs text-slate-600">수학 후반부 감독. 12:10 시험 종료 즉시 답안지/문제지 전량 회수 후 본부 제출.</td>
+              </tr>
+              <tr class="bg-amber-50/40 text-xs">
+                <td class="py-2 px-3 text-center font-bold text-amber-900">점심</td>
+                <td class="py-2 px-3 border-x border-slate-200 font-mono text-amber-800">12:40 ~ 13:40 (60분)</td>
+                <td class="py-2 px-3 font-mono font-bold text-amber-950 bg-amber-100/50">12:10 ~ 13:00 (50분)</td>
+                <td class="py-2 px-3 font-semibold text-amber-900">3학년 점심시간</td>
+                <td class="py-2 px-4 text-amber-900">★ 3학년은 12:10부터 30분간 급식 실시! 13:00까지 5교시 착석 완료 (1,2학년보다 30분 빠름)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-2.5 px-3 text-center font-bold bg-purple-50 text-purple-800">5교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">13:40 ~ 14:30 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-purple-900 bg-purple-50/40">13:00 ~ 13:40 (40분)</td>
+                <td class="py-2.5 px-3 font-semibold text-purple-900">영어 1차 (듣기평가 포함)</td>
+                <td class="py-2.5 px-4 text-xs text-slate-600">준비령 13:05, 듣기안내 13:07~13:10, 본령 13:10~14:20. 1·2학년은 점심시간이므로 수업 충돌 없음! (※ 수요일 비움)</td>
+              </tr>
+              <tr class="hover:bg-amber-50/30">
+                <td class="py-2.5 px-3 text-center font-bold bg-purple-50 text-purple-800">6교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">14:40 ~ 15:30 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-amber-900 bg-amber-50/50">13:40 ~ 14:20 (40분) <span class="text-[10px] bg-amber-200 px-1 py-0.2 rounded font-bold ml-1">겹침주의</span></td>
+                <td class="py-2.5 px-3 font-semibold text-purple-900">영어 2차 & 회수 (14:20)</td>
+                <td class="py-2.5 px-4 text-xs text-amber-900">※ 1·2학년 5교시(13:40~14:30)와 40분 겹침! 충돌 교사는 제외 후 대체 교사 투입. 14:20 영어 전량 회수! (※ 수요일 비움)</td>
+              </tr>
+              <tr class="bg-slate-50/80 text-xs">
+                <td class="py-2 px-3 text-center font-mono">-</td>
+                <td class="py-2 px-3 border-x border-slate-200 font-mono text-slate-400">14:30~14:40 / 15:30~15:40</td>
+                <td class="py-2 px-3 font-mono font-bold text-slate-700 bg-slate-100">14:20 ~ 14:50 (30분 휴식)</td>
+                <td class="py-2 px-3 text-slate-500">자습 및 탐구 준비</td>
+                <td class="py-2 px-4 text-slate-500">영어 종료 후 30분간 휴식 및 탐구 영역 준비 (14:45 준비령)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="py-2.5 px-3 text-center font-bold bg-rose-50 text-rose-800">7교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 font-mono">15:40 ~ 16:30 (50분)</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-rose-900 bg-rose-50/30">14:50 ~ 15:40 (50분)</td>
+                <td class="py-2.5 px-3 font-semibold text-rose-950">한국사 / 탐구 1선택</td>
+                <td class="py-2.5 px-4 text-xs text-rose-900">
+                  준비령 14:45, 한국사 14:50~15:20 (30분).<br>
+                  • <strong>월·금:</strong> 15:20 한국사 종료 즉시 <strong>15:30 전원 종례 및 하교!</strong><br>
+                  • <strong>화·목:</strong> 탐구 1선택(15:35~16:05) 진행 후 15:40에 8교시 교사에게 인계.
+                </td>
+              </tr>
+              <tr class="bg-purple-50/40 hover:bg-purple-50/70 border-l-4 border-l-purple-600">
+                <td class="py-2.5 px-3 text-center font-bold bg-purple-100 text-purple-900">8교시</td>
+                <td class="py-2.5 px-3 border-x border-slate-200 text-slate-400 italic">없음</td>
+                <td class="py-2.5 px-3 font-mono font-bold text-purple-900 bg-purple-100/50">15:40 ~ 16:30 (50분)</td>
+                <td class="py-2.5 px-3 font-semibold text-purple-950">탐구 2선택 & 회수</td>
+                <td class="py-2.5 px-4 text-xs text-purple-950">
+                  <strong>★ 화·목요일만 진행!</strong> (월·수·금은 8교시 없음)<br>
+                  15:40 입실 → 16:05 1선택 회수 → 16:07~16:37 2선택 감독 및 <strong>16:30 최종 회수 & 종례!</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Detailed Timetable & Proctor Duties Matrix (8교시 체계) -->
       <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm overflow-hidden">
         <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
-          <span>📋 교시별 세부 일정 및 감독 교사 행동 요령 (총정리표)</span>
+          <span>📋 3학년 교시별 세부 일정 및 감독 교사 행동 요령 (총정리표)</span>
         </h3>
         <p class="text-xs text-slate-500 mt-1">내가 들어가는 교시에 정확히 몇 시부터 몇 시까지 감독해야 하고, 언제 퇴실해야 하는지 확인하세요.</p>
 
@@ -191,9 +325,9 @@
             <thead>
               <tr class="bg-slate-100/80 text-slate-700 font-semibold border-y border-slate-200">
                 <th class="py-3 px-3 text-center w-16">교시</th>
-                <th class="py-3 px-3 w-28">시험 영역</th>
-                <th class="py-3 px-3 w-44">시험 시간 (총분수)</th>
-                <th class="py-3 px-3 w-48 text-blue-700 font-bold">실제 감독 시간 (배정 교사)</th>
+                <th class="py-3 px-3 w-32">시험 영역</th>
+                <th class="py-3 px-3 w-44">본령 시간 (총분수)</th>
+                <th class="py-3 px-3 w-52 text-blue-700 font-bold">실제 감독 시간 (배정 교사)</th>
                 <th class="py-3 px-4">감독 교사 행동 요령 & 중요 체크포인트</th>
               </tr>
             </thead>
@@ -201,11 +335,11 @@
               <!-- 아침 조회 -->
               <tr class="bg-amber-50/40">
                 <td class="py-3 px-3 text-center font-bold text-amber-800">조회</td>
-                <td class="py-3 px-3 font-semibold text-slate-900">입실 및 시험준비</td>
-                <td class="py-3 px-3 font-mono text-xs">08:40 ~ 08:50 (10분)</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">학급 조회 및 고사 준비</td>
+                <td class="py-3 px-3 font-mono text-xs">입실 8:10 / 08:40 ~ 08:50</td>
                 <td class="py-3 px-3 font-bold text-amber-800">담임 교사 임장</td>
                 <td class="py-3 px-4 text-xs text-slate-600">
-                  담임교사 임장 지도. 학생 본인 확인, 휴대폰 수거, 고사 준비 안내.
+                  담임교사 임장 지도. <strong>8:40 조회 시작, 8:50까지 착석 완료</strong>, 학생 본인 확인 및 휴대폰 수거. (08:35 준비령)
                 </td>
               </tr>
 
@@ -214,26 +348,15 @@
                 <td class="py-3 px-3 text-center font-bold bg-blue-50/50 text-blue-800">1교시</td>
                 <td class="py-3 px-3 font-semibold text-slate-900">
                   국어 (전반부)
-                  <span class="block text-[11px] text-slate-400">총 80분 중 앞 50분</span>
+                  <span class="block text-[11px] text-slate-400">총 80분 중 앞 35분</span>
                 </td>
-                <td class="py-3 px-3 font-mono text-xs">08:50 ~ 09:40 (50분)</td>
+                <td class="py-3 px-3 font-mono text-xs">08:40 ~ 10:00 (80분)</td>
                 <td class="py-3 px-3 font-bold text-blue-700">
-                  08:50 ~ 09:40 (50분)<br>
+                  08:50 ~ 09:25 (35분)<br>
                   <span class="text-xs font-normal text-slate-500">1교시 수업 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-600">
-                  <strong class="text-slate-900">시험지 배부 및 본령.</strong> 50분간 감독 후 09:40에 1교시 종료령과 함께 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다. (학생은 계속 이어서 시험 응시)
-                </td>
-              </tr>
-
-              <!-- 무감독 1 -->
-              <tr class="bg-slate-50/80 text-slate-500 text-xs">
-                <td class="py-2 px-3 text-center font-mono">-</td>
-                <td class="py-2 px-3 font-semibold text-slate-600">무감독 (쉬는시간)</td>
-                <td class="py-2 px-3 font-mono">09:40 ~ 09:50 (10분)</td>
-                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
-                <td class="py-2 px-4 text-slate-500">
-                  기존 1-2교시 쉬는 시간 활용. 학생들은 교실에서 조용히 계속 시험에 응시합니다.
+                  <strong>08:45 입실</strong> 및 출석체크. 08:50~09:25 감독 후 09:25에 <span class="text-rose-600 font-semibold">답안지 회수 없이</span> 2교시 감독 교사에게 인계하고 퇴실합니다.
                 </td>
               </tr>
 
@@ -242,26 +365,15 @@
                 <td class="py-3 px-3 text-center font-bold bg-blue-50/50 text-blue-800">2교시</td>
                 <td class="py-3 px-3 font-semibold text-slate-900">
                   국어 (후반부 & 회수)
-                  <span class="block text-[11px] text-slate-400">총 80분 중 뒤 20분</span>
+                  <span class="block text-[11px] text-slate-400">총 80분 중 뒤 35분</span>
                 </td>
-                <td class="py-3 px-3 font-mono text-xs">09:50 ~ 10:10 (20분)</td>
+                <td class="py-3 px-3 font-mono text-xs">08:40 ~ 10:00 (80분)</td>
                 <td class="py-3 px-3 font-bold text-blue-700">
-                  09:50 ~ 10:10 (20분)<br>
-                  <span class="text-xs font-normal text-slate-500">2교시 수업 교사</span>
+                  09:25 ~ 10:00 (35분)<br>
+                  <span class="text-xs font-normal text-slate-500">2교시 배정/대체 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-600">
-                  <strong class="text-slate-900">09:50 입실</strong>하여 20분간 감독. <strong>10:10 국어 종료령</strong>에 맞춰 답안지/문제지 회수 및 매수 확인 후 고사실 본부 제출. <span class="text-emerald-600 font-semibold">※ 10:10에 바로 퇴실 완료!</span>
-                </td>
-              </tr>
-
-              <!-- 자습 및 휴식 -->
-              <tr class="bg-emerald-50/40 text-xs">
-                <td class="py-2 px-3 text-center font-mono">-</td>
-                <td class="py-2 px-3 font-bold text-emerald-900">자습 및 휴식 (40분)</td>
-                <td class="py-2 px-3 font-mono text-emerald-700">10:10 ~ 10:50 (40분)</td>
-                <td class="py-2 px-3 text-emerald-700 font-medium">자습 및 휴식 (무감독)</td>
-                <td class="py-2 px-4 text-emerald-800">
-                  2교시 잔여 시간(30분) 및 기존 2-3교시 쉬는시간(10분) 활용 학생 자율 자습 및 휴식. (2교시 교사는 10:10에 답안지 회수 후 퇴실 완료!)
+                  <strong>09:20 입실 대기</strong> → 09:25 교대 입실 후 국어 후반부 감독. <strong>10:00 종료령</strong>에 맞춰 답안지/문제지 전량 회수 후 퇴실. (10:00~10:30 30분간 자습 및 휴식)
                 </td>
               </tr>
 
@@ -272,23 +384,14 @@
                   수학 (전반부)
                   <span class="block text-[11px] text-slate-400">총 100분 중 앞 50분</span>
                 </td>
-                <td class="py-3 px-3 font-mono text-xs">10:50 ~ 11:40 (50분)</td>
+                <td class="py-3 px-3 font-mono text-xs">10:30 ~ 12:10 (100분)</td>
                 <td class="py-3 px-3 font-bold text-indigo-700">
-                  10:50 ~ 11:40 (50분)<br>
-                  <span class="text-xs font-normal text-slate-500">3교시 수업 교사</span>
+                  10:30 ~ 11:20 (50분)<br>
+                  <span class="text-xs font-normal text-slate-500">3교시 배정/대체 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-600">
-                  <strong class="text-slate-900">10:45경 입실, 수학 문제지 배부 및 본령.</strong> 50분간 감독 후 11:40에 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다.
+                  <strong>10:25 준비령</strong>에 맞춰 입실, 수학 문제지 배부 및 출석체크. 11:20에 <span class="text-rose-600 font-semibold">회수 없이</span> 4교시 감독 교사에게 인계합니다.
                 </td>
-              </tr>
-
-              <!-- 무감독 2 -->
-              <tr class="bg-slate-50/80 text-slate-500 text-xs">
-                <td class="py-2 px-3 text-center font-mono">-</td>
-                <td class="py-2 px-3 font-semibold text-slate-600">무감독 (쉬는시간)</td>
-                <td class="py-2 px-3 font-mono">11:40 ~ 11:50 (10분)</td>
-                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
-                <td class="py-2 px-4 text-slate-500">기존 3-4교시 쉬는 시간 활용. 학생들은 정숙을 유지하며 시험을 계속 풉니다.</td>
               </tr>
 
               <!-- 4교시 수학 후반 -->
@@ -296,26 +399,26 @@
                 <td class="py-3 px-3 text-center font-bold bg-indigo-50/50 text-indigo-800">4교시</td>
                 <td class="py-3 px-3 font-semibold text-slate-900">
                   수학 (후반부 & 회수)
-                  <span class="block text-[11px] text-slate-400">총 100분 중 뒤 40분</span>
+                  <span class="block text-[11px] text-slate-400">총 100분 중 뒤 50분</span>
                 </td>
-                <td class="py-3 px-3 font-mono text-xs">11:50 ~ 12:30 (40분)</td>
+                <td class="py-3 px-3 font-mono text-xs">10:30 ~ 12:10 (100분)</td>
                 <td class="py-3 px-3 font-bold text-indigo-700">
-                  11:50 ~ 12:30 (40분)<br>
-                  <span class="text-xs font-normal text-slate-500">4교시 수업 교사</span>
+                  11:20 ~ 12:10 (50분)<br>
+                  <span class="text-xs font-normal text-slate-500">4교시 배정/대체 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-600">
-                  <strong class="text-slate-900">11:50 입실</strong>하여 40분간 감독. <strong>12:30 수학 종료령</strong>에 맞춰 답안지/문제지 회수 및 본부 제출 후 퇴실.
+                  <strong>11:15 입실 대기</strong> → 11:20 교대 입실 후 수학 후반부 감독. <strong>12:10 수학 종료령</strong>에 맞춰 답안지/문제지 전량 회수 후 본부 제출.
                 </td>
               </tr>
 
-              <!-- 점심 준비 및 점심시간 -->
+              <!-- 3학년 점심시간 -->
               <tr class="bg-amber-50/40 text-xs">
-                <td class="py-2 px-3 text-center font-mono">점심</td>
-                <td class="py-2 px-3 font-semibold text-amber-900">점심 준비 & 급식</td>
-                <td class="py-2 px-3 font-mono text-amber-800">12:30 ~ 13:40 (70분)</td>
+                <td class="py-2 px-3 text-center font-bold text-amber-900">점심</td>
+                <td class="py-2 px-3 font-semibold text-amber-900">3학년 점심 및 휴식</td>
+                <td class="py-2 px-3 font-mono text-amber-800">12:10 ~ 13:00 (50분)</td>
                 <td class="py-2 px-3 text-amber-800 font-medium">급식 지도</td>
                 <td class="py-2 px-4 text-amber-900">
-                  12:30~12:40 (휴식 및 준비) + 12:40~13:40 (점심시간 60분). 1·2학년 정규 급식 일정과 동일 운영!
+                  12:10~12:40 (3학년 점심 식사) + 12:40~13:00 (양치 및 착석 대기). 13:00까지 5교시 시험 준비 완료!
                 </td>
               </tr>
 
@@ -324,93 +427,81 @@
                 <td class="py-3 px-3 text-center font-bold bg-purple-50/50 text-purple-800">5교시</td>
                 <td class="py-3 px-3 font-semibold text-slate-900">
                   영어 (듣기평가 & 전반)
-                  <span class="block text-[11px] text-slate-400">총 70분 중 앞 50분</span>
+                  <span class="block text-[11px] text-slate-400">총 70분 중 앞 40분</span>
                 </td>
-                <td class="py-3 px-3 font-mono text-xs">13:40 ~ 14:30 (50분)</td>
+                <td class="py-3 px-3 font-mono text-xs">13:10 ~ 14:20 (70분)</td>
                 <td class="py-3 px-3 font-bold text-purple-700">
-                  13:40 ~ 14:30 (50분)<br>
-                  <span class="text-xs font-normal text-slate-500">5교시 수업 교사</span><br>
-                  <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">※ 수: 부담임 교사</span>
+                  13:00 ~ 13:40 (40분)<br>
+                  <span class="text-xs font-normal text-slate-500">5교시 배정 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-600">
-                  <strong class="text-slate-900">13:35 입실, 영어 문제지 배부.</strong> 13:40 본령 및 영어 듣기평가 방송 진행. 14:30에 <span class="text-rose-600 font-semibold">답안지 회수 없이 퇴실</span>합니다.
-                  <div class="mt-1 text-[11px] text-indigo-700 font-medium">※ 수요일은 3학년 자율활동 연동으로 <strong>해당 반 부담임 교사</strong>가 임장 감독합니다.</div>
+                  <strong>13:00 입실</strong>, 문제지 배부 및 출석체크. <strong>13:05 준비령, 13:07~13:10 듣기안내 방송</strong> 후 본령 진행. 13:40에 <span class="text-rose-600 font-semibold">회수 없이</span> 6교시 교사에게 인계. (※ 수요일은 비움)
                 </td>
               </tr>
 
-              <!-- 무감독 3 -->
-              <tr class="bg-slate-50/80 text-slate-500 text-xs">
-                <td class="py-2 px-3 text-center font-mono">-</td>
-                <td class="py-2 px-3 font-semibold text-slate-600">무감독 (쉬는시간)</td>
-                <td class="py-2 px-3 font-mono">14:30 ~ 14:40 (10분)</td>
-                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
-                <td class="py-2 px-4 text-slate-500">기존 5-6교시 쉬는 시간 활용. 학생들은 정숙을 유지하며 독해 문제를 계속 풉니다.</td>
+              <!-- 6교시 영어 후반 -->
+              <tr class="hover:bg-slate-50">
+                <td class="py-3 px-3 text-center font-bold bg-purple-50/50 text-purple-800">6교시</td>
+                <td class="py-3 px-3 font-semibold text-slate-900">
+                  영어 (후반부 & 회수)
+                  <span class="block text-[11px] text-slate-400">총 70분 중 뒤 40분</span>
+                </td>
+                <td class="py-3 px-3 font-mono text-xs">13:10 ~ 14:20 (70분)</td>
+                <td class="py-3 px-3 font-bold text-purple-700">
+                  13:40 ~ 14:20 (40분)<br>
+                  <span class="text-xs font-normal text-slate-500">6교시 배정/대체 교사</span>
+                </td>
+                <td class="py-3 px-4 text-xs text-slate-600">
+                  <strong>13:35 입실 대기</strong> → 13:40 교대 입실 후 영어 후반부 감독. <strong>14:20 영어 종료령</strong>에 맞춰 답안지/문제지 전량 회수 후 퇴실. (14:20~14:50 30분간 자습 및 휴식 / ※ 수요일 비움)
+                </td>
               </tr>
 
-              <!-- 6교시 영어 후반 + 배부 + 한국사 (연속 50분!) -->
+              <!-- 7교시 탐구 1차 -->
               <tr class="bg-rose-50/40 hover:bg-rose-50/70 border-l-4 border-l-rose-500">
-                <td class="py-3 px-3 text-center font-bold bg-rose-100/60 text-rose-800">6교시</td>
+                <td class="py-3 px-3 text-center font-bold bg-rose-100/60 text-rose-800">7교시</td>
                 <td class="py-3 px-3 font-semibold text-rose-950">
-                  영어 회수 + 한국사
-                  <span class="block text-[11px] text-rose-700 font-bold">★ 50분 연속 임장!</span>
+                  탐구 1차 (한국사 / 1선택)
+                  <span class="block text-[11px] text-rose-700 font-bold">월·금 15:30 종료!</span>
                 </td>
                 <td class="py-3 px-3 font-mono text-xs">
-                  14:40 ~ 15:30 (50분)<br>
-                  <span class="text-[11px] text-slate-500">영어10m + 준비10m + 한국사30m</span>
+                  14:50 ~ 15:40 (50분)<br>
+                  <span class="text-[11px] text-slate-500">한국사 14:50~15:20 (30분)</span>
                 </td>
                 <td class="py-3 px-3 font-bold text-rose-700">
-                  14:40 ~ 15:30 (50분)<br>
-                  <span class="text-xs font-normal text-slate-600">6교시 수업 교사</span><br>
-                  <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">※ 수: 담임 교사</span>
+                  14:50 ~ 15:40 (50분)<br>
+                  <span class="text-xs font-normal text-slate-600">7교시 배정 교사</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-rose-900">
                   <div class="space-y-1">
-                    <div><strong>① 14:40 입실:</strong> 영어 후반 10분 감독 후 <strong>14:50 영어 종료 및 답안지 회수</strong></div>
-                    <div><strong>② 14:50 ~ 15:00:</strong> 쉬는 시간 동안 한국사 시험지 배부 & 대기 지도</div>
-                    <div><strong>③ 15:00 ~ 15:30:</strong> <strong>한국사 30분 감독</strong> 및 15:30 회수</div>
+                    <div><strong>14:45 준비령</strong> 및 한국사 문제지 배부 → <strong>14:50~15:20 한국사 시험(30분)</strong></div>
                     <div class="p-1.5 bg-rose-100 rounded text-rose-950 font-bold space-y-1">
-                      <div>🔔 <strong>월·수·금:</strong> 15:30에 한국사 답안지 회수 완료 후 즉시 전 시험 종료 및 학급 종례!! <span class="text-indigo-800">(※ 수요일은 담임교사가 직접 본인 반 종례)</span></div>
-                      <div>🔔 <strong>화·목:</strong> 6교시 감독 교사가 <strong>시간을 조금 더 할애하여 탐구 2과목(제1/2선택) 시험지까지 학생들에게 배부</strong>해 주고 퇴실!</div>
+                      <div>🔔 <strong>월·금:</strong> 15:20 한국사 종료 즉시 답안지 회수 완료 후 <strong>15:30 전원 종례 및 하교!</strong></div>
+                      <div>🔔 <strong>화·목:</strong> 탐구 1선택(15:35~16:05) 진행 중 15:40에 8교시 교사에게 인계합니다.</div>
                     </div>
                   </div>
                 </td>
               </tr>
 
-              <!-- 화·목 탐구 제1선택 무감독 (10분) -->
-              <tr class="bg-slate-50/80 text-slate-500 text-xs">
-                <td class="py-2 px-3 text-center font-mono">-</td>
-                <td class="py-2 px-3 font-semibold text-slate-600">
-                  탐구 제1선택 시작<br>
-                  <span class="text-[10px] text-slate-400 font-normal">(화·목만 해당)</span>
-                </td>
-                <td class="py-2 px-3 font-mono">15:30 ~ 15:40 (10분)</td>
-                <td class="py-2 px-3 text-slate-400 italic">교사 없음 (무감독)</td>
-                <td class="py-2 px-4 text-slate-500">
-                  기존 6-7교시 쉬는 시간(10분) 활용 <strong>무감독 진행</strong>. 학생들은 6교시 교사가 나눠준 시험지로 <strong>15:30부터 탐구 제1선택(30분) 자율 시험 시작!</strong>
-                </td>
-              </tr>
-
-              <!-- 7교시 탐구 2과목 (화, 목만 진행!) -->
-              <tr class="bg-amber-50/50 hover:bg-amber-100/40 border-l-4 border-l-amber-500">
-                <td class="py-3 px-3 text-center font-bold bg-amber-100 text-amber-900">7교시<br><span class="text-[10px] font-normal">(화·목만)</span></td>
+              <!-- 8교시 탐구 2차 (화·목만 운영) -->
+              <tr class="bg-purple-50/50 hover:bg-purple-100/40 border-l-4 border-l-purple-500">
+                <td class="py-3 px-3 text-center font-bold bg-purple-100 text-purple-900">8교시<br><span class="text-[10px] font-normal">(화·목만)</span></td>
                 <td class="py-3 px-3 font-semibold text-slate-900">
-                  탐구 2과목 감독<br>
-                  <span class="text-[11px] text-amber-700 font-bold">1선택(30분) / 2선택(30분)</span>
+                  탐구 2차 & 최종 종례<br>
+                  <span class="text-[11px] text-purple-700 font-bold">1선택 회수 / 2선택 감독</span>
                 </td>
                 <td class="py-3 px-3 font-mono text-xs">
-                  15:30 ~ 16:30 (총 60분)<br>
-                  <span class="text-[10px] text-slate-500 font-normal">1선택: 15:30~16:00 (30분)<br>2선택: 16:00~16:30 (30분)</span>
+                  15:40 ~ 16:30 (50분)<br>
+                  <span class="text-[10px] text-slate-500 font-normal">1선택: ~16:05 회수<br>2선택: 16:07~16:37</span>
                 </td>
-                <td class="py-3 px-3 font-bold text-amber-800">
-                  15:40 ~ 16:30 (총 50분)<br>
-                  <span class="text-xs font-normal text-slate-500">7교시 수업 교사</span>
+                <td class="py-3 px-3 font-bold text-purple-800">
+                  15:40 ~ 16:30 (50분)<br>
+                  <span class="text-xs font-normal text-slate-500">8교시 배정 교사 (1·2순위)</span>
                 </td>
                 <td class="py-3 px-4 text-xs text-slate-700">
                   <div class="space-y-1">
-                    <div><strong>① 15:40 입실:</strong> 탐구 제1선택 후반부 20분간 감독 후 <strong>16:00 제1선택 종료 및 답안지 회수</strong></div>
-                    <div><strong>② 16:00 ~ 16:30 (30분):</strong> 이어서 <strong>탐구 제2선택 30분간 감독</strong></div>
-                    <div><strong>③ 16:30:</strong> 최종 시험 종료령 후 제2선택 답안지 전량 회수, 본부 제출 및 <strong>최종 학급 종례!</strong></div>
-                    <div class="text-[11px] text-amber-900 font-medium">※ 7교시 교사는 15:40~16:30 총 50분 감독으로 원래 수업 시수(50분)와 정확히 일치합니다.</div>
+                    <div><strong>① 15:40 입실:</strong> 탐구 제1선택 후반부 감독 후 <strong>16:05 제1선택 종료 및 답안지 회수</strong></div>
+                    <div><strong>② 16:07 ~ 16:37:</strong> 이어서 <strong>탐구 제2선택 감독 진행</strong></div>
+                    <div><strong>③ 16:30:</strong> 최종 고사 종료령 후 제2선택 답안지 전량 회수, 본부 제출 및 <strong>16:30 최종 학급 종례!</strong></div>
                   </div>
                 </td>
               </tr>
@@ -774,76 +865,86 @@
       }
     };
 
-    // Period timing & exam duties definition
+    // Period timing & exam duties definition (10.19~ 수능 타종 일과 8개 교시 체계)
     const PERIOD_CONFIG = {
       1: {
         period: 1,
-        area: '국어 1차 (전반부)',
+        area: '국어 1차 (전반부 35분)',
         subjectCategory: '국어',
-        examTime: '08:50 ~ 09:40',
-        durationText: '50분',
-        proctorTime: '08:50 ~ 09:40 (50분)',
-        dutyNote: '시험지/답안지 배부 및 50분간 감독. 09:40 종료령 후 답안지 회수 없이 퇴실.',
+        examTime: '08:40 ~ 10:00 (전체 80분)',
+        durationText: '35분',
+        proctorTime: '08:50 ~ 09:25 (35분)',
+        dutyNote: '08:45 입실 준비 및 출석체크. 08:50~09:25 국어 전반 감독 후 09:25에 2교시 교사에게 인계(회수 없이 퇴실).',
         isDismissal: false
       },
       2: {
         period: 2,
-        area: '국어 2차 (후반부 & 회수)',
+        area: '국어 2차 (후반부 35분 & 회수)',
         subjectCategory: '국어',
-        examTime: '09:50 ~ 10:10',
-        durationText: '20분',
-        proctorTime: '09:50 ~ 10:10 (20분)',
-        dutyNote: '09:50 입실, 20분 감독 후 10:10 종료령 시 답안지/문제지 전량 회수 후 퇴실. (이후 10:50까지 40분 자습 및 휴식)',
+        examTime: '08:40 ~ 10:00 (전체 80분)',
+        durationText: '35분',
+        proctorTime: '09:25 ~ 10:00 (35분)',
+        dutyNote: '09:20 입실 대기. 09:25 교대 입실 후 국어 후반부 감독. 10:00 종료령 즉시 답안지/문제지 전량 회수 후 퇴실. (10:00~10:30 휴식 30분)',
         isDismissal: false
       },
       3: {
         period: 3,
-        area: '수학 1차 (전반부)',
+        area: '수학 1차 (전반부 50분)',
         subjectCategory: '수학',
-        examTime: '10:50 ~ 11:40',
+        examTime: '10:30 ~ 12:10 (전체 100분)',
         durationText: '50분',
-        proctorTime: '10:50 ~ 11:40 (50분)',
-        dutyNote: '10:45 입실, 수학 시험지 배부 및 50분 감독. 11:40 종료 시 답안지 회수 없이 퇴실.',
+        proctorTime: '10:30 ~ 11:20 (50분)',
+        dutyNote: '준비령 10:25, 시험지 배부 및 출석체크. 10:30~11:20 감독 후 11:20에 4교시 교사에게 인계(회수 없이 퇴실).',
         isDismissal: false
       },
       4: {
         period: 4,
-        area: '수학 2차 (후반부 & 회수)',
+        area: '수학 2차 (후반부 50분 & 회수)',
         subjectCategory: '수학',
-        examTime: '11:50 ~ 12:30',
-        durationText: '40분',
-        proctorTime: '11:50 ~ 12:30 (40분)',
-        dutyNote: '11:50 입실, 40분 감독 후 12:30 수학 종료 시 답안지/문제지 회수 및 본부 제출.',
+        examTime: '10:30 ~ 12:10 (전체 100분)',
+        durationText: '50분',
+        proctorTime: '11:20 ~ 12:10 (50분)',
+        dutyNote: '11:15 입실 대기. 11:20 교대 입실 후 수학 후반부 감독. 12:10 수학 종료 즉시 답안지/문제지 전량 회수 후 본부 제출. (12:10~13:00 점심시간)',
         isDismissal: false
       },
       5: {
         period: 5,
-        area: '영어 1차 (듣기평가 & 전반)',
+        area: '영어 1차 (듣기평가 포함 전반 40분)',
         subjectCategory: '영어',
-        examTime: '13:40 ~ 14:30',
-        durationText: '50분',
-        proctorTime: '13:40 ~ 14:30 (50분)',
-        dutyNote: '13:35 입실, 문제지 배부 및 듣기평가 포함 50분 감독. 14:30에 답안지 회수 없이 퇴실. (※ 수요일: 해당 학급 부담임 교사 감독)',
+        examTime: '13:10 ~ 14:20 (전체 70분)',
+        durationText: '40분',
+        proctorTime: '13:00 ~ 13:40 (40분)',
+        dutyNote: '준비령 13:05, 듣기안내 13:07~13:10. 문제지 배부 및 듣기평가 포함 감독. 13:40에 6교시 교사에게 인계(회수 없음). (※ 수요일은 비움)',
         isDismissal: false
       },
       6: {
         period: 6,
-        area: '영어 회수 + 한국사 (연속)',
-        subjectCategory: '한국사/영어',
-        examTime: '14:40 ~ 15:30',
-        durationText: '50분',
-        proctorTime: '14:40 ~ 15:30 (연속 50분)',
-        dutyNote: '14:40 입실 → 14:50 영어 회수 → 한국사 배부 → 15:00~15:30 한국사 30분 감독 및 회수! (※ 수요일: 담임교사가 들어가 한국사 감독 및 15:30 종례 / 화·목: 시간 조금 더 할애하여 탐구 1·2선택 시험지 배부 후 퇴실)',
+        area: '영어 2차 (후반 40분 & 회수)',
+        subjectCategory: '영어',
+        examTime: '13:10 ~ 14:20 (전체 70분)',
+        durationText: '40분',
+        proctorTime: '13:40 ~ 14:20 (40분)',
+        dutyNote: '13:35 입실 대기. 13:40 입실 후 영어 후반부 감독. 14:20 영어 종료 즉시 답안지/문제지 전량 회수 후 퇴실. (14:20~14:50 휴식 30분 / ※ 수요일 비움)',
         isDismissal: false
       },
       7: {
         period: 7,
-        area: '탐구 2과목 (화·목만 진행)',
+        area: '탐구 1차 (한국사 / 1선택)',
+        subjectCategory: '한국사/탐구',
+        examTime: '14:50 ~ 15:40 (50분)',
+        durationText: '50분',
+        proctorTime: '14:50 ~ 15:40 (50분)',
+        dutyNote: '준비령 14:45, 한국사 14:50~15:20(30분). [월·금]: 15:20 한국사 종료 후 회수 및 15:30 종료/종례! [화·목]: 15:35~16:05 1선택 진행 중 15:40에 8교시 교사에게 인계.',
+        isDismissal: false
+      },
+      8: {
+        period: 8,
+        area: '탐구 2차 (화·목만 운영 / 1·2선택 회수 & 종례)',
         subjectCategory: '탐구',
-        examTime: '15:30 ~ 16:30',
-        durationText: '60분 (각 30분)',
+        examTime: '15:40 ~ 16:30 (50분)',
+        durationText: '50분',
         proctorTime: '15:40 ~ 16:30 (50분)',
-        dutyNote: '화·목요일만 진행! [15:30~15:40 무감독] → [15:40~16:00(20분) 탐구 1선택 감독 및 16:00 회수] → [16:00~16:30(30분) 탐구 2선택 감독 및 16:30 최종 회수 & 종례]',
+        dutyNote: '화·목요일만 진행! 15:40 입실 → 16:05 탐구 1선택 회수 → 16:07~16:37 탐구 2선택 감독 및 16:30 최종 회수 & 종례!',
         isDismissal: true
       }
     };
@@ -1343,83 +1444,330 @@
     };
 
     // -------------------------------------------------------------
-    // 2. TIMETABLE RESOLUTION (Class & Teacher Map Generation)
+    // 2. TIMETABLE RESOLUTION (1·2학년 충돌 감지 & 309·310 대체 & 1·2순위 자동 배정)
     // -------------------------------------------------------------
     const DAYS = ['월', '화', '수', '목', '금'];
-    const RESOLVED_CLASSES = {}; // classNum -> day -> array of 7 periods
-    const TEACHER_PROCTOR_DUTIES = {}; // teacherName -> array of duties
+    const RESOLVED_CLASSES = {}; 
+    const TEACHER_PROCTOR_DUTIES = {}; 
+    const TEACHER_DROPPED_INFO = {}; 
 
-    // Initialize data structures
     for (const t in TEACHERS_RAW) {
       TEACHER_PROCTOR_DUTIES[t] = [];
+      TEACHER_DROPPED_INFO[t] = [];
     }
 
+    // Helper: 1·2학년 수업 여부 판별 (101~209)
+    function isGrade12Class(cell) {
+      if (!cell) return false;
+      return /^[12]\d\d/.test(cell);
+    }
+
+    // Helper: 309, 310호 배정 여부 판별
+    function is309or310Class(cell) {
+      if (!cell) return false;
+      return /^3(09|10)/.test(cell);
+    }
+
+    // 1·2학년 수업과 3학년 모의고사 pNum 교시 간 시간 중복 검사
+    function checkGrade12Conflict(teacherName, day, pNum) {
+      const tObj = TEACHERS_RAW[teacherName];
+      if (!tObj) return null;
+      const sched = tObj.schedule[day] || [];
+
+      // Reg periods: 0=1T, 1=2T, 2=3T, 3=4T, 4=5T, 5=6T, 6=7T
+      let conflictingIndices = [];
+      if (pNum === 1) conflictingIndices = [0];
+      else if (pNum === 2) conflictingIndices = [0, 1]; // 3학년 09:25~10:00 vs 정규 1T(08:50~09:40) & 2T(09:50~10:40)
+      else if (pNum === 3) conflictingIndices = [1, 2]; // 3학년 10:30~11:20 vs 정규 2T(09:50~10:40) & 3T(10:50~11:40)
+      else if (pNum === 4) conflictingIndices = [2, 3]; // 3학년 11:20~12:10 vs 정규 3T(10:50~11:40) & 4T(11:50~12:40)
+      else if (pNum === 5) conflictingIndices = [];     // 3학년 13:00~13:40 (1,2학년 점심 12:40~13:40 충돌 없음)
+      else if (pNum === 6) conflictingIndices = [4];    // 3학년 13:40~14:20 vs 정규 5T(13:40~14:30)
+      else if (pNum === 7) conflictingIndices = [5];    // 3학년 14:50~15:40 vs 정규 6T(14:40~15:30)
+      else if (pNum === 8) conflictingIndices = [6];    // 3학년 15:40~16:30 vs 정규 7T(15:40~16:30)
+
+      for (let i = 0; i < conflictingIndices.length; i++) {
+        const idx = conflictingIndices[i];
+        if (idx < sched.length && isGrade12Class(sched[idx])) {
+          return { regPeriod: idx + 1, className: sched[idx] };
+        }
+      }
+      return null;
+    }
+
+    // 요일별 교사 정규 수업 시수 계산
+    function calculateDailyTeacherHours(day) {
+      const hours = {};
+      for (const t in TEACHERS_RAW) {
+        const sched = TEACHERS_RAW[t].schedule[day] || [];
+        let cnt = 0;
+        for (let i = 0; i < sched.length; i++) {
+          if (sched[i]) cnt++;
+        }
+        hours[t] = cnt;
+      }
+      return hours;
+    }
+
+    // 전체 학급 초기화
     for (let c = 1; c <= 8; c++) {
       RESOLVED_CLASSES[c] = {};
-      for (const day of DAYS) {
-        RESOLVED_CLASSES[c][day] = [];
-        for (let pIdx = 0; pIdx < 7; pIdx++) {
-          const rawCell = RAW_CLASS_TIMETABLES[c][day][pIdx];
-          const subj = rawCell[0];
-          let teacher = rawCell[1];
-          let isElective = false;
-          let electiveGroup = null;
-          let displaySubj = subj;
+      DAYS.forEach(d => { RESOLVED_CLASSES[c][d] = []; });
+    }
 
-          if (day === '수' && pIdx === 4) {
-            // 수요일 5교시: 해당 학급의 부담임 교사
-            const hr = HOMEROOM_TEACHERS[c];
-            teacher = hr.assistant;
-            displaySubj = `자율활동 (부담임: ${teacher})`;
-            isElective = false;
-            electiveGroup = null;
-          } else if (day === '수' && pIdx === 5) {
-            // 수요일 6교시: 해당 학급의 담임 교사
-            const hr = HOMEROOM_TEACHERS[c];
-            teacher = hr.homeroom;
-            displaySubj = `자율활동 (담임: ${teacher})`;
-            isElective = false;
-            electiveGroup = null;
-          } else if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
-            isElective = true;
-            electiveGroup = subj;
-            const elect = ELECTIVE_HOMEROOM_MAP[subj][c];
-            teacher = elect.teacher;
-            displaySubj = `${subj}선택 (${elect.subject})`;
-          } else if (subj === '미감A/음악') {
-            teacher = '박소연'; // 1반 교실 감독
-            displaySubj = '미감A/음악 (박소연)';
+    // 요일별 1~8교시 배정 알고리즘 실행
+    DAYS.forEach(day => {
+      const dailyHours = calculateDailyTeacherHours(day);
+      const droppedTeachers = []; // 1순위: 1·2학년 충돌로 빠진 교사 목록
+      const maxPeriods = (day === '화' || day === '목') ? 8 : (day === '수' ? 6 : 7);
+
+      for (let pNum = 1; pNum <= maxPeriods; pNum++) {
+        const pIdx = pNum - 1;
+        const periodConfig = PERIOD_CONFIG[pNum];
+        const assignedInPeriod = [];
+
+        // 수요일 5, 6교시는 비워둠 (요청사항)
+        if (day === '수' && (pNum === 5 || pNum === 6)) {
+          for (let c = 1; c <= 8; c++) {
+            RESOLVED_CLASSES[c][day].push({
+              period: pNum,
+              subject: '자율활동 / 모의고사 없음 (비움)',
+              teacher: '-',
+              originalTeacher: '-',
+              isOriginal: false,
+              badge: '미배정(비움)',
+              badgeType: 'empty',
+              conflictReason: null,
+              config: periodConfig,
+              hasDuty: false
+            });
+          }
+          continue;
+        }
+
+        // 신규 교시 여부 (월·금 7교시, 화·목 8교시)
+        const isNewExtraPeriod = (pNum === 7 && (day === '월' || day === '금')) || (pNum === 8 && (day === '화' || day === '목'));
+
+        if (!isNewExtraPeriod) {
+          // 1단계: 원래 시간표 교사 확인 및 충돌 검사
+          const pendingClasses = [];
+          for (let c = 1; c <= 8; c++) {
+            const rawCell = RAW_CLASS_TIMETABLES[c][day][pIdx];
+            const subj = rawCell ? rawCell[0] : '';
+            let origTeacher = rawCell ? rawCell[1] : '';
+            let isElective = false;
+            let displaySubj = subj;
+
+            if (['A', 'B', 'C', 'D', 'E'].includes(subj)) {
+              isElective = true;
+              const elect = ELECTIVE_HOMEROOM_MAP[subj][c];
+              origTeacher = elect.teacher;
+              displaySubj = `${subj}선택 (${elect.subject})`;
+            } else if (subj === '미감A/음악') {
+              origTeacher = '박소연';
+              displaySubj = '미감A/음악 (박소연)';
+            }
+
+            const conflict = checkGrade12Conflict(origTeacher, day, pNum);
+            if (conflict) {
+              droppedTeachers.push({
+                teacher: origTeacher,
+                origPeriod: pNum,
+                origClass: c,
+                reason: `${conflict.regPeriod}교시 ${conflict.className}`
+              });
+              TEACHER_DROPPED_INFO[origTeacher].push({
+                day: day,
+                origPeriod: pNum,
+                origClass: c,
+                conflictClass: conflict.className,
+                conflictPeriod: conflict.regPeriod
+              });
+              pendingClasses.push({ classNum: c, origTeacher: origTeacher, subj: displaySubj, conflict: conflict });
+            } else {
+              const item = {
+                period: pNum,
+                subject: displaySubj,
+                teacher: origTeacher,
+                originalTeacher: origTeacher,
+                isOriginal: true,
+                badge: '원래 배정',
+                badgeType: 'orig',
+                conflictReason: null,
+                config: periodConfig,
+                hasDuty: Boolean(origTeacher && origTeacher.trim() !== '')
+              };
+              RESOLVED_CLASSES[c][day].push(item);
+              if (item.hasDuty) {
+                assignedInPeriod.push(origTeacher);
+                TEACHER_PROCTOR_DUTIES[origTeacher].push({
+                  day: day,
+                  period: pNum,
+                  classNum: c,
+                  room: `3학년 ${c}반`,
+                  subject: displaySubj,
+                  config: periodConfig,
+                  badge: '원래 배정',
+                  badgeType: 'orig'
+                });
+              }
+            }
           }
 
-          const periodConfig = PERIOD_CONFIG[pIdx + 1];
-          const hasDuty = teacher && teacher.trim() !== '' && (pIdx < 6 || (day === '화' || day === '목'));
+          // 2단계: 충돌로 빈 학급 대체 교사 투입 (1순위: 309·310 교사, 2순위: 시수 적은 교사)
+          // 해당 정규 교시 309·310 배정 교사 후보 추출
+          const candidates309_310 = [];
+          if (pIdx < 7) {
+            for (const t in TEACHERS_RAW) {
+              const sched = TEACHERS_RAW[t].schedule[day] || [];
+              if (pIdx < sched.length && is309or310Class(sched[pIdx])) {
+                candidates309_310.push(t);
+              }
+            }
+          }
 
-          const periodItem = {
-            period: pIdx + 1,
-            subject: displaySubj,
-            teacher: teacher,
-            isElective: isElective,
-            electiveGroup: electiveGroup,
-            config: periodConfig,
-            hasDuty: hasDuty
-          };
+          for (let k = 0; k < pendingClasses.length; k++) {
+            const pClass = pendingClasses[k];
+            let subTeacher = null;
+            let subBadge = '';
+            let subType = '';
 
-          RESOLVED_CLASSES[c][day].push(periodItem);
+            // 1. 309·310 배정 교사 중 가능한 교사 우선 배정
+            for (let s = 0; s < candidates309_310.length; s++) {
+              const cand = candidates309_310[s];
+              if (!assignedInPeriod.includes(cand) && !checkGrade12Conflict(cand, day, pNum)) {
+                subTeacher = cand;
+                subBadge = '309·310 대체';
+                subType = 'sub_309_310';
+                candidates309_310.splice(s, 1);
+                break;
+              }
+            }
 
-          // Add to teacher's proctor duty list if teacher exists and period is active on this day
-          if (hasDuty && TEACHER_PROCTOR_DUTIES[teacher]) {
-            TEACHER_PROCTOR_DUTIES[teacher].push({
-              day: day,
-              period: pIdx + 1,
-              classNum: c,
-              room: `3학년 ${c}반`,
-              subject: displaySubj,
-              config: periodConfig
-            });
+            // 2. 309·310 교사가 없으면, 그 교시에 비어있고 수업 시수가 가장 적은 교사 투입
+            if (!subTeacher) {
+              const available = [];
+              for (const t in TEACHERS_RAW) {
+                if (!assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+                  const sReg = TEACHERS_RAW[t].schedule[day] || [];
+                  const regSlot = (pIdx < sReg.length) ? sReg[pIdx] : null;
+                  if (!regSlot) { // 정규 시간표상 공강인 교사
+                    available.push({ teacher: t, hours: dailyHours[t] });
+                  }
+                }
+              }
+              available.sort((a, b) => a.hours - b.hours);
+              if (available.length > 0) {
+                subTeacher = available[0].teacher;
+                subBadge = '대체 감독';
+                subType = 'sub_min';
+              }
+            }
+
+            const finalTeacher = subTeacher || '미정교사';
+            assignedInPeriod.push(finalTeacher);
+
+            const resolvedItem = {
+              period: pNum,
+              subject: pClass.subj,
+              teacher: finalTeacher,
+              originalTeacher: pClass.origTeacher,
+              isOriginal: false,
+              badge: subBadge,
+              badgeType: subType,
+              conflictReason: `${pClass.conflict.regPeriod}교시 ${pClass.conflict.className} 수업과 중복`,
+              config: periodConfig,
+              hasDuty: true
+            };
+            RESOLVED_CLASSES[pClass.classNum][day].push(resolvedItem);
+
+            if (TEACHER_PROCTOR_DUTIES[finalTeacher]) {
+              TEACHER_PROCTOR_DUTIES[finalTeacher].push({
+                day: day,
+                period: pNum,
+                classNum: pClass.classNum,
+                room: `3학년 ${pClass.classNum}반`,
+                subject: `${pClass.subj} (대체 감독)`,
+                config: periodConfig,
+                badge: subBadge,
+                badgeType: subType,
+                originalTeacher: pClass.origTeacher,
+                conflictReason: resolvedItem.conflictReason
+              });
+            }
+          }
+        } else {
+          // 신규 교시 (월·금 7교시 / 화·목 8교시): 8개 학급(1~8반) 신규 배정
+          // 1순위: 앞에 1·2학년이랑 겹쳐 수업이 빠진 교사 (droppedTeachers)
+          // 2순위: 그날의 수업 시수가 적은 선생님 순
+          const p1Candidates = [];
+          for (let d = 0; d < droppedTeachers.length; d++) {
+            const dtName = droppedTeachers[d].teacher;
+            if (!p1Candidates.includes(dtName) && !assignedInPeriod.includes(dtName) && !checkGrade12Conflict(dtName, day, pNum)) {
+              p1Candidates.push(dtName);
+            }
+          }
+
+          const p2Candidates = [];
+          for (const t in TEACHERS_RAW) {
+            if (!p1Candidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+              p2Candidates.push({ teacher: t, hours: dailyHours[t] });
+            }
+          }
+          p2Candidates.sort((a, b) => a.hours - b.hours);
+
+          for (let c = 1; c <= 8; c++) {
+            let assignedT = null;
+            let badge = '';
+            let bType = '';
+
+            if (p1Candidates.length > 0) {
+              assignedT = p1Candidates.shift();
+              badge = '1순위(앞수업충돌)';
+              bType = 'p1_dropped';
+            } else if (p2Candidates.length > 0) {
+              assignedT = p2Candidates.shift().teacher;
+              badge = '2순위(시수적은교사)';
+              bType = 'p2_min';
+            } else {
+              assignedT = '미정교사';
+              badge = '추가배정';
+              bType = 'extra';
+            }
+
+            assignedInPeriod.push(assignedT);
+            const subjName = (pNum === 7 ? '탐구 1차 (한국사)' : '탐구 2차 (선택과목)');
+
+            const resolvedItem = {
+              period: pNum,
+              subject: subjName,
+              teacher: assignedT,
+              originalTeacher: '(신규교시)',
+              isOriginal: false,
+              badge: badge,
+              badgeType: bType,
+              conflictReason: null,
+              config: periodConfig,
+              hasDuty: true
+            };
+            RESOLVED_CLASSES[c][day].push(resolvedItem);
+
+            if (TEACHER_PROCTOR_DUTIES[assignedT]) {
+              TEACHER_PROCTOR_DUTIES[assignedT].push({
+                day: day,
+                period: pNum,
+                classNum: c,
+                room: `3학년 ${c}반`,
+                subject: subjName,
+                config: periodConfig,
+                badge: badge,
+                badgeType: bType,
+                originalTeacher: '(신규교시)'
+              });
+            }
           }
         }
       }
-    }
+    });
 
     // Sort teacher duties by day and period
     const dayOrder = { '월': 1, '화': 2, '수': 3, '목': 4, '금': 5 };
@@ -1476,10 +1824,10 @@
         clockEl.textContent = `${hrs}:${mins}:${secs}`;
 
         const curMins = now.getHours() * 60 + now.getMinutes();
-        // 08:50 = 530, 16:30 = 990
-        if (curMins >= 530 && curMins <= 990) {
-          badgeEl.textContent = '모의고사 진행 시간대';
-          badgeEl.className = 'text-xs text-blue-600 font-bold';
+        // 08:40 = 520, 16:30 = 990
+        if (curMins >= 520 && curMins <= 990) {
+          badgeEl.textContent = '수능 타종 일과 진행 중';
+          badgeEl.className = 'text-xs text-indigo-600 font-bold';
         } else {
           badgeEl.textContent = '시험 시간 외';
           badgeEl.className = 'text-xs text-slate-400 font-normal';
@@ -1509,8 +1857,8 @@
         select.appendChild(opt);
       });
 
-      // Quick teachers (3rd grade teachers who have duties)
-      const topTeachers = ['고명호', '방수영', '김경남', '오의진', '정주윤', '박소연', '최정', '진혜리', '이지연', '권유진', '이서윤', '윤은정', '한효숙'];
+      // Quick teachers (frequent 3rd grade proctors)
+      const topTeachers = ['고명호', '방수영', '김경남', '오의진', '정주윤', '박소연', '최정', '진혜리', '이지연', '권유진', '이서윤', '윤은정', '한효숙', '황인욱', '강재욱', '신수완'];
       topTeachers.forEach(t => {
         const btn = document.createElement('button');
         btn.className = 'px-2 py-0.5 text-xs bg-slate-100 hover:bg-blue-100 text-slate-700 hover:text-blue-700 font-medium rounded transition';
@@ -1540,18 +1888,16 @@
       currentSelectedTeacher = teacherName;
       const teacherInfo = TEACHERS_RAW[teacherName];
       const duties = TEACHER_PROCTOR_DUTIES[teacherName] || [];
+      const droppedList = TEACHER_DROPPED_INFO[teacherName] || [];
 
       // Calculate stats
       const totalDuties = duties.length;
       let totalMinutes = 0;
       duties.forEach(d => {
-        if (d.period === 1) totalMinutes += 50;
-        else if (d.period === 2) totalMinutes += 20;
-        else if (d.period === 3) totalMinutes += 50;
-        else if (d.period === 4) totalMinutes += 40;
-        else if (d.period === 5) totalMinutes += 50;
-        else if (d.period === 6) totalMinutes += 50;
-        else if (d.period === 7) totalMinutes += 50;
+        if (d.period === 1 || d.period === 2) totalMinutes += 35;
+        else if (d.period === 3 || d.period === 4) totalMinutes += 50;
+        else if (d.period === 5 || d.period === 6) totalMinutes += 40;
+        else if (d.period === 7 || d.period === 8) totalMinutes += 50;
       });
 
       // Render Profile Card
@@ -1559,29 +1905,29 @@
       profileCard.innerHTML = `
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div class="flex items-center space-x-4">
-            <div class="w-14 h-14 rounded-2xl bg-blue-500/30 border border-blue-400/40 flex items-center justify-center text-2xl font-black text-white">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center text-2xl font-black text-white">
               ${teacherName.slice(0, 1)}
             </div>
             <div>
               <div class="flex items-center space-x-2">
                 <h2 class="text-2xl font-bold tracking-tight">${teacherName} 선생님</h2>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/30 border border-blue-400/40 text-blue-200">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/30 border border-indigo-400/40 text-indigo-200">
                   ${teacherInfo.subject}
                 </span>
               </div>
-              <p class="text-xs text-blue-200/80 mt-1">
-                ${totalDuties > 0 ? `모의고사 주간 총 ${totalDuties}회 감독 투입 (${totalMinutes}분)` : '3학년 모의고사 감독 배정 없음 (1·2학년 정규 수업 진행)'}
+              <p class="text-xs text-indigo-200/80 mt-1">
+                ${totalDuties > 0 ? `수능 타종 주간 총 ${totalDuties}회 감독 투입 (누적 ${totalMinutes}분)` : '3학년 모의고사 감독 배정 없음 (1·2학년 정규 수업 진행)'}
               </p>
             </div>
           </div>
 
           <div class="flex items-center space-x-3 w-full sm:w-auto">
             <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl px-4 py-2 text-center flex-1 sm:flex-none">
-              <span class="block text-xs text-blue-200">주간 감독 횟수</span>
+              <span class="block text-xs text-indigo-200">주간 감독 횟수</span>
               <span class="text-lg font-black text-white">${totalDuties}회</span>
             </div>
             <div class="bg-white/10 backdrop-blur border border-white/10 rounded-xl px-4 py-2 text-center flex-1 sm:flex-none">
-              <span class="block text-xs text-blue-200">총 감독 시간</span>
+              <span class="block text-xs text-indigo-200">총 감독 시간</span>
               <span class="text-lg font-black text-amber-300 font-mono">${totalMinutes}분</span>
             </div>
           </div>
@@ -1590,16 +1936,34 @@
 
       // Render Left: Proctor Duties List
       const proctorListEl = document.getElementById('teacherProctorList');
+      let html = '';
+
+      // If this teacher had dropped periods due to 1,2 conflict, show informative banner!
+      if (droppedList.length > 0) {
+        html += `
+          <div class="mb-4 p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-900">
+            <div class="font-bold flex items-center space-x-1 mb-1 text-amber-950">
+              <span>⚠️ [1·2학년 수업 겹침 알림]</span>
+            </div>
+            <ul class="list-disc list-inside space-y-0.5 text-amber-800">
+        `;
+        droppedList.forEach(dr => {
+          html += `<li><strong>${dr.day}요일 ${dr.origPeriod}교시(3-${dr.origClass}반):</strong> 1·2학년 정규 수업(<strong>${dr.conflictClass}</strong>)과 시간이 겹쳐 3학년 감독에서 제외되었습니다. (뒤 교시 1순위 배정으로 보전)</li>`;
+        });
+        html += `
+            </ul>
+          </div>
+        `;
+      }
+
       if (duties.length === 0) {
-        proctorListEl.innerHTML = `
+        html += `
           <div class="text-center py-10 bg-slate-50 rounded-xl border border-dashed border-slate-200">
             <p class="text-sm font-semibold text-slate-600">3학년 모의고사 감독 배정이 없습니다.</p>
             <p class="text-xs text-slate-400 mt-1">1학년 또는 2학년 수업 일정에 따라 정규 수업/자습을 진행합니다.</p>
           </div>
         `;
       } else {
-        let html = '';
-        // Group duties by day
         const byDay = { '월': [], '화': [], '수': [], '목': [], '금': [] };
         duties.forEach(d => byDay[d.day].push(d));
 
@@ -1612,7 +1976,7 @@
           const dayBadgeColor = isMonWedFri ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800';
 
           html += `
-            <div class="border border-slate-200 rounded-xl overflow-hidden print-card">
+            <div class="border border-slate-200 rounded-xl overflow-hidden print-card mb-3">
               <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                   <span class="w-6 h-6 rounded-md bg-slate-800 text-white font-bold text-xs flex items-center justify-center">${day}</span>
@@ -1630,9 +1994,20 @@
             let badgeBg = 'bg-blue-100 text-blue-700';
             if (p === 2) badgeBg = 'bg-sky-100 text-sky-700';
             else if (p === 3 || p === 4) badgeBg = 'bg-indigo-100 text-indigo-700';
-            else if (p === 5) badgeBg = 'bg-purple-100 text-purple-700';
-            else if (p === 6) badgeBg = 'bg-rose-100 text-rose-700 font-bold';
-            else if (p === 7) badgeBg = 'bg-amber-100 text-amber-800 font-bold';
+            else if (p === 5 || p === 6) badgeBg = 'bg-purple-100 text-purple-700';
+            else if (p === 7) badgeBg = 'bg-rose-100 text-rose-800 font-bold';
+            else if (p === 8) badgeBg = 'bg-purple-100 text-purple-900 font-bold';
+
+            let typeBadgeHtml = '';
+            if (d.badgeType === 'sub_309_310') {
+              typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">309·310 대체</span>`;
+            } else if (d.badgeType === 'sub_min') {
+              typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-300">대체 감독</span>`;
+            } else if (d.badgeType === 'p1_dropped') {
+              typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 border border-purple-300">1순위 배정</span>`;
+            } else if (d.badgeType === 'p2_min') {
+              typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-300">2순위 배정</span>`;
+            }
 
             html += `
               <div class="pt-2 first:pt-0">
@@ -1640,16 +2015,17 @@
                   <div class="flex items-center space-x-2">
                     <span class="px-2 py-0.5 rounded text-xs font-bold ${badgeBg}">${d.period}교시</span>
                     <span class="font-bold text-slate-900 text-sm">${d.room}</span>
-                    <span class="text-xs text-slate-500 font-medium">(${d.config.area})</span>
+                    <span class="text-xs text-slate-500 font-medium">(${d.config.area.split(' ')[0]})</span>
+                    ${typeBadgeHtml}
                   </div>
                   <div class="text-right">
                     <span class="text-xs font-bold text-slate-900 font-mono">${d.config.proctorTime}</span>
                   </div>
                 </div>
                 <div class="mt-1.5 bg-slate-50 p-2 rounded-lg text-xs text-slate-600 flex items-start space-x-1.5">
-                  <span class="text-blue-500 font-bold">▶</span>
+                  <span class="text-indigo-500 font-bold">▶</span>
                   <div>
-                    <span class="font-semibold text-slate-800">원래 수업:</span> ${d.subject} &nbsp;|&nbsp;
+                    <span class="font-semibold text-slate-800">과목/영역:</span> ${d.subject} &nbsp;|&nbsp;
                     <span class="text-slate-600">${d.config.dutyNote}</span>
                   </div>
                 </div>
@@ -1662,10 +2038,10 @@
             </div>
           `;
         });
-        proctorListEl.innerHTML = html;
       }
+      proctorListEl.innerHTML = html;
 
-      // Render Right: Original Timetable Grid
+      // Render Right: Weekly Grid (1~8교시)
       const originalTableContainer = document.getElementById('teacherOriginalTableContainer');
       let origHtml = `
         <table class="w-full text-center text-xs border-collapse">
@@ -1682,35 +2058,41 @@
           <tbody class="divide-y divide-slate-100">
       `;
 
-      for (let p = 1; p <= 7; p++) {
+      for (let p = 1; p <= 8; p++) {
         origHtml += `<tr class="hover:bg-slate-50/50">`;
-        origHtml += `<td class="py-2.5 px-2 font-bold text-slate-500 bg-slate-50/50">${p}교시</td>`;
+        origHtml += `<td class="py-2 px-2 font-bold text-slate-500 bg-slate-50/50">${p}교시</td>`;
 
         DAYS.forEach(day => {
-          const origCell = teacherInfo.schedule[day][p - 1];
-          // Check if this teacher is assigned as proctor for 3rd grade in this period
-          const isProctor = duties.some(d => d.day === day && d.period === p);
+          const origCell = (p <= 7) ? teacherInfo.schedule[day][p - 1] : null;
+          const duty = duties.find(d => d.day === day && d.period === p);
 
-          if (isProctor) {
-            const duty = duties.find(d => d.day === day && d.period === p);
+          if (duty) {
+            let cellBg = 'bg-blue-50/90 border-blue-300 text-blue-900';
+            if (duty.badgeType === 'sub_309_310' || duty.badgeType === 'sub_min') {
+              cellBg = 'bg-amber-50 border-amber-300 text-amber-950';
+            } else if (duty.badgeType === 'p1_dropped' || duty.badgeType === 'p2_min') {
+              cellBg = 'bg-purple-50 border-purple-300 text-purple-950';
+            }
+
             origHtml += `
-              <td class="py-2 px-1.5 bg-blue-50/80 border border-blue-200 rounded-lg">
-                <div class="font-bold text-blue-900">${duty.room}</div>
-                <div class="text-[11px] text-blue-700">${duty.config.area.split(' ')[0]}</div>
-                <div class="mt-0.5 inline-block text-[10px] font-semibold bg-blue-600 text-white px-1.5 py-0.2 rounded-full">
-                  감독(${duty.config.durationText})
+              <td class="py-1.5 px-1 ${cellBg} border rounded-lg">
+                <div class="font-bold">${duty.room}</div>
+                <div class="text-[10px] font-semibold truncate">${duty.config.area.split(' ')[0]}</div>
+                <div class="mt-0.5 inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-white/80 border border-slate-300">
+                  ${duty.badge}
                 </div>
               </td>
             `;
           } else if (origCell) {
+            const isCollided = isGrade12Class(origCell);
             origHtml += `
-              <td class="py-2 px-1.5 text-slate-600">
+              <td class="py-1.5 px-1 text-slate-600 ${isCollided ? 'bg-slate-50' : ''}">
                 <div class="font-semibold text-slate-800">${origCell}</div>
                 <div class="text-[10px] text-slate-400">정규 수업</div>
               </td>
             `;
           } else {
-            origHtml += `<td class="py-2 px-1.5 text-slate-300">-</td>`;
+            origHtml += `<td class="py-1.5 px-1 text-slate-300">-</td>`;
           }
         });
 
@@ -1733,7 +2115,7 @@
         return;
       }
 
-      let text = `[3학년 시간모의고사] ${teacherName} 선생님 감독 일정표\n`;
+      let text = `[3학년 수능 타종 모의고사] ${teacherName} 선생님 감독 일정표\n`;
       text += `--------------------------------------------------\n`;
       
       const byDay = { '월': [], '화': [], '수': [], '목': [], '금': [] };
@@ -1744,15 +2126,13 @@
           const note = (day === '화' || day === '목') ? '(16:30 탐구까지)' : '(15:30 한국사 후 종례)';
           text += `■ ${day}요일 ${note}\n`;
           byDay[day].forEach(d => {
-            let roleExtra = '';
-            if (d.day === '수' && d.period === 5) roleExtra = ' [부담임 감독]';
-            if (d.day === '수' && d.period === 6) roleExtra = ' [담임 감독 & 15:30종례]';
-            text += `  - ${d.period}교시: ${d.room} (${d.config.area})${roleExtra} | ${d.config.proctorTime}\n`;
+            const badgeTag = d.badge ? ` [${d.badge}]` : '';
+            text += `  - ${d.period}교시: ${d.room} (${d.config.area})${badgeTag} | ${d.config.proctorTime}\n`;
           });
         }
       });
       text += `--------------------------------------------------\n`;
-      text += `※ 월·수·금은 6교시 한국사(15:30) 종료 후 즉시 종례입니다.`;
+      text += `※ 월·금 15:30 종료 / 화·목 16:30 종료 / 수요일 4교시까지 운영`;
 
       navigator.clipboard.writeText(text).then(() => {
         alert(`${teacherName} 선생님의 감독 일정이 클립보드에 복사되었습니다! 메신저나 메모장에 붙여넣으세요.`);
@@ -1767,7 +2147,6 @@
     function renderMatrixDay(day) {
       currentMatrixDay = day;
 
-      // Update Tab Styles
       DAYS.forEach(d => {
         const btn = document.getElementById(`matrix-day-${d}`);
         if (d === day) {
@@ -1777,31 +2156,29 @@
         }
       });
 
-      // Update Banner
-      const isMonWedFri = (day === '월' || day === '수' || day === '금');
       const bannerEl = document.getElementById('matrixDayBanner');
       if (day === '수') {
         bannerEl.className = 'p-4 rounded-xl border border-indigo-200 bg-indigo-50/80 flex flex-col sm:flex-row items-center justify-between text-indigo-950 text-xs sm:text-sm';
         bannerEl.innerHTML = `
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 animate-pulse"></span>
-            <span class="font-bold">수요일 특이사항 (자율활동 임장 지도 연동):</span>
-            <span><strong>5교시: 부담임 교사</strong>(영어 1차 감독), <strong>6교시: 담임 교사</strong>(한국사 감독 및 15:30 종례)!</span>
+            <span class="font-bold">수요일 특이사항:</span>
+            <span><strong>1~4교시(국어/수학)까지만 모의고사 운영</strong>하며, 5·6교시는 비워둡니다!</span>
           </div>
           <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-indigo-200 text-indigo-900 text-xs shrink-0">
-            5교시 부담임 / 6교시 담임
+            4교시까지만 운영 (5,6T 비움)
           </span>
         `;
-      } else if (isMonWedFri) {
+      } else if (day === '월' || day === '금') {
         bannerEl.className = 'p-4 rounded-xl border border-blue-200 bg-blue-50/70 flex flex-col sm:flex-row items-center justify-between text-blue-900 text-xs sm:text-sm';
         bannerEl.innerHTML = `
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
             <span class="font-bold">${day}요일 모의고사:</span>
-            <span>6교시 한국사(15:00~15:30) 종료 즉시 <strong>15:30 전원 종례 및 하교</strong>합니다. (7교시 탐구 없음)</span>
+            <span>7교시 한국사(14:50~15:20) 종료 즉시 <strong>15:30 전원 종례 및 하교</strong>합니다. (7교시: 1순위/2순위 교사 배정)</span>
           </div>
-          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-blue-200 text-blue-800 text-xs">
-            15:30 시험 종료 & 종례
+          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-blue-200 text-blue-800 text-xs shrink-0">
+            15:30 시험 종료 & 종례 (7T까지)
           </span>
         `;
       } else {
@@ -1810,43 +2187,32 @@
           <div class="flex items-center space-x-2">
             <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
             <span class="font-bold">${day}요일 모의고사:</span>
-            <span>한국사 후 7교시 탐구 영역(15:40~16:30)까지 모두 치른 후 <strong>16:30에 최종 종례</strong>합니다.</span>
+            <span>한국사 및 8교시 탐구 영역(15:40~16:30)까지 치른 후 <strong>16:30에 최종 종례</strong>합니다. (8교시: 1순위/2순위 교사 배정)</span>
           </div>
-          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-800 text-xs">
-            16:30 시험 종료 & 종례
+          <span class="mt-2 sm:mt-0 font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-800 text-xs shrink-0">
+            16:30 시험 종료 & 종례 (8T까지)
           </span>
         `;
       }
 
       // Render Matrix Table
       const container = document.getElementById('matrixTableContainer');
-      const maxPeriods = (day === '화' || day === '목') ? 7 : 6;
+      const maxPeriods = (day === '화' || day === '목') ? 8 : (day === '수' ? 6 : 7);
 
       let html = `
         <table class="w-full text-center text-xs sm:text-sm border-collapse">
           <thead>
             <tr class="bg-slate-100 text-slate-800 font-bold border-y border-slate-200">
-              <th class="py-3 px-3 w-20 bg-slate-200/80">학급</th>
+              <th class="py-3 px-3 w-16 bg-slate-200/80">학급</th>
       `;
 
       for (let p = 1; p <= maxPeriods; p++) {
         const pConf = PERIOD_CONFIG[p];
         html += `
-          <th class="py-3 px-2 border-l border-slate-200">
+          <th class="py-3 px-1.5 border-l border-slate-200">
             <div class="text-xs font-bold text-blue-700">${p}교시</div>
             <div class="text-[11px] font-semibold text-slate-700">${pConf.area.split(' ')[0]}</div>
-            <div class="text-[10px] text-slate-400 font-mono">${pConf.examTime}</div>
-          </th>
-        `;
-      }
-
-      // If Mon, Wed, Fri, show 7교시 column as "종례 완료"
-      if (maxPeriods === 6) {
-        html += `
-          <th class="py-3 px-2 border-l border-slate-200 bg-slate-50 text-slate-400">
-            <div class="text-xs font-semibold">7교시</div>
-            <div class="text-[11px]">종례/하교</div>
-            <div class="text-[10px] font-mono">15:30 종료</div>
+            <div class="text-[10px] text-slate-400 font-mono">${pConf.proctorTime.split(' ')[0]}</div>
           </th>
         `;
       }
@@ -1866,29 +2232,35 @@
           const teacher = item.teacher;
           const subj = item.subject;
 
-          let roleBadge = '';
-          if (day === '수' && p === 5) {
-            roleBadge = `<span class="inline-block ml-1 text-[10px] px-1.5 py-0.2 bg-purple-100 text-purple-700 font-bold rounded">부담임</span>`;
-          } else if (day === '수' && p === 6) {
-            roleBadge = `<span class="inline-block ml-1 text-[10px] px-1.5 py-0.2 bg-amber-100 text-amber-800 font-bold rounded">담임</span>`;
+          let cellClass = 'py-2 px-1.5 border-l border-slate-100';
+          let badgeHtml = '';
+
+          if (item.badgeType === 'empty') {
+            cellClass += ' bg-slate-50/70 text-slate-400 border-dashed';
+            badgeHtml = `<span class="block text-[10px] text-slate-400 font-bold">비움</span>`;
+          } else if (item.badgeType === 'sub_309_310') {
+            cellClass += ' bg-amber-50/80 border-amber-200';
+            badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-amber-200 text-amber-900 font-bold rounded">309·310</span>`;
+          } else if (item.badgeType === 'sub_min') {
+            cellClass += ' bg-orange-50/80 border-orange-200';
+            badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-orange-200 text-orange-900 font-bold rounded">대체</span>`;
+          } else if (item.badgeType === 'p1_dropped') {
+            cellClass += ' bg-purple-50/90 border-purple-200';
+            badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-purple-200 text-purple-900 font-bold rounded">1순위</span>`;
+          } else if (item.badgeType === 'p2_min') {
+            cellClass += ' bg-indigo-50/90 border-indigo-200';
+            badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-indigo-200 text-indigo-900 font-bold rounded">2순위</span>`;
           }
 
           html += `
-            <td class="py-2.5 px-2 border-l border-slate-100">
-              <div class="font-bold text-slate-900 hover:text-blue-600 cursor-pointer flex items-center justify-center" onclick="selectTeacherFromTable('${teacher}')">
-                <span>${teacher || '-'}</span>${roleBadge}
+            <td class="${cellClass}">
+              <div class="font-bold text-slate-900 hover:text-blue-600 cursor-pointer flex items-center justify-center space-x-1" onclick="selectTeacherFromTable('${teacher}')">
+                <span>${teacher || '-'}</span>
+                ${badgeHtml}
               </div>
-              <div class="text-[11px] text-slate-500 truncate max-w-[110px] mx-auto" title="${subj}">
+              <div class="text-[10px] text-slate-500 truncate max-w-[100px] mx-auto mt-0.5" title="${subj}">
                 ${subj || '-'}
               </div>
-            </td>
-          `;
-        }
-
-        if (maxPeriods === 6) {
-          html += `
-            <td class="py-2.5 px-2 border-l border-slate-100 bg-slate-50/50 text-slate-400 text-xs font-medium">
-              -
             </td>
           `;
         }
@@ -1905,7 +2277,7 @@
     }
 
     function selectTeacherFromTable(teacherName) {
-      if (!teacherName || teacherName === '-') return;
+      if (!teacherName || teacherName === '-' || teacherName === '미정교사') return;
       document.getElementById('teacherSelect').value = teacherName;
       renderTeacherView(teacherName);
       switchTab('teacher');
@@ -1937,7 +2309,7 @@
               </span>
             </div>
             <h3 class="text-2xl font-black text-slate-900 mt-1.5">3학년 ${classNum}반 모의고사 시간표</h3>
-            <p class="text-xs text-slate-500 mt-1">월·수·금은 15:30 종료 (수: 5교시 부담임, 6교시 담임 임장) | 화·목은 16:30 종료</p>
+            <p class="text-xs text-slate-500 mt-1">10.19 수능 타종 일과 | 월·금 15:30 종료 (7T) | 화·목 16:30 종료 (8T) | 수요일 4T까지</p>
           </div>
           <button onclick="window.print()" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg flex items-center space-x-1 transition no-print">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
@@ -1949,16 +2321,26 @@
       `;
 
       DAYS.forEach(day => {
-        const isMonWedFri = (day === '월' || day === '수' || day === '금');
-        const maxP = isMonWedFri ? 6 : 7;
-        const badgeColor = isMonWedFri ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700';
+        const isMonFri = (day === '월' || day === '금');
+        const isWed = (day === '수');
+        const maxP = (day === '화' || day === '목') ? 8 : (isWed ? 6 : 7);
+        let badgeText = '16:30 종례 (8T)';
+        let badgeColor = 'bg-purple-100 text-purple-800';
+
+        if (isMonFri) {
+          badgeText = '15:30 종례 (7T)';
+          badgeColor = 'bg-blue-100 text-blue-800';
+        } else if (isWed) {
+          badgeText = '4교시까지 (5·6T 비움)';
+          badgeColor = 'bg-indigo-100 text-indigo-800';
+        }
 
         html += `
           <div class="border border-slate-200 rounded-xl overflow-hidden print-card">
             <div class="bg-slate-100/80 p-3 border-b border-slate-200 text-center">
               <span class="text-base font-black text-slate-900">${day}요일</span>
               <span class="block text-[11px] font-bold ${badgeColor} rounded mt-1 py-0.5">
-                ${isMonWedFri ? '15:30 종례' : '16:30 종례'}
+                ${badgeText}
               </span>
             </div>
             <div class="p-2 space-y-2 text-xs">
@@ -1968,24 +2350,33 @@
           const item = RESOLVED_CLASSES[classNum][day][p - 1];
           const pConf = PERIOD_CONFIG[p];
 
+          let cardStyle = 'bg-slate-50 border-slate-100';
+          let tagBadge = '';
+
+          if (item.badgeType === 'empty') {
+            cardStyle = 'bg-slate-100/60 border-dashed border-slate-200 text-slate-400';
+            tagBadge = `<span class="text-[10px] text-slate-400 font-bold">비움</span>`;
+          } else if (item.badgeType === 'sub_309_310') {
+            cardStyle = 'bg-amber-50/70 border-amber-200 text-amber-950';
+            tagBadge = `<span class="text-[10px] bg-amber-200 text-amber-900 font-bold px-1.5 py-0.2 rounded">대체</span>`;
+          } else if (item.badgeType === 'p1_dropped' || item.badgeType === 'p2_min') {
+            cardStyle = 'bg-purple-50/70 border-purple-200 text-purple-950';
+            tagBadge = `<span class="text-[10px] bg-purple-200 text-purple-900 font-bold px-1.5 py-0.2 rounded">${item.badgeType === 'p1_dropped' ? '1순위' : '2순위'}</span>`;
+          }
+
           html += `
-            <div class="p-2 bg-slate-50 rounded-lg border border-slate-100">
-              <div class="flex items-center justify-between font-bold text-slate-800">
+            <div class="p-2 rounded-lg border ${cardStyle}">
+              <div class="flex items-center justify-between font-bold">
                 <span>${p}교시 <span class="font-medium text-slate-500">(${pConf.area.split(' ')[0]})</span></span>
-                <span class="text-blue-700">${item.teacher}</span>
+                <span class="text-blue-700 flex items-center space-x-1">
+                  <span>${item.teacher}</span>
+                  ${tagBadge}
+                </span>
               </div>
               <div class="text-[11px] text-slate-500 mt-0.5 flex items-center justify-between">
-                <span>${item.subject}</span>
-                <span class="font-mono text-[10px]">${pConf.durationText}</span>
+                <span class="truncate max-w-[110px]">${item.subject}</span>
+                <span class="font-mono text-[10px]">${pConf.proctorTime.split(' ')[0]}</span>
               </div>
-            </div>
-          `;
-        }
-
-        if (isMonWedFri) {
-          html += `
-            <div class="p-2 bg-emerald-50 rounded-lg border border-emerald-100 text-center font-bold text-emerald-800">
-              15:30 시험 종료 & 종례
             </div>
           `;
         }
@@ -2001,7 +2392,7 @@
     }
 
     // -------------------------------------------------------------
-    // 7. SIMULATOR LOGIC
+    // 7. SIMULATOR LOGIC (10.19 수능 타종 일과 연동)
     // -------------------------------------------------------------
     function setSimTime(timeStr) {
       document.getElementById('simTimeInput').value = timeStr;
@@ -2014,7 +2405,7 @@
       const mins = String(now.getMinutes()).padStart(2, '0');
       document.getElementById('simTimeInput').value = `${hrs}:${mins}`;
       
-      const dayIndex = now.getDay(); // 0 is Sun, 1 is Mon
+      const dayIndex = now.getDay();
       const dayMap = { 1: '월', 2: '화', 3: '수', 4: '목', 5: '금' };
       if (dayMap[dayIndex]) {
         document.getElementById('simDaySelect').value = dayMap[dayIndex];
@@ -2028,34 +2419,25 @@
       const [h, m] = timeStr.split(':').map(Number);
       const totalMins = h * 60 + m;
 
-      const isMonWedFri = (day === '월' || day === '수' || day === '금');
+      const isMonFri = (day === '월' || day === '금');
+      const isWed = (day === '수');
       const resultCard = document.getElementById('simResultCard');
 
       // Schedule intervals
       // 08:40~08:50 (520~530): 조회
-      // 08:50~09:40 (530~580): 1교시 국어 전반 (50분)
-      // 09:40~09:50 (580~590): 무감독 휴식 (10분)
-      // 09:50~10:10 (590~610): 2교시 국어 후반 (20분)
-      // 10:10~10:50 (610~650): 자습 및 휴식 (40분)
-      // 10:50~11:40 (650~700): 3교시 수학 전반 (50분)
-      // 11:40~11:50 (700~710): 무감독 휴식 (10분)
-      // 11:50~12:30 (710~750): 4교시 수학 후반 (40분)
-      // 12:30~12:40 (750~760): 휴식 및 점심준비 (10분)
-      // 12:40~13:40 (760~820): 점심시간 (60분)
-      // 13:40~14:30 (820~870): 5교시 영어 전반 (50분)
-      // 14:30~14:40 (870~880): 무감독 휴식 (10분)
-      // 14:40~14:50 (880~890): 6교시 영어 후반 및 회수 (10분)
-      // 14:50~15:00 (890~900): 6교시 한국사 준비/배부 (10분)
-      // 15:00~15:30 (900~930): 6교시 한국사 시험 (30분)
-      // 월, 수, 금: 15:30 (930) 한국사 종료 즉시 종례!
-      // 화, 목:
-      // 15:30: 6교시 감독이 탐구 1·2선택 시험지 배부 후 퇴실
-      // 15:30~15:40 (930~940): 탐구 1선택 무감독 (10분)
-      // 15:40~16:00 (940~960): 7교시 교사 탐구 1선택 감독 (20분, 16:00 회수)
-      // 16:00~16:30 (960~990): 7교시 교사 탐구 2선택 감독 (30분, 16:30 회수 & 종례)
-      // 16:30: 시험 종료!
+      // 08:50~09:25 (530~565): 1교시 국어 전반 (35분)
+      // 09:25~10:00 (565~600): 2교시 국어 후반 & 회수 (35분)
+      // 10:00~10:30 (600~630): 휴식 및 자습 (30분)
+      // 10:30~11:20 (630~680): 3교시 수학 전반 (50분)
+      // 11:20~12:10 (680~730): 4교시 수학 후반 & 회수 (50분)
+      // 12:10~13:00 (730~780): 3학년 점심시간 (50분)
+      // 13:00~13:40 (780~820): 5교시 영어 전반 (40분)
+      // 13:40~14:20 (820~860): 6교시 영어 후반 & 회수 (40분)
+      // 14:20~14:50 (860~890): 휴식 및 탐구 준비 (30분)
+      // 14:50~15:40 (890~940): 7교시 탐구 1차 (한국사 14:50~15:20) (월·금은 15:30 종료)
+      // 15:40~16:30 (940~990): 8교시 탐구 2차 (화·목만 운영, 16:30 종료)
 
-      let statusType = ''; // 'proctor', 'unsupervised', 'break', 'lunch', 'dismissed', 'before'
+      let statusType = '';
       let periodNum = null;
       let statusTitle = '';
       let statusDesc = '';
@@ -2063,90 +2445,82 @@
       if (totalMins < 520) {
         statusType = 'before';
         statusTitle = '시험 시작 전 (등교 시간)';
-        statusDesc = '08:40부터 담임 교사 임장 조회 및 고사 준비가 시작됩니다.';
+        statusDesc = '08:40부터 담임 교사 임장 조회 및 착석 지도가 시작됩니다.';
       } else if (totalMins < 530) {
         statusType = 'morning';
-        statusTitle = '아침 조회 및 고사 준비 (08:40 ~ 08:50)';
-        statusDesc = '담임 선생님 임장 지도 하에 핸드폰 수거 및 시험 유의사항을 전달합니다.';
-      } else if (totalMins < 580) {
+        statusTitle = '학급 조회 및 고사 준비 (08:40 ~ 08:50)';
+        statusDesc = '담임 임장 지도 하에 학생 출석체크, 본인 확인, 휴대폰 수거를 완료합니다. 08:50까지 착석 완료!';
+      } else if (totalMins < 565) {
         statusType = 'proctor';
         periodNum = 1;
-        statusTitle = '1교시 국어 전반부 시험 진행 중 (08:50 ~ 09:40)';
-        statusDesc = '1교시 수업 교사가 50분간 감독합니다. 09:40 종료 시 답안지 회수 없이 퇴실합니다.';
-      } else if (totalMins < 590) {
-        statusType = 'unsupervised';
-        statusTitle = '국어 시험 중 무감독 휴식 시간 (09:40 ~ 09:50)';
-        statusDesc = '기존 1-2교시 쉬는 시간을 활용한 10분간의 무감독 시간입니다. 학생들은 조용히 문제를 계속 풉니다.';
-      } else if (totalMins < 610) {
+        statusTitle = '1교시 국어 전반부 진행 중 (08:50 ~ 09:25, 35분)';
+        statusDesc = '1교시 교사가 감독 중입니다. 09:25 종료 시 답안지 회수 없이 2교시 교사에게 인계합니다.';
+      } else if (totalMins < 600) {
         statusType = 'proctor';
         periodNum = 2;
-        statusTitle = '2교시 국어 후반부 & 회수 진행 중 (09:50 ~ 10:10)';
-        statusDesc = '2교시 수업 교사가 20분간 감독 후 10:10 국어 종료령과 함께 답안지를 회수하고 퇴실합니다.';
-      } else if (totalMins < 650) {
+        statusTitle = '2교시 국어 후반부 & 회수 진행 중 (09:25 ~ 10:00, 35분)';
+        statusDesc = '2교시 교사가 감독 중입니다. 10:00 본령 종료와 동시에 답안지/문제지를 전량 회수 후 퇴실합니다.';
+      } else if (totalMins < 630) {
         statusType = 'break';
-        statusTitle = '자습 및 휴식 시간 (10:10 ~ 10:50, 총 40분)';
-        statusDesc = '2교시 교사는 10:10에 답안지 회수 후 퇴실 완료! 학생들은 10:50 수학 시작 전까지 40분간 자습 및 휴식을 취합니다.';
-      } else if (totalMins < 700) {
+        statusTitle = '자습 및 휴식 시간 (10:00 ~ 10:30, 30분)';
+        statusDesc = '국어 시험 종료 후 30분간 자습 및 화장실 휴식. 10:25에 수학 준비령이 울립니다.';
+      } else if (totalMins < 680) {
         statusType = 'proctor';
         periodNum = 3;
-        statusTitle = '3교시 수학 전반부 시험 진행 중 (10:50 ~ 11:40)';
-        statusDesc = '3교시 수업 교사가 50분간 감독합니다. 11:40 종료 시 답안지 회수 없이 퇴실합니다.';
-      } else if (totalMins < 710) {
-        statusType = 'unsupervised';
-        statusTitle = '수학 시험 중 무감독 휴식 시간 (11:40 ~ 11:50)';
-        statusDesc = '10분간 무감독으로 진행되며, 학생들은 자율적으로 문제 풀이를 이어갑니다.';
-      } else if (totalMins < 750) {
+        statusTitle = '3교시 수학 전반부 진행 중 (10:30 ~ 11:20, 50분)';
+        statusDesc = '3교시 교사가 감독 중입니다. 11:20 종료 시 답안지 회수 없이 4교시 교사에게 인계합니다.';
+      } else if (totalMins < 730) {
         statusType = 'proctor';
         periodNum = 4;
-        statusTitle = '4교시 수학 후반부 & 회수 진행 중 (11:50 ~ 12:30)';
-        statusDesc = '4교시 수업 교사가 40분간 감독 후 12:30 수학 종료령과 함께 답안지를 회수하고 퇴실합니다.';
-      } else if (totalMins < 760) {
-        statusType = 'break';
-        statusTitle = '휴식 및 점심 준비 (12:30 ~ 12:40)';
-        statusDesc = '수학 시험 종료 후 급식 전 10분간의 휴식 및 준비 시간입니다.';
-      } else if (totalMins < 820) {
+        statusTitle = '4교시 수학 후반부 & 회수 진행 중 (11:20 ~ 12:10, 50분)';
+        statusDesc = '4교시 교사가 감독 중입니다. 12:10 수학 종료 즉시 답안지/문제지 전량 회수 후 본부 제출합니다.';
+      } else if (isWed) {
+        statusType = 'dismissed';
+        statusTitle = '수요일 4교시 종료 (5·6교시 비움)';
+        statusDesc = '수요일은 4교시 수학까지 모의고사가 진행되며, 5·6교시는 비워둡니다.';
+      } else if (totalMins < 780) {
         statusType = 'lunch';
-        statusTitle = '점심 시간 (12:40 ~ 13:40, 60분)';
-        statusDesc = '1, 2학년과 동일하게 급식실 점심식사가 진행됩니다.';
-      } else if (totalMins < 870) {
+        statusTitle = '3학년 점심시간 (12:10 ~ 13:00, 50분)';
+        statusDesc = '★ 3학년은 12:10부터 30분간 급식을 실시하며, 13:00까지 5교시 시험실에 착석 완료합니다.';
+      } else if (totalMins < 820) {
         statusType = 'proctor';
         periodNum = 5;
-        statusTitle = '5교시 영어 듣기평가 및 전반부 진행 중 (13:40 ~ 14:30)';
-        statusDesc = '5교시 수업 교사가 50분간 감독합니다. 14:30에 답안지 회수 없이 퇴실합니다.';
-      } else if (totalMins < 880) {
-        statusType = 'unsupervised';
-        statusTitle = '영어 시험 중 무감독 휴식 시간 (14:30 ~ 14:40)';
-        statusDesc = '10분간 무감독 시간입니다. 학생들은 자율적으로 독해 문제를 계속 풉니다.';
-      } else if (totalMins < 930) {
+        statusTitle = '5교시 영어 듣기평가 및 전반부 진행 중 (13:00 ~ 13:40, 40분)';
+        statusDesc = '13:00 입실 완료, 13:05 준비령, 13:07~13:10 듣기안내 및 평가 진행. 13:40에 회수 없이 6교시 교사에게 인계합니다.';
+      } else if (totalMins < 860) {
         statusType = 'proctor';
         periodNum = 6;
-        statusTitle = '6교시 영어 회수 + 한국사 진행 중 (14:40 ~ 15:30, 연속 50분!)';
-        statusDesc = '6교시 수업 교사가 임장하여 14:50 영어 회수 → 준비 → 15:00~15:30 한국사를 감독합니다. (화·목: 15:30에 시간 조금 더 할애하여 탐구 1·2선택 시험지 배부 후 퇴실)';
-      } else if (isMonWedFri) {
-        statusType = 'dismissed';
-        statusTitle = '월·수·금 시험 종료 및 종례 완료 (15:30 이후)';
-        statusDesc = '월, 수, 금요일은 6교시 한국사 종료 후 15:30에 이미 종례 및 하교를 마쳤습니다.';
+        statusTitle = '6교시 영어 후반부 & 회수 진행 중 (13:40 ~ 14:20, 40분)';
+        statusDesc = '6교시 교사가 감독 중입니다. 14:20 영어 종료 즉시 답안지/문제지 전량 회수 후 퇴실합니다.';
+      } else if (totalMins < 890) {
+        statusType = 'break';
+        statusTitle = '자습 및 탐구 준비 시간 (14:20 ~ 14:50, 30분)';
+        statusDesc = '영어 종료 후 30분간 휴식 및 탐구 영역 준비. 14:45에 한국사 준비령이 울립니다.';
       } else if (totalMins < 940) {
-        statusType = 'unsupervised';
-        statusTitle = '탐구 제1선택 전반부 무감독 시간 (15:30 ~ 15:40, 10분)';
-        statusDesc = '6교시 교사가 배부한 시험지로 학생들은 15:30부터 탐구 제1선택(15:30~16:00, 30분) 자율 시험을 시작합니다. 15:40까지 10분간 무감독으로 진행됩니다.';
-      } else if (totalMins < 960) {
         statusType = 'proctor';
         periodNum = 7;
-        statusTitle = '7교시 탐구 제1선택 후반부 감독 진행 중 (15:40 ~ 16:00, 20분)';
-        statusDesc = '7교시 수업 교사가 15:40에 입실하여 탐구 제1선택 후반 20분을 감독하고, 16:00에 제1선택 답안지를 회수합니다.';
+        if (isMonFri && totalMins >= 920) {
+          statusTitle = '월·금 7교시 한국사 종료 및 15:30 전원 종례!';
+          statusDesc = '14:50~15:20 한국사(30분) 종료 후 답안지 회수 완료! 15:30에 전원 종례 및 하교합니다.';
+        } else {
+          statusTitle = '7교시 탐구 1차 (한국사 / 1선택) 진행 중 (14:50 ~ 15:40)';
+          statusDesc = '한국사 14:50~15:20 후 화·목은 탐구 1선택(15:35~16:05) 진행. 15:40에 8교시 교사에게 인계합니다.';
+        }
+      } else if (isMonFri) {
+        statusType = 'dismissed';
+        statusTitle = '월·금 시험 종료 및 종례 완료 (15:30 이후)';
+        statusDesc = '월, 금요일은 7교시 한국사 종료 후 15:30에 종례 및 하교를 마쳤습니다.';
       } else if (totalMins < 990) {
         statusType = 'proctor';
-        periodNum = 7;
-        statusTitle = '7교시 탐구 제2선택 감독 진행 중 (16:00 ~ 16:30, 30분)';
-        statusDesc = '7교시 수업 교사가 이어서 탐구 제2선택(16:00~16:30, 30분)을 감독하고, 16:30에 최종 시험 종료령 및 전량 회수, 종례합니다.';
+        periodNum = 8;
+        statusTitle = '8교시 탐구 2차 & 최종 회수/종례 진행 중 (15:40 ~ 16:30, 화·목만)';
+        statusDesc = '15:40 입실 → 16:05 탐구 1선택 회수 → 16:07~16:37 탐구 2선택 감독 및 16:30 최종 회수 & 종례!';
       } else {
         statusType = 'dismissed';
         statusTitle = '화·목 시험 종료 및 종례 완료 (16:30 이후)';
-        statusDesc = '오늘의 모든 모의고사 시험이 완료되었습니다.';
+        statusDesc = '오늘의 모든 모의고사 시험 일정이 완료되었습니다.';
       }
 
-      // Generate HTML
       let html = `
         <div class="space-y-4">
           <div class="flex items-center space-x-3">
@@ -2169,10 +2543,19 @@
 
         for (let c = 1; c <= 8; c++) {
           const item = RESOLVED_CLASSES[c][day][periodNum - 1];
+          let badgeHtml = '';
+          if (item.badgeType === 'sub_309_310') badgeHtml = `<span class="text-[10px] bg-amber-200 text-amber-900 px-1 rounded font-bold">309·310</span>`;
+          else if (item.badgeType === 'sub_min') badgeHtml = `<span class="text-[10px] bg-orange-200 text-orange-900 px-1 rounded font-bold">대체</span>`;
+          else if (item.badgeType === 'p1_dropped') badgeHtml = `<span class="text-[10px] bg-purple-200 text-purple-900 px-1 rounded font-bold">1순위</span>`;
+          else if (item.badgeType === 'p2_min') badgeHtml = `<span class="text-[10px] bg-indigo-200 text-indigo-900 px-1 rounded font-bold">2순위</span>`;
+
           html += `
             <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3 text-center">
               <span class="block text-xs font-bold text-blue-900">${c}반 고사실</span>
-              <span class="block text-base font-black text-blue-700 mt-1">${item.teacher} 선생님</span>
+              <span class="block text-base font-black text-blue-700 mt-1 flex items-center justify-center space-x-1">
+                <span>${item.teacher}</span>
+                ${badgeHtml}
+              </span>
               <span class="block text-[11px] text-slate-500 mt-0.5 truncate">${item.subject}</span>
             </div>
           `;
