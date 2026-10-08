@@ -170,8 +170,8 @@
             <h3 class="font-bold text-slate-900 text-base">1·2학년 수업 충돌 & 배정 원칙</h3>
             <p class="text-xs text-slate-600 mt-1 leading-relaxed">
               3학년 감독 시간과 1·2학년 정규 수업 시간이 겹치는 경우, <strong>1·2학년 수업을 우선 진행</strong>합니다.<br>
-              • <strong>감독 제외:</strong> 오혜진, 김계전 선생님은 모의고사 감독 제외<br>
-              • <strong>대체 대상:</strong> 30X 등 3학년 수업 교사에 한해 309·310 대체 및 1·2순위 배정
+              • <strong>감독 제외:</strong> 오혜진, 김계전, 송지현 선생님은 모의고사 감독 제외<br>
+              • <strong>수업 겹침 표시:</strong> 시간 겹침으로 미배정된 시간은 시간표상에 <strong>흐리게(취소선)</strong> 표시되며, 30X 교사로 자동 대체됩니다.
             </p>
           </div>
 
@@ -1469,8 +1469,8 @@
       TEACHER_DROPPED_INFO[t] = [];
     }
 
-    // 감독 제외 교사 (오혜진, 김계전)
-    const EXCLUDED_TEACHERS = ['오혜진', '김계전'];
+    // 감독 제외 교사 (오혜진, 김계전, 송지현)
+    const EXCLUDED_TEACHERS = ['오혜진', '김계전', '송지현'];
 
     // Helper: 3학년 수업 담당 교사 판별 (시간표에 3XX 포함 & 감독 제외 교사 아님)
     function isGrade3Teacher(t) {
@@ -1501,7 +1501,7 @@
     // 1·2학년 수업과 3학년 모의고사 pNum 교시 간 시간 중복 검사
     function checkGrade12Conflict(teacherName, day, pNum) {
       if (EXCLUDED_TEACHERS.includes(teacherName)) {
-        return { regPeriod: '-', className: '감독제외교사(오혜진/김계전)' };
+        return { regPeriod: '-', className: '감독제외교사(오혜진/김계전/송지현)' };
       }
       const tObj = TEACHERS_RAW[teacherName];
       if (!tObj) return null;
@@ -2128,15 +2128,61 @@
               </td>
             `;
           } else if (origCell) {
-            const isCollided = isGrade12Class(origCell);
-            origHtml += `
-              <td class="py-1.5 px-1 text-slate-600 ${isCollided ? 'bg-slate-50' : ''}">
-                <div class="font-semibold text-slate-800">${origCell}</div>
-                <div class="text-[10px] text-slate-400">정규 수업</div>
-              </td>
-            `;
+            const dropped = droppedList.find(dr => dr.day === day && dr.origPeriod === p);
+            const isCollided12 = isGrade12Class(origCell);
+            const isExcluded = EXCLUDED_TEACHERS.includes(currentSelectedTeacher);
+
+            if (dropped) {
+              // 수업시간 겹침으로 감독 배정 제외된 시간 (흐리게 & 취소선)
+              origHtml += `
+                <td class="py-1.5 px-1 bg-slate-100/80 border border-dashed border-slate-300 opacity-40 rounded-lg">
+                  <div class="font-bold text-slate-400 line-through">3-${dropped.origClass}반 (${origCell})</div>
+                  <div class="mt-0.5 inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-50 text-rose-600 border border-rose-200">
+                    수업겹침 제외
+                  </div>
+                  <div class="text-[9px] text-slate-400 font-mono mt-0.5">(${dropped.conflictClass} 겹침)</div>
+                </td>
+              `;
+            } else if (isExcluded && /^3\d\d/.test(origCell)) {
+              // 감독 제외 교사의 3학년 수업 (흐리게 & 취소선)
+              origHtml += `
+                <td class="py-1.5 px-1 bg-slate-100/80 border border-dashed border-slate-300 opacity-40 rounded-lg">
+                  <div class="font-bold text-slate-400 line-through">${origCell}</div>
+                  <div class="mt-0.5 inline-block text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-200 text-slate-600 border border-slate-300">
+                    감독 제외
+                  </div>
+                </td>
+              `;
+            } else if (isCollided12) {
+              origHtml += `
+                <td class="py-1.5 px-1 bg-slate-50/80 text-slate-600">
+                  <div class="font-semibold text-slate-700">${origCell}</div>
+                  <div class="text-[10px] text-amber-600 font-medium">1·2학년 정규수업</div>
+                </td>
+              `;
+            } else {
+              origHtml += `
+                <td class="py-1.5 px-1 text-slate-600">
+                  <div class="font-semibold text-slate-800">${origCell}</div>
+                  <div class="text-[10px] text-slate-400">정규 수업</div>
+                </td>
+              `;
+            }
           } else {
-            origHtml += `<td class="py-1.5 px-1 text-slate-300">-</td>`;
+            const dropped = droppedList.find(dr => dr.day === day && dr.origPeriod === p);
+            if (dropped) {
+              origHtml += `
+                <td class="py-1.5 px-1 bg-slate-100/80 border border-dashed border-slate-300 opacity-40 rounded-lg">
+                  <div class="font-bold text-slate-400 line-through">3-${dropped.origClass}반</div>
+                  <div class="mt-0.5 inline-block text-[10px] font-bold px-1 py-0.2 rounded bg-rose-50 text-rose-600 border border-rose-200">
+                    수업겹침 제외
+                  </div>
+                  <div class="text-[9px] text-slate-400 mt-0.5">(${dropped.conflictClass} 겹침)</div>
+                </td>
+              `;
+            } else {
+              origHtml += `<td class="py-1.5 px-1 text-slate-300">-</td>`;
+            }
           }
         });
 
@@ -2296,6 +2342,15 @@
             badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-indigo-200 text-indigo-900 font-bold rounded">2순위</span>`;
           }
 
+          let origFadedHtml = '';
+          if (item.originalTeacher && item.originalTeacher !== '-' && item.originalTeacher !== '(신규교시)' && item.originalTeacher !== item.teacher) {
+            origFadedHtml = `
+              <div class="mt-1 pt-1 border-t border-slate-200/60 text-[10px] text-slate-400 opacity-60 line-through truncate max-w-[110px] mx-auto" title="${item.conflictReason || '수업 겹침으로 제외'}">
+                원래: ${item.originalTeacher} (겹침제외)
+              </div>
+            `;
+          }
+
           html += `
             <td class="${cellClass}">
               <div class="font-bold text-slate-900 hover:text-blue-600 cursor-pointer flex items-center justify-center space-x-1" onclick="selectTeacherFromTable('${teacher}')">
@@ -2305,6 +2360,7 @@
               <div class="text-[10px] text-slate-500 truncate max-w-[100px] mx-auto mt-0.5" title="${subj}">
                 ${subj || '-'}
               </div>
+              ${origFadedHtml}
             </td>
           `;
         }
@@ -2421,6 +2477,11 @@
                 <span class="truncate max-w-[110px]">${item.subject}</span>
                 <span class="font-mono text-[10px]">${pConf.proctorTime.split(' ')[0]}</span>
               </div>
+              ${(item.originalTeacher && item.originalTeacher !== '-' && item.originalTeacher !== '(신규교시)' && item.originalTeacher !== item.teacher) ? `
+                <div class="text-[10px] text-slate-400 opacity-60 line-through mt-0.5 border-t border-slate-200/50 pt-0.5">
+                  원래: ${item.originalTeacher} (수업겹침 제외)
+                </div>
+              ` : ''}
             </div>
           `;
         }
@@ -2629,7 +2690,7 @@
       // [Sheet 1: 종합_시간표]
       const matrixData = [
         ['2026학년도 3학년 시간모의고사 요일별 종합 시간표 (수능 타종 일과)'],
-        ['* 오혜진, 김계전 선생님 감독 제외 / 30X 수업 교사 대상 대체 및 1·2순위 배정 완료'],
+        ['* 오혜진, 김계전, 송지현 선생님 감독 제외 / 30X 수업 교사 대상 대체 및 1·2순위 배정 완료'],
         []
       ];
 
@@ -2652,8 +2713,8 @@
               row.push('-(비움)');
             } else {
               let text = item.teacher;
-              if (item.badgeType === 'sub_309_310') text += ' [309·310]';
-              else if (item.badgeType === 'sub_min') text += ' [대체]';
+              if (item.badgeType === 'sub_309_310') text += ` [309·310] (원래:${item.originalTeacher} 겹침제외)`;
+              else if (item.badgeType === 'sub_min') text += ` [대체] (원래:${item.originalTeacher} 겹침제외)`;
               else if (item.badgeType === 'p1_dropped') text += ' [1순위]';
               else if (item.badgeType === 'p2_min') text += ' [2순위]';
               row.push(text);
@@ -2702,7 +2763,7 @@
 
         let g3Status = '3학년 수업교사';
         if (EXCLUDED_TEACHERS.includes(t)) {
-          g3Status = '감독 제외 (오혜진/김계전)';
+          g3Status = '감독 제외 (오혜진/김계전/송지현)';
         } else if (!isGrade3Teacher(t)) {
           g3Status = '1·2학년 전담 (제외)';
         }
