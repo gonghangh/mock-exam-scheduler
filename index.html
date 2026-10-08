@@ -1689,6 +1689,11 @@
               assignedT = asstCandidates.shift();
               badge = '1·2부담임(3학년교과)';
               bType = 'p1_asst';
+            } else if (HOMEROOM_TEACHERS[1]?.homeroom) {
+              // 수요일 7교시 8반: 1반 담임 선생님(고명호) 배정 (윤정윤 배정 제외)
+              assignedT = HOMEROOM_TEACHERS[1].homeroom;
+              badge = '1반 담임';
+              bType = 'sub_1ban';
             } else if (backupCandidates.length > 0) {
               assignedT = backupCandidates.shift().teacher;
               badge = '추가배정(시수균형)';
@@ -2209,7 +2214,7 @@
 
             let typeBadgeHtml = '';
             if (d.badgeType === 'sub_1ban') {
-              typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-300">1반 교사 대체</span>`;
+              typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-300">${d.badge || '1반 교사 대체'}</span>`;
             } else if (d.badgeType === 'sub_309_310') {
               typeBadgeHtml = `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">309·310 대체</span>`;
             } else if (d.badgeType === 'sub_min') {
@@ -2471,7 +2476,7 @@
             badgeHtml = `<span class="block text-[10px] text-slate-400 font-bold">비움</span>`;
           } else if (item.badgeType === 'sub_1ban') {
             cellClass += ' bg-teal-50/80 border-teal-200';
-            badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-teal-200 text-teal-900 font-bold rounded">1반대체</span>`;
+            badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-teal-200 text-teal-900 font-bold rounded">${item.badge || '1반대체'}</span>`;
           } else if (item.badgeType === 'sub_309_310') {
             cellClass += ' bg-amber-50/80 border-amber-200';
             badgeHtml = `<span class="inline-block text-[10px] px-1 py-0.2 bg-amber-200 text-amber-900 font-bold rounded">309·310</span>`;
@@ -2599,7 +2604,7 @@
             tagBadge = `<span class="text-[10px] text-slate-400 font-bold">비움</span>`;
           } else if (item.badgeType === 'sub_1ban') {
             cardStyle = 'bg-teal-50/70 border-teal-200 text-teal-950';
-            tagBadge = `<span class="text-[10px] bg-teal-200 text-teal-900 font-bold px-1.5 py-0.2 rounded">1반대체</span>`;
+            tagBadge = `<span class="text-[10px] bg-teal-200 text-teal-900 font-bold px-1.5 py-0.2 rounded">${item.badge || '1반대체'}</span>`;
           } else if (item.badgeType === 'sub_309_310') {
             cardStyle = 'bg-amber-50/70 border-amber-200 text-amber-950';
             tagBadge = `<span class="text-[10px] bg-amber-200 text-amber-900 font-bold px-1.5 py-0.2 rounded">대체</span>`;
@@ -2795,7 +2800,7 @@
         for (let c = 2; c <= 8; c++) {
           const item = RESOLVED_CLASSES[c][day][periodNum - 1];
           let badgeHtml = '';
-          if (item.badgeType === 'sub_1ban') badgeHtml = `<span class="text-[10px] bg-teal-200 text-teal-900 px-1 rounded font-bold">1반대체</span>`;
+          if (item.badgeType === 'sub_1ban') badgeHtml = `<span class="text-[10px] bg-teal-200 text-teal-900 px-1 rounded font-bold">${item.badge || '1반대체'}</span>`;
           else if (item.badgeType === 'sub_309_310') badgeHtml = `<span class="text-[10px] bg-amber-200 text-amber-900 px-1 rounded font-bold">309·310</span>`;
           else if (item.badgeType === 'sub_min') badgeHtml = `<span class="text-[10px] bg-orange-200 text-orange-900 px-1 rounded font-bold">대체</span>`;
           else if (item.badgeType === 'p1_dropped') badgeHtml = `<span class="text-[10px] bg-purple-200 text-purple-900 px-1 rounded font-bold">1순위</span>`;
