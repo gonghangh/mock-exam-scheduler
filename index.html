@@ -6,6 +6,8 @@
   <title>3학년 시간모의고사 일정 및 감독 통합 운영 포털</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS CDN for Excel Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -72,6 +74,10 @@
           <a href="./mobile/" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg flex items-center space-x-1 transition border border-blue-200 shadow-xs">
             <span>📱 모바일 버전</span>
           </a>
+          <button onclick="exportScheduleToExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg flex items-center space-x-1.5 transition shadow-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span>📊 엑셀 다운로드</span>
+          </button>
           <button onclick="window.print()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg flex items-center space-x-1.5 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             <span>인쇄하기</span>
@@ -161,10 +167,11 @@
 
           <div class="bg-amber-50/60 border border-amber-200/80 rounded-xl p-4 hover:border-amber-400 transition">
             <div class="w-8 h-8 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-sm mb-3">2</div>
-            <h3 class="font-bold text-slate-900 text-base">1·2학년 수업 충돌 방지</h3>
+            <h3 class="font-bold text-slate-900 text-base">1·2학년 수업 충돌 & 배정 원칙</h3>
             <p class="text-xs text-slate-600 mt-1 leading-relaxed">
               3학년 감독 시간과 1·2학년 정규 수업 시간이 겹치는 경우, <strong>1·2학년 수업을 우선 진행</strong>합니다.<br>
-              이때 발생하는 공백은 <strong>309·310호 배정 교사 우선 투입</strong> 및 시수 적은 교사로 안전하게 자동 대체됩니다.
+              • <strong>감독 제외:</strong> 오혜진, 김계전 선생님은 모의고사 감독 제외<br>
+              • <strong>대체 대상:</strong> 30X 등 3학년 수업 교사에 한해 309·310 대체 및 1·2순위 배정
             </p>
           </div>
 
@@ -611,13 +618,19 @@
           <p class="text-xs text-slate-500 mt-1">원하시는 요일을 선택하시면 1반부터 8반까지 교시별 시험 영역 및 감독 교사를 한눈에 확인하실 수 있습니다.</p>
         </div>
 
-        <!-- Day Tabs -->
-        <div class="flex items-center bg-slate-100 p-1 rounded-xl">
-          <button onclick="renderMatrixDay('월')" id="matrix-day-월" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 shadow-sm transition">월요일</button>
-          <button onclick="renderMatrixDay('화')" id="matrix-day-화" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">화요일</button>
-          <button onclick="renderMatrixDay('수')" id="matrix-day-수" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">수요일</button>
-          <button onclick="renderMatrixDay('목')" id="matrix-day-목" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">목요일</button>
-          <button onclick="renderMatrixDay('금')" id="matrix-day-금" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">금요일</button>
+        <!-- Day Tabs & Excel Download -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex items-center bg-slate-100 p-1 rounded-xl">
+            <button onclick="renderMatrixDay('월')" id="matrix-day-월" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 shadow-sm transition">월요일</button>
+            <button onclick="renderMatrixDay('화')" id="matrix-day-화" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">화요일</button>
+            <button onclick="renderMatrixDay('수')" id="matrix-day-수" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">수요일</button>
+            <button onclick="renderMatrixDay('목')" id="matrix-day-목" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">목요일</button>
+            <button onclick="renderMatrixDay('금')" id="matrix-day-금" class="day-btn px-4 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">금요일</button>
+          </div>
+          <button onclick="exportScheduleToExcel()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center space-x-1.5 transition shadow-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <span>전체 시간표 엑셀 다운로드</span>
+          </button>
         </div>
       </div>
 
@@ -1456,6 +1469,23 @@
       TEACHER_DROPPED_INFO[t] = [];
     }
 
+    // 감독 제외 교사 (오혜진, 김계전)
+    const EXCLUDED_TEACHERS = ['오혜진', '김계전'];
+
+    // Helper: 3학년 수업 담당 교사 판별 (시간표에 3XX 포함 & 감독 제외 교사 아님)
+    function isGrade3Teacher(t) {
+      if (!t || EXCLUDED_TEACHERS.includes(t)) return false;
+      const sched = TEACHERS_RAW[t]?.schedule;
+      if (!sched) return false;
+      for (const d in sched) {
+        const arr = sched[d] || [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i] && /^3\d\d/.test(arr[i])) return true;
+        }
+      }
+      return false;
+    }
+
     // Helper: 1·2학년 수업 여부 판별 (101~209)
     function isGrade12Class(cell) {
       if (!cell) return false;
@@ -1470,6 +1500,9 @@
 
     // 1·2학년 수업과 3학년 모의고사 pNum 교시 간 시간 중복 검사
     function checkGrade12Conflict(teacherName, day, pNum) {
+      if (EXCLUDED_TEACHERS.includes(teacherName)) {
+        return { regPeriod: '-', className: '감독제외교사(오혜진/김계전)' };
+      }
       const tObj = TEACHERS_RAW[teacherName];
       if (!tObj) return null;
       const sched = tObj.schedule[day] || [];
@@ -1569,19 +1602,21 @@
 
             const conflict = checkGrade12Conflict(origTeacher, day, pNum);
             if (conflict) {
-              droppedTeachers.push({
-                teacher: origTeacher,
-                origPeriod: pNum,
-                origClass: c,
-                reason: `${conflict.regPeriod}교시 ${conflict.className}`
-              });
-              TEACHER_DROPPED_INFO[origTeacher].push({
-                day: day,
-                origPeriod: pNum,
-                origClass: c,
-                conflictClass: conflict.className,
-                conflictPeriod: conflict.regPeriod
-              });
+              if (isGrade3Teacher(origTeacher)) {
+                droppedTeachers.push({
+                  teacher: origTeacher,
+                  origPeriod: pNum,
+                  origClass: c,
+                  reason: `${conflict.regPeriod}교시 ${conflict.className}`
+                });
+                TEACHER_DROPPED_INFO[origTeacher].push({
+                  day: day,
+                  origPeriod: pNum,
+                  origClass: c,
+                  conflictClass: conflict.className,
+                  conflictPeriod: conflict.regPeriod
+                });
+              }
               pendingClasses.push({ classNum: c, origTeacher: origTeacher, subj: displaySubj, conflict: conflict });
             } else {
               const item = {
@@ -1614,10 +1649,11 @@
           }
 
           // 2단계: 충돌로 빈 학급 대체 교사 투입 (1순위: 309·310 교사, 2순위: 시수 적은 교사)
-          // 해당 정규 교시 309·310 배정 교사 후보 추출
+          // *오혜진, 김계전 제외 및 3학년 수업 교사(3XX)에 한해서만 대체 교사 선발
           const candidates309_310 = [];
           if (pIdx < 7) {
             for (const t in TEACHERS_RAW) {
+              if (!isGrade3Teacher(t)) continue;
               const sched = TEACHERS_RAW[t].schedule[day] || [];
               if (pIdx < sched.length && is309or310Class(sched[pIdx])) {
                 candidates309_310.push(t);
@@ -1643,10 +1679,11 @@
               }
             }
 
-            // 2. 309·310 교사가 없으면, 그 교시에 비어있고 수업 시수가 가장 적은 교사 투입
+            // 2. 309·310 교사가 없으면, 그 교시에 비어있고 수업 시수가 가장 적은 3학년 교사 투입
             if (!subTeacher) {
               const available = [];
               for (const t in TEACHERS_RAW) {
+                if (!isGrade3Teacher(t)) continue;
                 if (!assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
                   const sReg = TEACHERS_RAW[t].schedule[day] || [];
                   const regSlot = (pIdx < sReg.length) ? sReg[pIdx] : null;
@@ -1697,18 +1734,19 @@
           }
         } else {
           // 신규 교시 (월·금 7교시 / 화·목 8교시): 8개 학급(1~8반) 신규 배정
-          // 1순위: 앞에 1·2학년이랑 겹쳐 수업이 빠진 교사 (droppedTeachers)
-          // 2순위: 그날의 수업 시수가 적은 선생님 순
+          // 1순위: 앞에 1·2학년이랑 겹쳐 수업이 빠진 3학년 교사 (droppedTeachers)
+          // 2순위: 그날의 수업 시수가 적은 3학년 교사 순
           const p1Candidates = [];
           for (let d = 0; d < droppedTeachers.length; d++) {
             const dtName = droppedTeachers[d].teacher;
-            if (!p1Candidates.includes(dtName) && !assignedInPeriod.includes(dtName) && !checkGrade12Conflict(dtName, day, pNum)) {
+            if (isGrade3Teacher(dtName) && !p1Candidates.includes(dtName) && !assignedInPeriod.includes(dtName) && !checkGrade12Conflict(dtName, day, pNum)) {
               p1Candidates.push(dtName);
             }
           }
 
           const p2Candidates = [];
           for (const t in TEACHERS_RAW) {
+            if (!isGrade3Teacher(t)) continue;
             if (!p1Candidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
               p2Candidates.push({ teacher: t, hours: dailyHours[t] });
             }
@@ -1852,7 +1890,13 @@
         const opt = document.createElement('option');
         opt.value = t;
         const dutyCount = TEACHER_PROCTOR_DUTIES[t]?.length || 0;
-        opt.textContent = `${t} (${TEACHERS_RAW[t].subject}) [감독 ${dutyCount}회]`;
+        let tag = `감독 ${dutyCount}회`;
+        if (EXCLUDED_TEACHERS.includes(t)) {
+          tag = '감독 제외';
+        } else if (!isGrade3Teacher(t)) {
+          tag = '1·2학년 전담';
+        }
+        opt.textContent = `${t} (${TEACHERS_RAW[t].subject}) [${tag}]`;
         if (t === currentSelectedTeacher) opt.selected = true;
         select.appendChild(opt);
       });
@@ -2569,6 +2613,165 @@
 
       html += `</div>`;
       resultCard.innerHTML = html;
+    }
+
+    // -------------------------------------------------------------
+    // 8. EXCEL EXPORT FUNCTION (SheetJS)
+    // -------------------------------------------------------------
+    function exportScheduleToExcel() {
+      if (typeof XLSX === 'undefined') {
+        alert('엑셀 라이브러리(SheetJS)를 로드 중입니다. 잠시 후 다시 시도해 주세요.');
+        return;
+      }
+
+      const wb = XLSX.utils.book_new();
+
+      // [Sheet 1: 종합_시간표]
+      const matrixData = [
+        ['2026학년도 3학년 시간모의고사 요일별 종합 시간표 (수능 타종 일과)'],
+        ['* 오혜진, 김계전 선생님 감독 제외 / 30X 수업 교사 대상 대체 및 1·2순위 배정 완료'],
+        []
+      ];
+
+      DAYS.forEach(day => {
+        matrixData.push([`【 ${day}요일 시간표 】`]);
+        matrixData.push(['교시', '시험 시간', '시험 영역 / 내용', '1반', '2반', '3반', '4반', '5반', '6반', '7반', '8반']);
+        
+        const maxPeriods = (day === '화' || day === '목') ? 8 : (day === '수' ? 6 : 7);
+        for (let pNum = 1; pNum <= maxPeriods; pNum++) {
+          const cfg = PERIOD_CONFIG[pNum];
+          const pIdx = pNum - 1;
+          const row = [
+            `${pNum}교시`,
+            cfg ? cfg.time : '-',
+            cfg ? cfg.name : '-'
+          ];
+          for (let c = 1; c <= 8; c++) {
+            const item = RESOLVED_CLASSES[c][day][pIdx];
+            if (!item || item.badgeType === 'empty') {
+              row.push('-(비움)');
+            } else {
+              let text = item.teacher;
+              if (item.badgeType === 'sub_309_310') text += ' [309·310]';
+              else if (item.badgeType === 'sub_min') text += ' [대체]';
+              else if (item.badgeType === 'p1_dropped') text += ' [1순위]';
+              else if (item.badgeType === 'p2_min') text += ' [2순위]';
+              row.push(text);
+            }
+          }
+          matrixData.push(row);
+        }
+        matrixData.push([]); // 빈 줄 구분
+      });
+
+      const wsMatrix = XLSX.utils.aoa_to_sheet(matrixData);
+      XLSX.utils.book_append_sheet(wb, wsMatrix, '종합_시간표');
+
+      // [Sheet 2: 교사별_감독집계]
+      const teacherRows = [
+        ['교사 성함', '담당 과목', '3학년수업여부', '총 감독 교시수', '총 감독 시간(분)', '월요일', '화요일', '수요일', '목요일', '금요일']
+      ];
+
+      const teacherNames = Object.keys(TEACHERS_RAW).sort((a, b) => {
+        const aG3 = isGrade3Teacher(a) ? 1 : 0;
+        const bG3 = isGrade3Teacher(b) ? 1 : 0;
+        if (aG3 !== bG3) return bG3 - aG3;
+        const aDuties = (TEACHER_PROCTOR_DUTIES[a] || []).length;
+        const bDuties = (TEACHER_PROCTOR_DUTIES[b] || []).length;
+        return bDuties - aDuties || a.localeCompare(b, 'ko');
+      });
+
+      teacherNames.forEach(t => {
+        const raw = TEACHERS_RAW[t];
+        const duties = TEACHER_PROCTOR_DUTIES[t] || [];
+        let totalMins = 0;
+        duties.forEach(d => {
+          if (d.config && d.config.duration) totalMins += d.config.duration;
+        });
+
+        const dayDutiesStr = {};
+        DAYS.forEach(d => { dayDutiesStr[d] = []; });
+        duties.forEach(d => {
+          let badgeTag = '';
+          if (d.badgeType === 'sub_309_310') badgeTag = '[309]';
+          else if (d.badgeType === 'sub_min') badgeTag = '[대체]';
+          else if (d.badgeType === 'p1_dropped') badgeTag = '[1순위]';
+          else if (d.badgeType === 'p2_min') badgeTag = '[2순위]';
+          dayDutiesStr[d.day].push(`${d.period}T ${d.classNum}반${badgeTag}`);
+        });
+
+        let g3Status = '3학년 수업교사';
+        if (EXCLUDED_TEACHERS.includes(t)) {
+          g3Status = '감독 제외 (오혜진/김계전)';
+        } else if (!isGrade3Teacher(t)) {
+          g3Status = '1·2학년 전담 (제외)';
+        }
+
+        teacherRows.push([
+          t,
+          raw.subject || '-',
+          g3Status,
+          duties.length,
+          totalMins,
+          dayDutiesStr['월'].join(', ') || '-',
+          dayDutiesStr['화'].join(', ') || '-',
+          dayDutiesStr['수'].join(', ') || '-',
+          dayDutiesStr['목'].join(', ') || '-',
+          dayDutiesStr['금'].join(', ') || '-'
+        ]);
+      });
+
+      const wsTeacher = XLSX.utils.aoa_to_sheet(teacherRows);
+      XLSX.utils.book_append_sheet(wb, wsTeacher, '교사별_감독집계');
+
+      // [Sheet 3: 학급별_시간표]
+      const classRows = [
+        ['학급', '요일', '교시', '시험 시간', '시험 영역 / 내용', '감독 교사', '배정 구분', '원래 교사']
+      ];
+      for (let c = 1; c <= 8; c++) {
+        DAYS.forEach(day => {
+          const maxPeriods = (day === '화' || day === '목') ? 8 : (day === '수' ? 6 : 7);
+          for (let pNum = 1; pNum <= maxPeriods; pNum++) {
+            const item = RESOLVED_CLASSES[c][day][pNum - 1];
+            if (!item) continue;
+            classRows.push([
+              `${c}반`,
+              `${day}요일`,
+              `${pNum}교시`,
+              item.config ? item.config.time : '-',
+              item.subject,
+              item.teacher,
+              item.badge || '정규',
+              item.originalTeacher || '-'
+            ]);
+          }
+        });
+      }
+      const wsClass = XLSX.utils.aoa_to_sheet(classRows);
+      XLSX.utils.book_append_sheet(wb, wsClass, '학급별_시간표');
+
+      // [Sheet 4: 시정표_비교]
+      const bellRows = [
+        ['교시', '1·2학년 정규 시정표', '3학년 바뀐 시정표 (입실/감독)', '시험 영역 / 내용', '비고 및 유의사항'],
+        ['조회', '08:40 ~ 08:50 (10분)', '08:40 ~ 08:50 (10분)', '입실 8:10 / 준비령 8:35', '담임 임장 지도, 8:50까지 착석 완료'],
+        ['1교시', '08:50 ~ 09:40 (50분)', '08:50 ~ 09:25 (35분)', '국어 1차 (80분 중 전반부)', '1교시 교사 감독 후 2교시 교사 인계'],
+        ['2교시', '09:50 ~ 10:40 (50분)', '09:25 ~ 10:00 (35분)', '국어 2차 & 회수 (10:00)', '1·2학년 1T와 중복주의! 대체 교사 배정'],
+        ['휴식', '09:40 ~ 09:50 (10분 쉬는시간)', '10:00 ~ 10:30 (30분 휴식)', '자습 및 수학 준비', '30분간 자습 및 휴식'],
+        ['3교시', '10:50 ~ 11:40 (50분)', '10:30 ~ 11:20 (50분)', '수학 1차 (100분 중 전반부)', '1·2학년 2T와 중복주의! 대체 교사 배정'],
+        ['4교시', '11:50 ~ 12:40 (50분)', '11:20 ~ 12:10 (50분)', '수학 2차 & 회수 (12:10)', '1·2학년 3T와 중복주의! 대체 교사 배정'],
+        ['점심', '12:40 ~ 13:40 (60분 점심)', '12:10 ~ 13:10 (60분 점심)', '점심 식사 및 휴식', '12:10 점심 식사 이동 (1·2학년과 30분 시차)'],
+        ['5교시', '13:40 ~ 14:30 (50분)', '13:10 ~ 13:40 (30분)', '영어 1차 (듣기 평가 13:10~)', '1,2학년 점심시간 중 진행 (충돌 없음)'],
+        ['6교시', '14:40 ~ 15:30 (50분)', '13:40 ~ 14:20 (40분)', '영어 2차 & 회수 (14:20)', '1·2학년 5T와 중복주의! (※수요일 비움)'],
+        ['휴식', '15:30 ~ 15:40 (10분 쉬는시간)', '14:20 ~ 14:50 (30분 휴식)', '자습 및 탐구 준비', '자습 및 휴식 (14:45 탐구 준비령)'],
+        ['7교시', '15:40 ~ 16:30 (50분)', '14:50 ~ 15:40 (50분)', '탐구 1차 (한국사 14:50~15:20)', '★ 월·금 15:30 전원 종례 및 하교!'],
+        ['8교시', '-(정규 없음)', '15:40 ~ 16:30 (50분)', '탐구 2차 & 최종 회수 (화·목만)', '화·목 8T 진행 후 16:30 최종 종례 및 하교']
+      ];
+      const wsBell = XLSX.utils.aoa_to_sheet(bellRows);
+      XLSX.utils.book_append_sheet(wb, wsBell, '시정표_비교');
+
+      // File download
+      const today = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(wb, `3학년_시간모의고사_시간표_${today}.xlsx`);
     }
   </script>
 </body>
