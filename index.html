@@ -94,10 +94,10 @@
           👨‍🏫 선생님별 맞춤 조회 (내 일정 & 대체)
         </button>
         <button onclick="switchTab('matrix')" id="tab-matrix" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
-          📅 요일별 전체 현황판 (2~8반)
+          📅 요일별 전체 현황판 (1~8반)
         </button>
         <button onclick="switchTab('class')" id="tab-class" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
-          🏫 학급별 시간표 (2~8반 인쇄용)
+          🏫 학급별 시간표 (1~8반 인쇄용)
         </button>
         <button onclick="switchTab('simulator')" id="tab-simulator" class="tab-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition whitespace-nowrap">
           ⏱️ 시험 진행 시뮬레이터
@@ -614,8 +614,8 @@
       <!-- Day Selector & Action Bar -->
       <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <h2 class="text-lg sm:text-xl font-bold text-slate-900">요일별 전체 감독 현황판 (3학년 2~8반)</h2>
-          <p class="text-xs text-slate-500 mt-1">원하시는 요일을 선택하시면 2반부터 8반까지 교시별 시험 영역 및 감독 교사를 한눈에 확인하실 수 있습니다. (1반은 시험 미실시/자율)</p>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900">요일별 전체 감독 현황판 (3학년 1~8반)</h2>
+          <p class="text-xs text-slate-500 mt-1">원하시는 요일을 선택하시면 1반부터 8반까지 교시별 시험 영역 및 감독 교사를 한눈에 확인하실 수 있습니다. (1반은 1교시만 시험 실시)</p>
         </div>
 
         <!-- Day Tabs & Excel Download -->
@@ -651,18 +651,19 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TAB 4: 학급별 시간표 (2~8반 인쇄 & 교실 게시용) -->
+    <!-- TAB 4: 학급별 시간표 (1~8반 인쇄 & 교실 게시용) -->
     <!-- ========================================================================= -->
     <div id="content-class" class="hidden space-y-6">
 
       <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 no-print">
         <div>
-          <h2 class="text-lg sm:text-xl font-bold text-slate-900">학급별 모의고사 시간표 (2~8반)</h2>
-          <p class="text-xs text-slate-500 mt-1">학급별로 요일별 모의고사 시험 일정과 감독 선생님을 확인하고, 교실 칠판 부착용으로 인쇄할 수 있습니다. (1반 제외)</p>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900">학급별 모의고사 시간표 (1~8반)</h2>
+          <p class="text-xs text-slate-500 mt-1">학급별로 요일별 모의고사 시험 일정과 감독 선생님을 확인하고, 교실 칠판 부착용으로 인쇄할 수 있습니다. (1반은 1교시만 시험 실시)</p>
         </div>
 
         <!-- Class Selector -->
         <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <button onclick="selectClass(1)" id="class-btn-1" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">1반</button>
           <button onclick="selectClass(2)" id="class-btn-2" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-white bg-blue-600 transition">2반</button>
           <button onclick="selectClass(3)" id="class-btn-3" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">3반</button>
           <button onclick="selectClass(4)" id="class-btn-4" class="class-btn px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition">4반</button>
@@ -1512,7 +1513,7 @@
       else if (pNum === 2) conflictingIndices = [0, 1]; // 3학년 09:25~10:00 vs 정규 1T(08:50~09:40) & 2T(09:50~10:40)
       else if (pNum === 3) conflictingIndices = [1, 2]; // 3학년 10:30~11:20 vs 정규 2T(09:50~10:40) & 3T(10:50~11:40)
       else if (pNum === 4) conflictingIndices = [2, 3]; // 3학년 11:20~12:10 vs 정규 3T(10:50~11:40) & 4T(11:50~12:40)
-      else if (pNum === 5) conflictingIndices = [];     // 3학년 13:00~13:40 (1,2학년 점심 12:40~13:40 충돌 없음)
+      else if (pNum === 5) conflictingIndices = [3];    // 1·2학년 4교시(11:50~12:40) 수업 시 급식시간(12:40~13:40) 보장을 위해 3학년 5교시(13:00~13:40) 감독 금지
       else if (pNum === 6) conflictingIndices = [4];    // 3학년 13:40~14:20 vs 정규 5T(13:40~14:30)
       else if (pNum === 7) conflictingIndices = [5];    // 3학년 14:50~15:40 vs 정규 6T(14:40~15:30)
       else if (pNum === 8) conflictingIndices = [6];    // 3학년 15:40~16:30 vs 정규 7T(15:40~16:30)
@@ -1540,13 +1541,60 @@
       return hours;
     }
 
+    // 교사별 기존 정규 수업 시수 사전 집계 (시수 오버 방지 및 균형 배정용)
+    const TEACHER_WORKLOAD_STATS = {};
+    for (const t in TEACHERS_RAW) {
+      let g3 = 0, g12 = 0;
+      DAYS.forEach(d => {
+        const sched = TEACHERS_RAW[t].schedule[d] || [];
+        sched.forEach(c => {
+          if (!c) return;
+          if (/^3\d\d/.test(c)) g3++;
+          else if (/^[12]\d\d/.test(c)) g12++;
+        });
+      });
+      TEACHER_WORKLOAD_STATS[t] = {
+        origG3: g3,
+        origG12: g12,
+        origTotal: g3 + g12
+      };
+    }
+
+    // 교사 시수 초과 방지 및 균등 배정 비교 함수
+    function compareTeacherLoad(tA, tB, day) {
+      const stA = TEACHER_WORKLOAD_STATS[tA] || { origG3: 0, origG12: 0, origTotal: 0 };
+      const stB = TEACHER_WORKLOAD_STATS[tB] || { origG3: 0, origG12: 0, origTotal: 0 };
+      const dutiesA = TEACHER_PROCTOR_DUTIES[tA] ? TEACHER_PROCTOR_DUTIES[tA].length : 0;
+      const dutiesB = TEACHER_PROCTOR_DUTIES[tB] ? TEACHER_PROCTOR_DUTIES[tB].length : 0;
+
+      // 1. 시수 초과 방지: 기존 3학년 시수 도달/초과 여부 (0: 여유 있음, 1: 한도 도달/초과)
+      const overA = (dutiesA >= stA.origG3) ? 1 : 0;
+      const overB = (dutiesB >= stB.origG3) ? 1 : 0;
+      if (overA !== overB) return overA - overB;
+
+      // 2. 누적 배정 비율 적은 교사 우선 (시수 대비 골고루 배정)
+      const ratioA = stA.origG3 > 0 ? (dutiesA / stA.origG3) : 1;
+      const ratioB = stB.origG3 > 0 ? (dutiesB / stB.origG3) : 1;
+      if (Math.abs(ratioA - ratioB) > 0.05) return ratioA - ratioB;
+
+      // 3. 누적 감독 건수 적은 순
+      if (dutiesA !== dutiesB) return dutiesA - dutiesB;
+
+      // 4. 당일 수업 시수 적은 순
+      if (day) {
+        const dailyHours = calculateDailyTeacherHours(day);
+        return (dailyHours[tA] || 0) - (dailyHours[tB] || 0);
+      }
+      return 0;
+    }
+
     // 3학년 교과 교사 중 1,2학년 부담임 명단 (사진 기준)
     // 1-8 박현선, 2-1 최정, 2-2 김동인, 2-6 최창근, 2-7 이지연, 2-8 진혜리
     const G12_ASST_G3_TEACHERS = ['최정', '김동인', '최창근', '이지연', '진혜리', '박현선'];
 
-    // 전체 학급 초기화 (1반 제외: 2~8반 7개 반만 시험 고사실로 운영)
-    const ACTIVE_CLASSES = [2, 3, 4, 5, 6, 7, 8];
-    ACTIVE_CLASSES.forEach(c => {
+    // 전체 학급 초기화 (1반은 1교시만 시험 실시, 2~8반은 전 교시 시험 실시)
+    const ALL_CLASSES = [1, 2, 3, 4, 5, 6, 7, 8];
+    ALL_CLASSES.forEach(c => {
       RESOLVED_CLASSES[c] = {};
       DAYS.forEach(d => { RESOLVED_CLASSES[c][d] = []; });
     });
@@ -1580,37 +1628,106 @@
         const periodConfig = PERIOD_CONFIG[pNum];
         const assignedInPeriod = [];
 
+        // 1반은 1교시만 시험을 실시하므로, 2교시 이후에는 자습(미실시)으로 기록
+        if (pNum > 1) {
+          const slot1 = getOriginalClassSlot(1, day, pIdx);
+          RESOLVED_CLASSES[1][day].push({
+            period: pNum,
+            subject: '자습 (시험 미실시)',
+            teacher: '-',
+            originalTeacher: slot1.origTeacher || '-',
+            isOriginal: false,
+            badge: '미실시',
+            badgeType: 'empty',
+            conflictReason: null,
+            config: periodConfig,
+            hasDuty: false
+          });
+        }
+
+        // 시험을 치르는 학급 (1교시는 1~8반, 2교시 이후는 2~8반)
+        const examClasses = (pNum === 1) ? [1, 2, 3, 4, 5, 6, 7, 8] : [2, 3, 4, 5, 6, 7, 8];
+
         // -------------------------------------------------------------
-        // 특수 교시 A: 수요일 5교시 (영어 1차 듣기) - 부담임 임장 감독
+        // 특수 교시 A: 수요일 5교시 (영어 1차 듣기) - 부담임 임장 감독 (급식시간 보장 연동)
         // -------------------------------------------------------------
         if (day === '수' && pNum === 5) {
-          ACTIVE_CLASSES.forEach(c => {
+          examClasses.forEach(c => {
             const asstTeacher = HOMEROOM_TEACHERS[c].assistant;
-            assignedInPeriod.push(asstTeacher);
-            const resolvedItem = {
-              period: 5,
-              subject: '영어 1차 (듣기평가)',
-              teacher: asstTeacher,
-              originalTeacher: asstTeacher,
-              isOriginal: true,
-              badge: '부담임 임장',
-              badgeType: 'homeroom',
-              conflictReason: null,
-              config: periodConfig,
-              hasDuty: true
-            };
-            RESOLVED_CLASSES[c][day].push(resolvedItem);
-            if (TEACHER_PROCTOR_DUTIES[asstTeacher]) {
-              TEACHER_PROCTOR_DUTIES[asstTeacher].push({
-                day: day,
+            const lunchConflict = checkGrade12Conflict(asstTeacher, day, 5);
+
+            if (!lunchConflict && !EXCLUDED_TEACHERS.includes(asstTeacher) && !assignedInPeriod.includes(asstTeacher)) {
+              assignedInPeriod.push(asstTeacher);
+              const resolvedItem = {
                 period: 5,
-                classNum: c,
-                room: `3학년 ${c}반`,
                 subject: '영어 1차 (듣기평가)',
-                config: periodConfig,
+                teacher: asstTeacher,
+                originalTeacher: asstTeacher,
+                isOriginal: true,
                 badge: '부담임 임장',
-                badgeType: 'homeroom'
-              });
+                badgeType: 'homeroom',
+                conflictReason: null,
+                config: periodConfig,
+                hasDuty: true
+              };
+              RESOLVED_CLASSES[c][day].push(resolvedItem);
+              if (TEACHER_PROCTOR_DUTIES[asstTeacher]) {
+                TEACHER_PROCTOR_DUTIES[asstTeacher].push({
+                  day: day,
+                  period: 5,
+                  classNum: c,
+                  room: `3학년 ${c}반`,
+                  subject: '영어 1차 (듣기평가)',
+                  config: periodConfig,
+                  badge: '부담임 임장',
+                  badgeType: 'homeroom'
+                });
+              }
+            } else {
+              // 1,2학년 4교시 수업으로 인한 급식시간 보장 또는 제외 교사 대체 선발
+              const conflictReasonText = lunchConflict
+                ? `${lunchConflict.regPeriod}교시 ${lunchConflict.className} 수업 (급식시간 보장)`
+                : `${asstTeacher} 감독 제외`;
+
+              const subCandidates = [];
+              for (const t in TEACHERS_RAW) {
+                if (!isGrade3Teacher(t) || EXCLUDED_TEACHERS.includes(t)) continue;
+                if (!assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, 5)) {
+                  subCandidates.push(t);
+                }
+              }
+              subCandidates.sort((a, b) => compareTeacherLoad(a, b, day));
+
+              const finalTeacher = subCandidates.length > 0 ? subCandidates[0] : '미정교사';
+              assignedInPeriod.push(finalTeacher);
+
+              const resolvedItem = {
+                period: 5,
+                subject: '영어 1차 (듣기평가)',
+                teacher: finalTeacher,
+                originalTeacher: asstTeacher,
+                isOriginal: false,
+                badge: '대체(급식보장)',
+                badgeType: 'sub_min',
+                conflictReason: conflictReasonText,
+                config: periodConfig,
+                hasDuty: true
+              };
+              RESOLVED_CLASSES[c][day].push(resolvedItem);
+              if (TEACHER_PROCTOR_DUTIES[finalTeacher]) {
+                TEACHER_PROCTOR_DUTIES[finalTeacher].push({
+                  day: day,
+                  period: 5,
+                  classNum: c,
+                  room: `3학년 ${c}반`,
+                  subject: '영어 1차 (대체 감독)',
+                  config: periodConfig,
+                  badge: '대체(급식보장)',
+                  badgeType: 'sub_min',
+                  originalTeacher: asstTeacher,
+                  conflictReason: conflictReasonText
+                });
+              }
             }
           });
           continue;
@@ -1620,7 +1737,7 @@
         // 특수 교시 B: 수요일 6교시 (영어 2차 독해/회수) - 담임 임장 감독
         // -------------------------------------------------------------
         if (day === '수' && pNum === 6) {
-          ACTIVE_CLASSES.forEach(c => {
+          examClasses.forEach(c => {
             const hrTeacher = HOMEROOM_TEACHERS[c].homeroom;
             assignedInPeriod.push(hrTeacher);
             const resolvedItem = {
@@ -1663,39 +1780,44 @@
               asstCandidates.push(t);
             }
           });
-          // 시수 균형 정렬 (누적 적은 순)
-          asstCandidates.sort((a, b) => (TEACHER_PROCTOR_DUTIES[a] ? TEACHER_PROCTOR_DUTIES[a].length : 0) - (TEACHER_PROCTOR_DUTIES[b] ? TEACHER_PROCTOR_DUTIES[b].length : 0));
+          asstCandidates.sort((a, b) => compareTeacherLoad(a, b, day));
 
-          // 7번째 학급을 위한 일반 3학년 교사 후보군 (시수 최소자)
+          // 7번째 학급을 위한 일반 3학년 교사 후보군 (시수 여유순)
           const backupCandidates = [];
           for (const t in TEACHERS_RAW) {
             if (!isGrade3Teacher(t)) continue;
-            if (!asstCandidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
-              backupCandidates.push({
-                teacher: t,
-                totalDuties: TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0,
-                hours: dailyHours[t]
-              });
+            const dCount = TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0;
+            const maxG3 = TEACHER_WORKLOAD_STATS[t] ? TEACHER_WORKLOAD_STATS[t].origG3 : 0;
+            if (dCount < maxG3 && !asstCandidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+              backupCandidates.push(t);
             }
           }
-          backupCandidates.sort((a, b) => (a.totalDuties - b.totalDuties) || (a.hours - b.hours));
+          if (backupCandidates.length === 0) {
+            for (const t in TEACHERS_RAW) {
+              if (!isGrade3Teacher(t)) continue;
+              if (!asstCandidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+                backupCandidates.push(t);
+              }
+            }
+          }
+          backupCandidates.sort((a, b) => compareTeacherLoad(a, b, day));
 
-          ACTIVE_CLASSES.forEach(c => {
+          examClasses.forEach(c => {
             let assignedT = null;
             let badge = '';
             let bType = '';
 
-            if (asstCandidates.length > 0) {
-              assignedT = asstCandidates.shift();
-              badge = '1·2부담임(3학년교과)';
-              bType = 'p1_asst';
-            } else if (HOMEROOM_TEACHERS[1]?.homeroom) {
+            if (c === 8 && HOMEROOM_TEACHERS[1]?.homeroom) {
               // 수요일 7교시 8반: 1반 담임 선생님(고명호) 배정 (윤정윤 배정 제외)
               assignedT = HOMEROOM_TEACHERS[1].homeroom;
               badge = '1반 담임';
               bType = 'sub_1ban';
+            } else if (asstCandidates.length > 0) {
+              assignedT = asstCandidates.shift();
+              badge = '1·2부담임(3학년교과)';
+              bType = 'p1_asst';
             } else if (backupCandidates.length > 0) {
-              assignedT = backupCandidates.shift().teacher;
+              assignedT = backupCandidates.shift();
               badge = '추가배정(시수균형)';
               bType = 'extra';
             } else {
@@ -1741,33 +1863,39 @@
         const isNewExtraPeriod = (pNum === 7 && (day === '월' || day === '금')) || (pNum === 8 && (day === '화' || day === '목'));
 
         if (isNewExtraPeriod) {
-          // 1순위: 앞에 1·2학년이랑 겹쳐 수업이 빠진 3학년 교사 (droppedTeachers)
+          // 1순위: 앞에 1·2학년이랑 겹쳐 수업이 빠진 3학년 교사 (droppedTeachers) 중 정규 시수 여유 교사
           const p1Candidates = [];
           for (let d = 0; d < droppedTeachers.length; d++) {
             const dtName = droppedTeachers[d].teacher;
-            if (isGrade3Teacher(dtName) && !p1Candidates.includes(dtName) && !assignedInPeriod.includes(dtName) && !checkGrade12Conflict(dtName, day, pNum)) {
+            const dCount = TEACHER_PROCTOR_DUTIES[dtName] ? TEACHER_PROCTOR_DUTIES[dtName].length : 0;
+            const maxG3 = TEACHER_WORKLOAD_STATS[dtName] ? TEACHER_WORKLOAD_STATS[dtName].origG3 : 0;
+            if (isGrade3Teacher(dtName) && dCount < maxG3 && !p1Candidates.includes(dtName) && !assignedInPeriod.includes(dtName) && !checkGrade12Conflict(dtName, day, pNum)) {
               p1Candidates.push(dtName);
             }
           }
-          // 시수 균형 정렬 (누적 감독 적은 순)
-          p1Candidates.sort((a, b) => (TEACHER_PROCTOR_DUTIES[a] ? TEACHER_PROCTOR_DUTIES[a].length : 0) - (TEACHER_PROCTOR_DUTIES[b] ? TEACHER_PROCTOR_DUTIES[b].length : 0));
+          p1Candidates.sort((a, b) => compareTeacherLoad(a, b, day));
 
-          // 2순위: 그날의 수업 시수가 적고 누적 감독이 적은 3학년 교사
+          // 2순위: 그날의 수업 시수가 적고 누적 감독이 적은 3학년 교사 (정규 시수 미달자 우선)
           const p2Candidates = [];
           for (const t in TEACHERS_RAW) {
             if (!isGrade3Teacher(t)) continue;
-            if (!p1Candidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
-              p2Candidates.push({
-                teacher: t,
-                totalDuties: TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0,
-                hours: dailyHours[t]
-              });
+            const dCount = TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0;
+            const maxG3 = TEACHER_WORKLOAD_STATS[t] ? TEACHER_WORKLOAD_STATS[t].origG3 : 0;
+            if (dCount < maxG3 && !p1Candidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+              p2Candidates.push(t);
             }
           }
-          // 1차: 누적 감독 횟수 적은 순, 2차: 당일 시수 적은 순 (시수 편중 방지)
-          p2Candidates.sort((a, b) => (a.totalDuties - b.totalDuties) || (a.hours - b.hours));
+          if (p1Candidates.length + p2Candidates.length < examClasses.length) {
+            for (const t in TEACHERS_RAW) {
+              if (!isGrade3Teacher(t)) continue;
+              if (!p1Candidates.includes(t) && !p2Candidates.includes(t) && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+                p2Candidates.push(t);
+              }
+            }
+          }
+          p2Candidates.sort((a, b) => compareTeacherLoad(a, b, day));
 
-          ACTIVE_CLASSES.forEach(c => {
+          examClasses.forEach(c => {
             let assignedT = null;
             let badge = '';
             let bType = '';
@@ -1777,7 +1905,7 @@
               badge = '1순위(앞수업충돌)';
               bType = 'p1_dropped';
             } else if (p2Candidates.length > 0) {
-              assignedT = p2Candidates.shift().teacher;
+              assignedT = p2Candidates.shift();
               badge = '2순위(시수균형)';
               bType = 'p2_min';
             } else {
@@ -1825,7 +1953,7 @@
         // -------------------------------------------------------------
         const pendingClasses = [];
 
-        ACTIVE_CLASSES.forEach(c => {
+        examClasses.forEach(c => {
           const slot = getOriginalClassSlot(c, day, pIdx);
           const origTeacher = slot.origTeacher;
           const displaySubj = slot.displaySubj;
@@ -1880,27 +2008,40 @@
 
         // 2단계: 충돌 또는 제외로 비어있는 학급에 대체 교사 배치
         // ★ 대체 교사 우선순위:
-        // [1순위] 1반에 원래 배정되었던 3학년 교사 (1반 시험 미실시로 시간 여유 발생)
+        // [1순위] 1반에 원래 배정되었던 3학년 교사 (2교시 이후 가용, 1반 시험 미실시로 시간 여유 발생)
         // [2순위] 309·310호 배정 교사
-        // [3순위] 당일 공강이고 누적 감독 시수가 가장 적은 3학년 교사
+        // [3순위] 당일 공강이고 시수 여유가 가장 많은 3학년 교사
 
-        // 1반 원래 배정 교사 확인
-        const slot1 = getOriginalClassSlot(1, day, pIdx);
-        const t1 = slot1.origTeacher;
-        let t1Available = (t1 && isGrade3Teacher(t1) && !EXCLUDED_TEACHERS.includes(t1) && !assignedInPeriod.includes(t1) && !checkGrade12Conflict(t1, day, pNum)) ? t1 : null;
-
-        // 309·310 후보군
-        const candidates309_310 = [];
-        if (pIdx < 7) {
-          for (const t in TEACHERS_RAW) {
-            if (!isGrade3Teacher(t)) continue;
-            const sched = TEACHERS_RAW[t].schedule[day] || [];
-            if (pIdx < sched.length && is309or310Class(sched[pIdx])) {
-              candidates309_310.push(t);
+        // 1반 원래 배정 교사 확인 (2교시 이후에만 가용)
+        let t1Available = null;
+        if (pNum > 1) {
+          const slot1 = getOriginalClassSlot(1, day, pIdx);
+          const t1 = slot1.origTeacher;
+          if (t1 && isGrade3Teacher(t1) && !EXCLUDED_TEACHERS.includes(t1) && !assignedInPeriod.includes(t1) && !checkGrade12Conflict(t1, day, pNum)) {
+            const st1 = TEACHER_WORKLOAD_STATS[t1];
+            const d1 = TEACHER_PROCTOR_DUTIES[t1] ? TEACHER_PROCTOR_DUTIES[t1].length : 0;
+            if (d1 < st1.origG3) {
+              t1Available = t1;
             }
           }
         }
-        candidates309_310.sort((a, b) => (TEACHER_PROCTOR_DUTIES[a] ? TEACHER_PROCTOR_DUTIES[a].length : 0) - (TEACHER_PROCTOR_DUTIES[b] ? TEACHER_PROCTOR_DUTIES[b].length : 0));
+
+        // 309·310 후보군 (시수 여유 있는 교사 우선)
+        const candidates309_310 = [];
+        if (pIdx < 7) {
+          for (const t in TEACHERS_RAW) {
+            if (!isGrade3Teacher(t) || EXCLUDED_TEACHERS.includes(t)) continue;
+            const dCount = TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0;
+            const maxG3 = TEACHER_WORKLOAD_STATS[t] ? TEACHER_WORKLOAD_STATS[t].origG3 : 0;
+            if (dCount < maxG3) {
+              const sched = TEACHERS_RAW[t].schedule[day] || [];
+              if (pIdx < sched.length && is309or310Class(sched[pIdx])) {
+                candidates309_310.push(t);
+              }
+            }
+          }
+        }
+        candidates309_310.sort((a, b) => compareTeacherLoad(a, b, day));
 
         for (let k = 0; k < pendingClasses.length; k++) {
           const pClass = pendingClasses[k];
@@ -1930,27 +2071,37 @@
             }
           }
 
-          // 3. [3순위] 당일 해당 교시 공강이고 누적 감독 시수가 가장 적은 3학년 교사
+          // 3. [3순위] 당일 해당 교시 공강이고 시수 여유가 많은 3학년 교사
           if (!subTeacher) {
             const available = [];
             for (const t in TEACHERS_RAW) {
-              if (!isGrade3Teacher(t)) continue;
-              if (!assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+              if (!isGrade3Teacher(t) || EXCLUDED_TEACHERS.includes(t)) continue;
+              const dCount = TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0;
+              const maxG3 = TEACHER_WORKLOAD_STATS[t] ? TEACHER_WORKLOAD_STATS[t].origG3 : 0;
+              if (dCount < maxG3 && !assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
                 const sReg = TEACHERS_RAW[t].schedule[day] || [];
                 const regSlot = (pIdx < sReg.length) ? sReg[pIdx] : null;
                 if (!regSlot) { // 정규 시간표상 공강인 교사
-                  available.push({
-                    teacher: t,
-                    totalDuties: TEACHER_PROCTOR_DUTIES[t] ? TEACHER_PROCTOR_DUTIES[t].length : 0,
-                    hours: dailyHours[t]
-                  });
+                  available.push(t);
                 }
               }
             }
-            // 누적 감독 횟수 적은 순 우선 정렬 (시수 균형)
-            available.sort((a, b) => (a.totalDuties - b.totalDuties) || (a.hours - b.hours));
+            if (available.length === 0) {
+              for (const t in TEACHERS_RAW) {
+                if (!isGrade3Teacher(t) || EXCLUDED_TEACHERS.includes(t)) continue;
+                if (!assignedInPeriod.includes(t) && !checkGrade12Conflict(t, day, pNum)) {
+                  const sReg = TEACHERS_RAW[t].schedule[day] || [];
+                  const regSlot = (pIdx < sReg.length) ? sReg[pIdx] : null;
+                  if (!regSlot) {
+                    available.push(t);
+                  }
+                }
+              }
+            }
+            // 시수 초과 방지 및 균등 배정 정렬
+            available.sort((a, b) => compareTeacherLoad(a, b, day));
             if (available.length > 0) {
-              subTeacher = available[0].teacher;
+              subTeacher = available[0];
               subBadge = '대체 감독';
               subType = 'sub_min';
             }
@@ -2010,7 +2161,7 @@
     let currentTab = 'guide';
     let currentSelectedTeacher = '고명호';
     let currentMatrixDay = '화';
-    let currentSelectedClass = 2;
+    let currentSelectedClass = 1;
 
     window.addEventListener('DOMContentLoaded', () => {
       initTeacherSelector();
@@ -2442,6 +2593,7 @@
               <th class="py-3 px-2 w-16 bg-slate-200/80">교시</th>
               <th class="py-3 px-2 w-28 bg-slate-100 border-l border-slate-200">시간</th>
               <th class="py-3 px-3 w-36 bg-slate-100 border-l border-slate-200">시험 영역</th>
+              <th class="py-3 px-2 border-l border-slate-200 text-blue-800 font-black">1반</th>
               <th class="py-3 px-2 border-l border-slate-200 text-blue-800 font-black">2반</th>
               <th class="py-3 px-2 border-l border-slate-200 text-blue-800 font-black">3반</th>
               <th class="py-3 px-2 border-l border-slate-200 text-blue-800 font-black">4반</th>
@@ -2463,7 +2615,7 @@
         html += `<td class="py-3 px-2 font-mono text-xs text-slate-600 bg-slate-50/50 border-r border-slate-200">${pConf.proctorTime.split(' ')[0]}</td>`;
         html += `<td class="py-3 px-2 font-bold text-slate-800 bg-slate-50/50 border-r border-slate-200">${pConf.area.split(' ')[0]}</td>`;
 
-        for (let c = 2; c <= 8; c++) {
+        for (let c = 1; c <= 8; c++) {
           const item = RESOLVED_CLASSES[c][day][pIdx];
           const teacher = item.teacher;
           const subj = item.subject;
@@ -2534,7 +2686,7 @@
     function selectClass(classNum) {
       currentSelectedClass = classNum;
 
-      for (let c = 2; c <= 8; c++) {
+      for (let c = 1; c <= 8; c++) {
         const btn = document.getElementById(`class-btn-${c}`);
         if (!btn) continue;
         if (c === classNum) {
@@ -2791,13 +2943,19 @@
       `;
 
       if (statusType === 'proctor' && periodNum) {
+        const simClasses = (periodNum === 1) ? [1, 2, 3, 4, 5, 6, 7, 8] : [2, 3, 4, 5, 6, 7, 8];
+        const headingText = (periodNum === 1) 
+          ? '📌 지금 교실에 들어간 감독 선생님 현황 (1~8반 전체 고사실)' 
+          : '📌 지금 교실에 들어간 감독 선생님 현황 (2~8반 고사실 / 1반 자습)';
+
         html += `
           <div class="mt-4">
-            <h4 class="text-sm font-bold text-slate-800 mb-2">📌 지금 교실에 들어간 감독 선생님 현황 (2~8반)</h4>
+            <h4 class="text-sm font-bold text-slate-800 mb-2">${headingText}</h4>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         `;
 
-        for (let c = 2; c <= 8; c++) {
+        for (let idx = 0; idx < simClasses.length; idx++) {
+          const c = simClasses[idx];
           const item = RESOLVED_CLASSES[c][day][periodNum - 1];
           let badgeHtml = '';
           if (item.badgeType === 'sub_1ban') badgeHtml = `<span class="text-[10px] bg-teal-200 text-teal-900 px-1 rounded font-bold">${item.badge || '1반대체'}</span>`;
@@ -2850,7 +3008,7 @@
 
       DAYS.forEach(day => {
         matrixData.push([`【 ${day}요일 시간표 】`]);
-        matrixData.push(['교시', '시험 시간', '시험 영역 / 내용', '2반', '3반', '4반', '5반', '6반', '7반', '8반']);
+        matrixData.push(['교시', '시험 시간', '시험 영역 / 내용', '1반', '2반', '3반', '4반', '5반', '6반', '7반', '8반']);
         
         const maxPeriods = (day === '화' || day === '목') ? 8 : 7;
         for (let pNum = 1; pNum <= maxPeriods; pNum++) {
@@ -2861,7 +3019,7 @@
             cfg ? cfg.proctorTime : '-',
             cfg ? cfg.area : '-'
           ];
-          for (let c = 2; c <= 8; c++) {
+          for (let c = 1; c <= 8; c++) {
             const item = RESOLVED_CLASSES[c][day][pIdx];
             if (!item || item.badgeType === 'empty') {
               row.push('-(비움)');
@@ -2946,7 +3104,7 @@
       const classRows = [
         ['학급', '요일', '교시', '시험 시간', '시험 영역 / 내용', '감독 교사', '배정 구분', '원래 교사']
       ];
-      for (let c = 2; c <= 8; c++) {
+      for (let c = 1; c <= 8; c++) {
         DAYS.forEach(day => {
           const maxPeriods = (day === '화' || day === '목') ? 8 : 7;
           for (let pNum = 1; pNum <= maxPeriods; pNum++) {
