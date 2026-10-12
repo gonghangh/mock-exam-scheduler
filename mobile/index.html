@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -441,7 +441,7 @@
         4: { subject: 'A_화학Ⅱ', teacher: '이예진' },
         5: { subject: 'A_생명과학Ⅱ', teacher: '이승언' },
         6: { subject: 'A_생활과과학', teacher: '강재욱' },
-        7: { subject: 'A_생활과창의성', teacher: '이채현' },
+        7: { subject: 'A_생활과창의성', teacher: '한효숙' },
         8: { subject: 'A_학습과생활', teacher: '이승연' }
       },
       'B': {
@@ -455,7 +455,7 @@
         8: { subject: 'B_물리학Ⅱ', teacher: '강재욱' }
       },
       'C': {
-        1: { subject: 'C_생활과창의성', teacher: '이채현' },
+        1: { subject: 'C_생활과창의성', teacher: '한효숙' },
         2: { subject: 'C_동아시아사', teacher: '황인욱' },
         3: { subject: 'C_사회문화', teacher: '이현승' },
         4: { subject: 'C_사회탐구', teacher: '조덕인' },
@@ -466,7 +466,7 @@
       },
       'D': {
         1: { subject: 'D_한국지리', teacher: '이서윤' },
-        2: { subject: 'D_생활과창의성', teacher: '이채현' },
+        2: { subject: 'D_생활과창의성', teacher: '한효숙' },
         3: { subject: 'D_동아시아사', teacher: '황인욱' },
         4: { subject: 'D_여행지리', teacher: '윤은정' },
         5: { subject: 'D_사회탐구', teacher: '배혜선' },
@@ -481,7 +481,7 @@
         4: { subject: 'E_생활과과학', teacher: '양기훈' },
         5: { subject: 'E_여행지리', teacher: '윤은정' },
         6: { subject: 'E_사회탐구', teacher: '배혜선' },
-        7: { subject: 'E_중국어회화', teacher: '이채현' },
+        7: { subject: 'E_중국어회화', teacher: '한효숙' },
         8: { subject: 'E_공학일반', teacher: '신수완' }
       }
     };
@@ -491,7 +491,7 @@
       1: { homeroom: '고명호', assistant: '박현우', hSubject: '수학', aSubject: '정보' },
       2: { homeroom: '강재욱', assistant: '이서윤', hSubject: '물리', aSubject: '지리' },
       3: { homeroom: '황인욱', assistant: '황인욱', hSubject: '역사', aSubject: '역사' },
-      4: { homeroom: '김경남', assistant: '이채현', hSubject: '영어', aSubject: '중국어' },
+      4: { homeroom: '김경남', assistant: '한효숙', hSubject: '영어', aSubject: '중국어' },
       5: { homeroom: '정주윤', assistant: '배혜선', hSubject: '수학', aSubject: '일반사회' },
       6: { homeroom: '오의진', assistant: '이예진', hSubject: '국어', aSubject: '화학' },
       7: { homeroom: '신수완', assistant: '양기훈', hSubject: '기술', aSubject: '지구과학' },
@@ -523,7 +523,7 @@
       4: {
         '월': [['E',''], ['영독','김경남'], ['C',''], ['B',''], ['D',''], ['미감A','박소연'], ['','']],
         '화': [['화작','방수영'], ['확통','고명호'], ['D',''], ['스생','최창근'], ['영독','김경남'], ['미감A','박소연'], ['A','']],
-        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['자율(부담임)','이채현'], ['자율(담임)','김경남'], ['','']],
+        '수': [['C',''], ['진로','황지윤'], ['B',''], ['E',''], ['자율(부담임)','한효숙'], ['자율(담임)','김경남'], ['','']],
         '목': [['확통','고명호'], ['A',''], ['미감A','박소연'], ['B',''], ['E',''], ['C',''], ['화작','방수영']],
         '금': [['스생','최창근'], ['영독','김경남'], ['D',''], ['화작','방수영'], ['A',''], ['확통','고명호'], ['','']]
       },
@@ -839,7 +839,7 @@ const TEACHERS_RAW = {
           '금': ['306 영독', '308 영독', null, '307 영독', null, '202 D_영발', null]
         }
       },
-      '이채현': {
+      '한효숙': {
         subject: '중국어/생창',
         schedule: {
           '월': ['307 E_중회', null, '301 C_생창', null, '302 D_생창', null, null],
@@ -1971,7 +1971,7 @@ const TEACHERS_RAW = {
       });
 
       // Quick Chips
-      const quickList = ['고명호', '방수영', '김경남', '오의진', '정주윤', '박소연', '최정', '진혜리', '이지연', '권유진', '이서윤', '윤은정', '이채현'];
+      const quickList = ['고명호', '방수영', '김경남', '오의진', '정주윤', '박소연', '최정', '진혜리', '이지연', '권유진', '이서윤', '윤은정', '한효숙'];
       quickList.forEach(t => {
         const chip = document.createElement('button');
         chip.className = 'px-2.5 py-1 text-xs bg-slate-100 active:bg-blue-200 text-slate-700 font-medium rounded-lg transition';
